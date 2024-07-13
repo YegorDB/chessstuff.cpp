@@ -22,4 +22,5 @@ public:
     const bool checkIsLightColor() const;
     const uint16_t getColor() const;
     const std::string getColorName() const;
+    const std::string toString() const;
 };

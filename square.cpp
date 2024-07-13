@@ -24,3 +24,7 @@ const uint16_t Square::getColor() const {
 const std::string Square::getColorName() const {
     return colorName;
 }
+
+const std::string Square::toString() const {
+    return name + " (" + std::to_string(x) + ", " + std::to_string(y) + ") " + colorName;
+}
