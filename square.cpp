@@ -1,6 +1,10 @@
 #include "square.h"
 
-Square::Square(uint16_t x, uint16_t y) : x(x), y(y) {
+const std::string Square::COLUMN_SIGNS{"abcdefgh"};
+const std::string Square::ROW_SIGNS{"012345678"};
+const std::vector<std::string> Square::COLOR_NAMES{"light", "dark"};
+
+Square::Square(int x, int y) : x(x), y(y) {
     name = {COLUMN_SIGNS[x], ROW_SIGNS[8 - y]};
     isLightColor = x % 2 == y % 2;
     color = isLightColor ? 0 : 1;
@@ -17,7 +21,7 @@ const bool Square::checkIsLightColor() const {
     return isLightColor;
 }
 
-const uint16_t Square::getColor() const {
+const int Square::getColor() const {
     return color;
 }
 

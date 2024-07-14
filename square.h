@@ -3,24 +3,24 @@
 #include <vector>
 
 class Square {
-private:
-    const std::string COLUMN_SIGNS{"abcdefgh"};
-    const std::string ROW_SIGNS{"012345678"};
-    const std::vector<std::string> COLOR_NAMES = {"light", "dark"};
+static const std::string COLUMN_SIGNS;
+static const std::string ROW_SIGNS;
+static const std::vector<std::string> COLOR_NAMES;
 
-    uint16_t color;
+private:
+    int color;
     std::string name, colorName;
     bool isLightColor;
 
 public:
-    const uint16_t x, y;
+    const int x, y;
 
-    Square(uint16_t x, uint16_t y);
+    Square(int x, int y);
     Square(std::string name);
 
     const std::string& getName() const;
     const bool checkIsLightColor() const;
-    const uint16_t getColor() const;
+    const int getColor() const;
     const std::string& getColorName() const;
     const std::string toString() const;
 };

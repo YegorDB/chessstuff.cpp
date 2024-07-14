@@ -17,4 +17,11 @@ int main() {
 
     Piece p{PieceType::KING, true};
     std::cout << static_cast<uint16_t>(p.type) << " " << p.getColorName() << std::endl;
+
+    auto directions = p.getMoveDirections();
+    if (directions != nullptr) {
+        for (auto dd : *directions) {
+            std::cout << dd.dx << " " << dd.dy << " " << dd.maxDistance << std::endl;
+        }
+    }
 }
