@@ -9,7 +9,7 @@ Square::Square(uint16_t x, uint16_t y) : x(x), y(y) {
 
 Square::Square(std::string name) : Square(name[0] - 97, 56 - name[1]) {}
 
-const std::string Square::getName() const {
+const std::string& Square::getName() const {
     return name;
 }
 
@@ -21,7 +21,7 @@ const uint16_t Square::getColor() const {
     return color;
 }
 
-const std::string Square::getColorName() const {
+const std::string& Square::getColorName() const {
     return colorName;
 }
 

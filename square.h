@@ -18,9 +18,9 @@ public:
     Square(uint16_t x, uint16_t y);
     Square(std::string name);
 
-    const std::string getName() const;
+    const std::string& getName() const;
     const bool checkIsLightColor() const;
     const uint16_t getColor() const;
-    const std::string getColorName() const;
+    const std::string& getColorName() const;
     const std::string toString() const;
 };
