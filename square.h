@@ -8,19 +8,16 @@ static const std::string ROW_SIGNS;
 static const std::vector<std::string> COLOR_NAMES;
 
 private:
-    int color;
-    std::string name, colorName;
-    bool isLightColor;
+    std::string name;
 
 public:
     const int x, y;
+    const bool isLightColor;
 
     Square(int x, int y);
     Square(std::string name);
 
     const std::string& getName() const;
-    const bool checkIsLightColor() const;
-    const int getColor() const;
     const std::string& getColorName() const;
     const std::string toString() const;
 };

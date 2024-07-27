@@ -20,12 +20,9 @@ enum class PieceType {
 
 class Piece {
 static const std::vector<std::string> COLOR_NAMES;
-static const std::unordered_map<PieceType, std::vector<Direction>> MOVE_DIRECTIONS;
 
-private:
-    int color;
-    std::string colorName;
-    bool isFirstMove = true;
+protected:
+    std::vector<Direction> moveDirections;
 
 public:
     const PieceType type;
@@ -33,7 +30,44 @@ public:
 
     Piece(PieceType type, bool isWhiteColor);
 
-    const std::vector<Direction>* getMoveDirections() const;
-    // const std::vector<Direction>& attackDirections() const;
+    const std::vector<Direction>& getMoveDirections() const;
+    const std::vector<Direction>& getAttackDirections() const;
     const std::string& getColorName() const;
+};
+
+class King : public Piece {
+public:
+    King(bool isWhiteColor);
+};
+
+class Queen : public Piece {
+public:
+    Queen(bool isWhiteColor);
+};
+
+class Rook : public Piece {
+public:
+    Rook(bool isWhiteColor);
+};
+
+class Bishop : public Piece {
+public:
+    Bishop(bool isWhiteColor);
+};
+
+class Knight : public Piece {
+public:
+    Knight(bool isWhiteColor);
+};
+
+class Pawn : public Piece {
+protected:
+    std::vector<Direction> firstMoveDirections;
+    std::vector<Direction> attackDirections;
+
+public:
+    Pawn(bool isWhiteColor);
+
+    const std::vector<Direction>& getFirstMoveDirections() const;
+    const std::vector<Direction>& getAttackDirections() const;
 };
