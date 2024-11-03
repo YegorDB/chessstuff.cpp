@@ -6,7 +6,12 @@
 struct Direction {
     int dx;
     int dy;
-    int maxDistance = 1;   
+    int maxDistance = 1;
+};
+
+enum class PieceColor {
+    WHITE = 0,
+    BLACK = 1
 };
 
 enum class PieceType {
@@ -20,9 +25,9 @@ enum class PieceType {
 
 class Piece {
 static const std::vector<std::string> COLOR_NAMES;
-
-protected:
-    std::vector<Direction> moveDirections;
+static const std::unordered_map<PieceType, std::vector<Direction>> DIRECTIONS;
+static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_PLACE_DIRECTIONS;
+static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_THREAT_DIRECTIONS;
 
 public:
     const PieceType type;
@@ -30,44 +35,7 @@ public:
 
     Piece(PieceType type, bool isWhiteColor);
 
-    const std::vector<Direction>& getMoveDirections() const;
-    const std::vector<Direction>& getAttackDirections() const;
+    const std::vector<Direction>& getPlaceDirections() const;
+    const std::vector<Direction>& getThreatDirections() const;
     const std::string& getColorName() const;
-};
-
-class King : public Piece {
-public:
-    King(bool isWhiteColor);
-};
-
-class Queen : public Piece {
-public:
-    Queen(bool isWhiteColor);
-};
-
-class Rook : public Piece {
-public:
-    Rook(bool isWhiteColor);
-};
-
-class Bishop : public Piece {
-public:
-    Bishop(bool isWhiteColor);
-};
-
-class Knight : public Piece {
-public:
-    Knight(bool isWhiteColor);
-};
-
-class Pawn : public Piece {
-protected:
-    std::vector<Direction> firstMoveDirections;
-    std::vector<Direction> attackDirections;
-
-public:
-    Pawn(bool isWhiteColor);
-
-    const std::vector<Direction>& getFirstMoveDirections() const;
-    const std::vector<Direction>& getAttackDirections() const;
 };

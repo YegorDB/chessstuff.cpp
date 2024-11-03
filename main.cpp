@@ -14,21 +14,19 @@ int main() {
     // Direction d{1, 2};
     // std::cout << d.dx << " " << d.dy << " " << d.maxDistance << std::endl;
 
-    // King k{false};
+    // Piece k{PieceType::KING, false};
     // std::cout << static_cast<int>(k.type) << " " << k.getColorName() << std::endl;
 
-    // auto mdirections = k.getMoveDirections();
-    // for (auto dd : mdirections) {
+    // for (auto dd : k.getPlaceDirections()) {
     //     std::cout << dd.dx << " " << dd.dy << " " << dd.maxDistance << std::endl;
     // }
 
-    // auto adirections = k.getAttackDirections();
-    // for (auto dd : adirections) {
+    // for (auto dd : k.getThreatDirections()) {
     //     std::cout << dd.dx << " " << dd.dy << " " << dd.maxDistance << std::endl;
     // }
 
     Square s{1, 2};
-    PieceItem pi{King{false}};
+    Piece pi{PieceType::KING, false};
 
     BoardItem bi{s, &pi};
     std::cout << bi.square.toString() << std::endl;
@@ -48,10 +46,10 @@ int main() {
     std::cout << (items[0][4].piece != nullptr) << std::endl;
 
     std::cout << (items[0][4].piece->type == PieceType::KING) << std::endl;
-    King k3 = items[0][4].piece->getKing();
+    Piece k3 = *items[0][4].piece;
     std::cout << static_cast<int>(k3.type) << " " << k3.getColorName() << std::endl;
 
     std::cout << (items[7][3].piece->type == PieceType::QUEEN) << std::endl;
-    Queen q3 = items[7][3].piece->getQueen();
+    Piece q3 = *items[7][3].piece;
     std::cout << static_cast<int>(q3.type) << " " << q3.getColorName() << std::endl;
 }
