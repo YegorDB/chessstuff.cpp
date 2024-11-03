@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#include "point.h"
+
 class Square {
 static const std::string COLUMN_SIGNS;
 static const std::string ROW_SIGNS;
@@ -11,9 +13,10 @@ private:
     std::string name;
 
 public:
-    const int x, y;
+    const Point point;
     const bool isLightColor;
 
+    Square(Point point);
     Square(int x, int y);
     Square(std::string name);
 

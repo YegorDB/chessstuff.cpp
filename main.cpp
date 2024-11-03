@@ -25,10 +25,10 @@ int main() {
     //     std::cout << dd.dx << " " << dd.dy << " " << dd.maxDistance << std::endl;
     // }
 
-    Square s{1, 2};
+    Square s4{1, 2};
     Piece pi{PieceType::KING, false};
 
-    BoardItem bi{s, &pi};
+    BoardItem bi{s4, &pi};
     std::cout << bi.square.toString() << std::endl;
 
     Board b{};
