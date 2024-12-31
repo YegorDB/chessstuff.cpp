@@ -34,22 +34,23 @@ int main() {
     Board b{};
     auto items = b.getItems();
 
-    for (auto row : items) {
-        for (auto bi : row) {
-            std::cout << bi.square.getName() << " ";
+    int i = 0;
+    for (auto item : items.sequence()) {
+        std::cout << item->square.getName() << " ";
+        if (++i % 8 == 0) {
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
     }
 
-    std::cout << (items[2][3].piece == nullptr) << std::endl;
-    std::cout << (items[7][3].piece != nullptr) << std::endl;
-    std::cout << (items[0][4].piece != nullptr) << std::endl;
+    std::cout << (items.matrix[2][3].piece == nullptr) << std::endl;
+    std::cout << (items.matrix[7][3].piece != nullptr) << std::endl;
+    std::cout << (items.matrix[0][4].piece != nullptr) << std::endl;
 
-    std::cout << (items[0][4].piece->type == PieceType::KING) << std::endl;
-    Piece k3 = *items[0][4].piece;
+    std::cout << (items.matrix[0][4].piece->type == PieceType::KING) << std::endl;
+    Piece k3 = *items.matrix[0][4].piece;
     std::cout << static_cast<int>(k3.type) << " " << k3.getColorName() << std::endl;
 
-    std::cout << (items[7][3].piece->type == PieceType::QUEEN) << std::endl;
-    Piece q3 = *items[7][3].piece;
+    std::cout << (items.matrix[7][3].piece->type == PieceType::QUEEN) << std::endl;
+    Piece q3 = *items.matrix[7][3].piece;
     std::cout << static_cast<int>(q3.type) << " " << q3.getColorName() << std::endl;
 }
