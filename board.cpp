@@ -4,6 +4,9 @@ Board::Board() {
     initItems();
     initPiecePacks();
     initPieces();
+
+    clearActions();
+    setActions();
 }
 
 void Board::initItems() {
@@ -50,3 +53,42 @@ void Board::initPieces() {
 const BoardItems& Board::getItems() const {
     return items;
 }
+
+void Board::clearActions() {
+    for (int y = 0; y < 8; ++y) {
+        for (int x = 0; x < 8; ++x) {
+            items[y][x].actions.clear();
+        }
+    }
+};
+
+void Board::setActions() {
+    for (int y = 0; y < 8; ++y) {
+        for (int x = 0; x < 8; ++x) {
+            if (items[y][x].piece == nullptr) continue;
+
+            for (auto direction : items[y][x].piece->getPlaceDirections()) {
+                int _x = x;
+                int _y = y;
+                bool after_piece = false;
+                for (int d = 0; d < direction.maxDistance; ++d) {
+                    _x += direction.dx;
+                    _y += direction.dy;
+                    if (_x < 0 || _x > 7 || _y < 0 || _y > 7) break;
+                    if (items[_y][_x].piece == nullptr) {
+                        if (after_piece) {
+                            items[y][x].actions.xray.insert_to(_y * 10 + _x);
+                            items[_y][_x].actions.xray.insert_by(y * 10 + x);
+                        } else {
+                            items[y][x].actions.place.insert_to(_y * 10 + _x);
+                            items[_y][_x].actions.place.insert_by(y * 10 + x);
+                        }
+                    } else {
+                    }
+                }
+            }
+            break; // test
+        }
+        break; // test
+    }
+};
