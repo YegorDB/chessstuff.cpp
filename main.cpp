@@ -42,6 +42,18 @@ int main() {
         }
     }
 
+    std::cout << std::endl;
+
+    i = 0;
+    for (auto item : items.sequenceWithPieces()) {
+        std::cout << item->square.getName() << " ";
+        if (++i % 8 == 0) {
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << std::endl;
+
     std::cout << (items.matrix[2][3].piece == nullptr) << std::endl;
     std::cout << (items.matrix[7][3].piece != nullptr) << std::endl;
     std::cout << (items.matrix[0][4].piece != nullptr) << std::endl;

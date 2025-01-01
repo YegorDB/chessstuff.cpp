@@ -10,10 +10,13 @@ public:
 
     BoardItem(Square square);
     BoardItem(Square square, Piece* piece);
+
+    static bool hasPiece(const BoardItem& item);
 };
 
 class BoardItems {
 using Matrix = std::vector<std::vector<BoardItem>>;
+using Filter = bool(const BoardItem&);
 
 // private:
 //     Matrix _matrix;
@@ -21,10 +24,13 @@ using Matrix = std::vector<std::vector<BoardItem>>;
 public:
     class Iterator {
     private:
-        Matrix matrix;
-        int index;
+        Matrix _matrix;
+        int _index;
+        Filter* _filter = nullptr;
+        Point _point;
     public:
         Iterator(Matrix& matrix, int index);
+        Iterator(Matrix& matrix, int index, Filter* filter);
         Iterator& operator++();
         BoardItem* operator*();
         bool operator==(const Iterator& other) const;
@@ -44,6 +50,7 @@ public:
 
     BoardItems();
     Sequence sequence();
+    Sequence sequenceWithPieces();
     // const Matrix& matrix() const;
 
     void placePiece(Piece& piece, const Point& point);

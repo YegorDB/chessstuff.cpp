@@ -53,9 +53,7 @@ void Board::clearActions() {
 };
 
 void Board::setActions() {
-    for (auto item : items.sequence()) {
-        if (item->piece == nullptr) continue;
-
+    for (auto item : items.sequenceWithPieces()) {
         for (auto direction : item->piece->getPlaceDirections()) {
             Point nextPoint = item->square.point;
             bool after_piece = false;

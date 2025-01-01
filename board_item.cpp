@@ -6,6 +6,10 @@ BoardItem::BoardItem(Square square) : square(square) {};
 
 BoardItem::BoardItem(Square square, Piece* piece) : square(square), piece(piece) {};
 
+bool BoardItem::hasPiece(const BoardItem& item) {
+    return item.piece != nullptr;
+};
+
 BoardItems::BoardItems() {
     matrix.clear();
     for (int i = 0; i < 8; ++i) {
@@ -22,6 +26,13 @@ BoardItems::Sequence BoardItems::sequence() {
     return Sequence{
         Iterator{matrix, 0},
         Iterator{matrix, 64},
+    };
+};
+
+BoardItems::Sequence BoardItems::sequenceWithPieces() {
+    return Sequence{
+        Iterator{matrix, 0, &BoardItem::hasPiece},
+        Iterator{matrix, 64, &BoardItem::hasPiece},
     };
 };
 
@@ -47,24 +58,34 @@ BoardItems::Iterator BoardItems::Sequence::end() const {
     return _end;
 };
 
-BoardItems::Iterator::Iterator(Matrix& matrix, int index) : matrix{matrix}, index{index} {
+BoardItems::Iterator::Iterator(Matrix& matrix, int index) : _matrix{matrix}, _index{index}, _point{Point{index % 8, index / 8}} {}
+
+BoardItems::Iterator::Iterator(Matrix& matrix, int index, Filter* filter) : BoardItems::Iterator(matrix, index) {
+    _filter = filter;
 }
 
 BoardItems::Iterator& BoardItems::Iterator::operator++() {
-    ++index;
+    while (true) {
+        ++_index;
+        if (_index >= 64) break;
+
+        _point = Point{_index % 8, _index / 8};
+        if (_filter == nullptr) break;
+
+        BoardItem item = _matrix[_point.y()][_point.x()];
+        if ((*_filter)(item)) break;
+    }
     return *this;
 }
 
 BoardItem* BoardItems::Iterator::operator*() {
-    int y = index / 8;
-    int x = index % 8;
-    return &matrix[y][x];
+    return &_matrix[_point.y()][_point.x()];
 }
 
 bool BoardItems::Iterator::operator==(const BoardItems::Iterator& other) const {
-    return this->index == other.index;
+    return this->_index == other._index;
 };
 
 bool BoardItems::Iterator::operator!=(const BoardItems::Iterator& other) const {
-    return this->index != other.index;
+    return this->_index != other._index;
 };
