@@ -24,16 +24,16 @@ void Board::initOneSidePieces(bool isWhiteColor) {
     int firstLine = isWhiteColor ? 0 : 7;
     int secondLine = isWhiteColor ? 1 : 6;
 
-    items.matrix[firstLine][0].piece = &(piecePacks[pack].rooks[0]);
-    items.matrix[firstLine][1].piece = &(piecePacks[pack].knights[0]);
-    items.matrix[firstLine][2].piece = &(piecePacks[pack].bishops[0]);
-    items.matrix[firstLine][3].piece = &(piecePacks[pack].queens[0]);
-    items.matrix[firstLine][4].piece = &(piecePacks[pack].king);
-    items.matrix[firstLine][5].piece = &(piecePacks[pack].bishops[1]);
-    items.matrix[firstLine][6].piece = &(piecePacks[pack].knights[1]);
-    items.matrix[firstLine][7].piece = &(piecePacks[pack].rooks[1]);
+    items.placePiece(piecePacks[pack].rooks[0], Point{0, firstLine});
+    items.placePiece(piecePacks[pack].knights[0], Point{1, firstLine});
+    items.placePiece(piecePacks[pack].bishops[0], Point{2, firstLine});
+    items.placePiece(piecePacks[pack].queens[0], Point{3, firstLine});
+    items.placePiece(piecePacks[pack].king, Point{4, firstLine});
+    items.placePiece(piecePacks[pack].bishops[1], Point{5, firstLine});
+    items.placePiece(piecePacks[pack].knights[1], Point{6, firstLine});
+    items.placePiece(piecePacks[pack].rooks[1], Point{7, firstLine});
     for (int i = 0; i < 8; ++i) {
-        items.matrix[secondLine][i].piece = &(piecePacks[pack].pawns[i]);
+        items.placePiece(piecePacks[pack].pawns[i], Point{i, secondLine});
     }
 }
 

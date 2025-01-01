@@ -45,4 +45,6 @@ public:
     BoardItems();
     Sequence sequence();
     // const Matrix& matrix() const;
+
+    void placePiece(Piece& piece, const Point& point);
 };

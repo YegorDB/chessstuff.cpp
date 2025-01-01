@@ -24,7 +24,7 @@ Point Point::next(Direction direction) {
     return Point{_x + direction.dx, _y + direction.dy};
 };
 
-bool Point::isValid() {
+bool Point::isValid() const {
     return _x >= 0 && _x < 8 && _y >= 0 && _y < 8;
 };
 

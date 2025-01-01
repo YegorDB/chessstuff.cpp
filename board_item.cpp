@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "board_item.h"
 
 BoardItem::BoardItem(Square square) : square(square) {};
@@ -26,6 +28,13 @@ BoardItems::Sequence BoardItems::sequence() {
 // const BoardItems::Matrix& BoardItems::matrix() const {
 //     return _matrix;
 // };
+
+void BoardItems::placePiece(Piece& piece, const Point& to) {
+    if (!to.isValid()) {
+        throw std::runtime_error{"Invalid point to place a piece."};
+    }
+    matrix[to.y()][to.x()].piece = &piece;
+};
 
 BoardItems::Sequence::Sequence(BoardItems::Iterator begin, BoardItems::Iterator end) : _begin{begin}, _end{end} {
 };

@@ -16,6 +16,6 @@ public:
     int hash() const;
 
     Point next(Direction direction);
-    bool isValid();
+    bool isValid() const;
     const std::string toString() const;
 };
