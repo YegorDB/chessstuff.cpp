@@ -57,22 +57,20 @@ void Board::setActions() {
         if (item->piece == nullptr) continue;
 
         for (auto direction : item->piece->getPlaceDirections()) {
-            int x = item->square.point.x;
-            int y = item->square.point.y;
-            int _x = x;
-            int _y = y;
+            Point nextPoint = item->square.point;
             bool after_piece = false;
             for (int d = 0; d < direction.maxDistance; ++d) {
-                _x += direction.dx;
-                _y += direction.dy;
-                if (_x < 0 || _x > 7 || _y < 0 || _y > 7) break;
-                if (items.matrix[_y][_x].piece == nullptr) {
+                nextPoint = nextPoint.next(direction);
+                if (!nextPoint.isValid()) break;
+
+                BoardItem nextItem = items.matrix[nextPoint.y()][nextPoint.x()];
+                if (nextItem.piece == nullptr) {
                     if (after_piece) {
-                        item->actions.xray.insert_to(_y * 10 + _x);
-                        items.matrix[_y][_x].actions.xray.insert_by(y * 10 + x);
+                        item->actions.xray.insert_to(nextPoint.hash());
+                        nextItem.actions.xray.insert_by(item->square.point.hash());
                     } else {
-                        item->actions.place.insert_to(_y * 10 + _x);
-                        items.matrix[_y][_x].actions.place.insert_by(y * 10 + x);
+                        item->actions.place.insert_to(nextPoint.hash());
+                        nextItem.actions.place.insert_by(item->square.point.hash());
                     }
                 } else {
                 }

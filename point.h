@@ -1,12 +1,21 @@
 #include <string>
 
-class Point {
-public:
-    const int x, y;
+#include "direction.h"
 
+class Point {
+private:
+    int _x, _y, _hash;
+
+public:
     Point(int x, int y);
 
-    Point next(int dx, int dy);
+    void operator=(Point point);
+
+    int x() const;
+    int y() const;
+    int hash() const;
+
+    Point next(Direction direction);
     bool isValid();
     const std::string toString() const;
 };

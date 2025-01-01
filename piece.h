@@ -3,11 +3,7 @@
 #include <vector>
 #include <unordered_map>
 
-struct Direction {
-    int dx;
-    int dy;
-    int maxDistance = 1;
-};
+#include "direction.h"
 
 enum class PieceColor {
     WHITE = 0,

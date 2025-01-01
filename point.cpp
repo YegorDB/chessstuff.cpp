@@ -1,15 +1,33 @@
 #include "point.h"
 
-Point::Point(int x, int y) : x(x), y(y) {}
+Point::Point(int x, int y) : _x(x), _y(y), _hash(y * 10 + x) {};
 
-Point Point::next(int dx, int dy) {
-    return Point{x + dx, y + dy};
-}
+void Point::operator=(Point other) {
+    _x = other._x;
+    _y = other._y;
+    _hash = other._hash;
+};
+
+int Point::x() const {
+    return _x;
+};
+
+int Point::y() const {
+    return _y;
+};
+
+int Point::hash() const {
+    return _hash;
+};
+
+Point Point::next(Direction direction) {
+    return Point{_x + direction.dx, _y + direction.dy};
+};
 
 bool Point::isValid() {
-    return x >= 0 && x < 8 && y >= 0 && y < 8;
-}
+    return _x >= 0 && _x < 8 && _y >= 0 && _y < 8;
+};
 
 const std::string Point::toString() const {
-    return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
-}
+    return "(" + std::to_string(_x) + ", " + std::to_string(_y) + ")";
+};

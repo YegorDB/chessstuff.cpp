@@ -53,4 +53,9 @@ int main() {
     std::cout << (items.matrix[7][3].piece->type == PieceType::QUEEN) << std::endl;
     Piece q3 = *items.matrix[7][3].piece;
     std::cout << static_cast<int>(q3.type) << " " << q3.getColorName() << std::endl;
+
+    Point point{0, 0};
+    std::cout << point.toString() << std::endl;
+    point = point.next(Direction{2, 2});
+    std::cout << point.toString() << std::endl;
 }
