@@ -11,47 +11,47 @@ bool BoardItem::hasPiece(const BoardItem& item) {
 };
 
 BoardItems::BoardItems() {
-    matrix.clear();
+    _matrix.clear();
     for (int i = 0; i < 8; ++i) {
-        matrix.push_back({});
+        _matrix.push_back({});
         for (int j = 0; j < 8; ++j) {
             Square s{j, i};
             BoardItem bi{s};
-            matrix[i].push_back(bi);
+            _matrix[i].push_back(bi);
         }
     }
 };
 
 BoardItems::Sequence BoardItems::sequence() {
     return Sequence{
-        Iterator{matrix, 0},
-        Iterator{matrix, 64},
+        Iterator{_matrix, 0},
+        Iterator{_matrix, 64},
     };
 };
 
 BoardItems::Sequence BoardItems::sequenceWithPieces() {
     return Sequence{
-        Iterator{matrix, 0, &BoardItem::hasPiece},
-        Iterator{matrix, 64, &BoardItem::hasPiece},
+        Iterator{_matrix, 0, &BoardItem::hasPiece},
+        Iterator{_matrix, 64, &BoardItem::hasPiece},
     };
 };
 
 BoardItems::SequenceByDirection BoardItems::sequenceByDirection(const Point& point, const Direction& direction) {
     return SequenceByDirection{
-        IteratorWithDitrection{matrix, point, direction},
-        IteratorWithDitrection{matrix, Point{8, 8}, direction},
+        IteratorWithDitrection{_matrix, point, direction},
+        IteratorWithDitrection{_matrix, Point{8, 8}, direction},
     };
 };
 
-// const BoardItems::Matrix& BoardItems::matrix() const {
-//     return _matrix;
-// };
+const BoardItem& BoardItems::getItem(const Point& point) const {
+    return _matrix[point.y()][point.x()];
+};
 
 void BoardItems::placePiece(Piece& piece, const Point& to) {
     if (!to.isValid()) {
         throw std::runtime_error{"Invalid point to place a piece."};
     }
-    matrix[to.y()][to.x()].piece = &piece;
+    _matrix[to.y()][to.x()].piece = &piece;
 };
 
 BoardItems::Sequence::Sequence(BoardItems::Iterator begin, BoardItems::Iterator end) : _begin{begin}, _end{end} {

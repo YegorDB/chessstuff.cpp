@@ -18,8 +18,8 @@ class BoardItems {
 using Matrix = std::vector<std::vector<BoardItem>>;
 using Filter = bool(const BoardItem&);
 
-// private:
-//     Matrix _matrix;
+private:
+    Matrix _matrix;
 
 public:
     class Iterator {
@@ -70,13 +70,11 @@ public:
         IteratorWithDitrection end() const;
     };
 
-    Matrix matrix;
-
     BoardItems();
     Sequence sequence();
     Sequence sequenceWithPieces();
     SequenceByDirection sequenceByDirection(const Point& point, const Direction& direction);
-    // const Matrix& matrix() const;
 
+    const BoardItem& getItem(const Point& point) const;
     void placePiece(Piece& piece, const Point& point);
 };

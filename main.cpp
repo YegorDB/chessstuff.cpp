@@ -54,16 +54,16 @@ int main() {
 
     std::cout << std::endl;
 
-    std::cout << (items.matrix[2][3].piece == nullptr) << std::endl;
-    std::cout << (items.matrix[7][3].piece != nullptr) << std::endl;
-    std::cout << (items.matrix[0][4].piece != nullptr) << std::endl;
+    std::cout << (items.getItem(Point{3, 2}).piece == nullptr) << std::endl;
+    std::cout << (items.getItem(Point{3, 7}).piece != nullptr) << std::endl;
+    std::cout << (items.getItem(Point{4, 0}).piece != nullptr) << std::endl;
 
-    std::cout << (items.matrix[0][4].piece->type == PieceType::KING) << std::endl;
-    Piece k3 = *items.matrix[0][4].piece;
+    std::cout << (items.getItem(Point{4, 0}).piece->type == PieceType::KING) << std::endl;
+    Piece k3 = *items.getItem(Point{4, 0}).piece;
     std::cout << static_cast<int>(k3.type) << " " << k3.getColorName() << std::endl;
 
-    std::cout << (items.matrix[7][3].piece->type == PieceType::QUEEN) << std::endl;
-    Piece q3 = *items.matrix[7][3].piece;
+    std::cout << (items.getItem(Point{3, 7}).piece->type == PieceType::QUEEN) << std::endl;
+    Piece q3 = *items.getItem(Point{3, 7}).piece;
     std::cout << static_cast<int>(q3.type) << " " << q3.getColorName() << std::endl;
 
     Point point{0, 0};
