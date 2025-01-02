@@ -37,6 +37,21 @@ public:
         bool operator!=(const Iterator& other) const;
     };
 
+    class IteratorWithDitrection {
+    private:
+        Matrix _matrix;
+        Point _point;
+        Direction _direction;
+        int _distance = 0;
+        void nextStep();
+    public:
+        IteratorWithDitrection(Matrix& matrix, const Point& point, const Direction& direction, bool withStartPoint = false);
+        IteratorWithDitrection& operator++();
+        BoardItem* operator*();
+        bool operator==(const IteratorWithDitrection& other) const;
+        bool operator!=(const IteratorWithDitrection& other) const;
+    };
+
     class Sequence {
     private:
         Iterator _begin, _end;
@@ -46,11 +61,21 @@ public:
         Iterator end() const;
     };
 
+    class SequenceByDirection {
+    private:
+        IteratorWithDitrection _begin, _end;
+    public:
+        SequenceByDirection(IteratorWithDitrection begin, IteratorWithDitrection end);
+        IteratorWithDitrection begin() const;
+        IteratorWithDitrection end() const;
+    };
+
     Matrix matrix;
 
     BoardItems();
     Sequence sequence();
     Sequence sequenceWithPieces();
+    SequenceByDirection sequenceByDirection(const Point& point, const Direction& direction);
     // const Matrix& matrix() const;
 
     void placePiece(Piece& piece, const Point& point);

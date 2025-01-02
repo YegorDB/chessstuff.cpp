@@ -10,6 +10,7 @@ public:
     Point(int x, int y);
 
     void operator=(Point point);
+    bool operator==(const Point& other) const;
 
     int x() const;
     int y() const;

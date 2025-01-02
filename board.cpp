@@ -55,22 +55,21 @@ void Board::clearActions() {
 void Board::setActions() {
     for (auto item : items.sequenceWithPieces()) {
         for (auto direction : item->piece->getPlaceDirections()) {
-            Point nextPoint = item->square.point;
             bool after_piece = false;
-            for (int d = 0; d < direction.maxDistance; ++d) {
-                nextPoint = nextPoint.next(direction);
-                if (!nextPoint.isValid()) break;
-
-                BoardItem nextItem = items.matrix[nextPoint.y()][nextPoint.x()];
-                if (nextItem.piece == nullptr) {
+            for (auto nextItem : items.sequenceByDirection(item->square.point, direction)) {
+                if (nextItem->piece == nullptr) {
                     if (after_piece) {
-                        item->actions.xray.insert_to(nextPoint.hash());
-                        nextItem.actions.xray.insert_by(item->square.point.hash());
+                        item->actions.xray.insert_to(nextItem->square.point.hash());
+                        nextItem->actions.xray.insert_by(item->square.point.hash());
                     } else {
-                        item->actions.place.insert_to(nextPoint.hash());
-                        nextItem.actions.place.insert_by(item->square.point.hash());
+                        item->actions.place.insert_to(nextItem->square.point.hash());
+                        nextItem->actions.place.insert_by(item->square.point.hash());
                     }
                 } else {
+                    if (after_piece) {
+                        break;
+                    }
+                    after_piece = true;
                 }
             }
         }

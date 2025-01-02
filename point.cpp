@@ -8,6 +8,10 @@ void Point::operator=(Point other) {
     _hash = other._hash;
 };
 
+bool Point::operator==(const Point& other) const {
+    return this->_hash == other._hash;
+};
+
 int Point::x() const {
     return _x;
 };
