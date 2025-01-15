@@ -122,6 +122,41 @@ void test_piece() {
     assert((pawn2.getThreatDirections()[1] == Direction{1, -1}));
 }
 
+void test_piece_pack() {
+    PiecePack piece_pack{true};
+
+    assert(piece_pack.king.type == PieceType::KING);
+    assert(piece_pack.king.isWhiteColor);
+
+    assert(piece_pack.queens.size() == 1);
+    assert(piece_pack.queens[0].type == PieceType::QUEEN);
+    assert(piece_pack.queens[0].isWhiteColor);
+
+    assert(piece_pack.rooks.size() == 2);
+    for (int i = 0; i < 2; ++i) {
+        assert(piece_pack.rooks[i].type == PieceType::ROOK);
+        assert(piece_pack.rooks[i].isWhiteColor);
+    }
+
+    assert(piece_pack.bishops.size() == 2);
+    for (int i = 0; i < 2; ++i) {
+        assert(piece_pack.bishops[i].type == PieceType::BISHOP);
+        assert(piece_pack.bishops[i].isWhiteColor);
+    }
+
+    assert(piece_pack.knights.size() == 2);
+    for (int i = 0; i < 2; ++i) {
+        assert(piece_pack.knights[i].type == PieceType::KNIGHT);
+        assert(piece_pack.knights[i].isWhiteColor);
+    }
+
+    assert(piece_pack.pawns.size() == 8);
+    for (int i = 0; i < 8; ++i) {
+        assert(piece_pack.pawns[i].type == PieceType::PAWN);
+        assert(piece_pack.pawns[i].isWhiteColor);
+    }
+}
+
 int main() {
     // Piece k{PieceType::KING, false};
     // std::cout << static_cast<int>(k.type) << " " << k.getColorName() << std::endl;
@@ -179,6 +214,7 @@ int main() {
     test_point();
     test_square();
     test_piece();
+    test_piece_pack();
 
     std::cout << "OK" << std::endl;
 }
