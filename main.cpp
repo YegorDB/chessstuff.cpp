@@ -123,38 +123,61 @@ void test_piece() {
 }
 
 void test_piece_pack() {
-    PiecePack piece_pack{true};
+    for (bool isWhiteColor : {true, false}) {
+        PiecePack piece_pack{isWhiteColor};
 
-    assert(piece_pack.king.type == PieceType::KING);
-    assert(piece_pack.king.isWhiteColor);
+        assert(piece_pack.king.type == PieceType::KING);
+        assert(piece_pack.king.isWhiteColor == isWhiteColor);
 
-    assert(piece_pack.queens.size() == 1);
-    assert(piece_pack.queens[0].type == PieceType::QUEEN);
-    assert(piece_pack.queens[0].isWhiteColor);
+        assert(piece_pack.queens.size() == 1);
+        assert(piece_pack.queens[0].type == PieceType::QUEEN);
+        assert(piece_pack.queens[0].isWhiteColor == isWhiteColor);
 
-    assert(piece_pack.rooks.size() == 2);
-    for (int i = 0; i < 2; ++i) {
-        assert(piece_pack.rooks[i].type == PieceType::ROOK);
-        assert(piece_pack.rooks[i].isWhiteColor);
+        assert(piece_pack.rooks.size() == 2);
+        for (int i = 0; i < 2; ++i) {
+            assert(piece_pack.rooks[i].type == PieceType::ROOK);
+            assert(piece_pack.rooks[i].isWhiteColor == isWhiteColor);
+        }
+
+        assert(piece_pack.bishops.size() == 2);
+        for (int i = 0; i < 2; ++i) {
+            assert(piece_pack.bishops[i].type == PieceType::BISHOP);
+            assert(piece_pack.bishops[i].isWhiteColor == isWhiteColor);
+        }
+
+        assert(piece_pack.knights.size() == 2);
+        for (int i = 0; i < 2; ++i) {
+            assert(piece_pack.knights[i].type == PieceType::KNIGHT);
+            assert(piece_pack.knights[i].isWhiteColor == isWhiteColor);
+        }
+
+        assert(piece_pack.pawns.size() == 8);
+        for (int i = 0; i < 8; ++i) {
+            assert(piece_pack.pawns[i].type == PieceType::PAWN);
+            assert(piece_pack.pawns[i].isWhiteColor == isWhiteColor);
+        }
     }
+}
 
-    assert(piece_pack.bishops.size() == 2);
-    for (int i = 0; i < 2; ++i) {
-        assert(piece_pack.bishops[i].type == PieceType::BISHOP);
-        assert(piece_pack.bishops[i].isWhiteColor);
-    }
+void test_board_item_action() {
+    BoardItemAction action{};
 
-    assert(piece_pack.knights.size() == 2);
-    for (int i = 0; i < 2; ++i) {
-        assert(piece_pack.knights[i].type == PieceType::KNIGHT);
-        assert(piece_pack.knights[i].isWhiteColor);
-    }
+    action.insertTo(1);
 
-    assert(piece_pack.pawns.size() == 8);
-    for (int i = 0; i < 8; ++i) {
-        assert(piece_pack.pawns[i].type == PieceType::PAWN);
-        assert(piece_pack.pawns[i].isWhiteColor);
-    }
+    BoardItemActionHashes toValues = action.getTo();
+    assert(toValues.size() == 1);
+    assert(toValues.find(1) != toValues.end());
+
+    action.insertBy(2);
+
+    BoardItemActionHashes byValues = action.getBy();
+    assert(byValues.size() == 1);
+    assert(byValues.find(2) != byValues.end());
+
+    action.clear();
+
+    assert(action.getTo().empty());
+    assert(action.getBy().empty());
 }
 
 int main() {
@@ -215,6 +238,7 @@ int main() {
     test_square();
     test_piece();
     test_piece_pack();
+    test_board_item_action();
 
     std::cout << "OK" << std::endl;
 }

@@ -59,11 +59,11 @@ void Board::setActions() {
             for (auto nextItem : items.sequenceByDirection(item->square.point, direction)) {
                 if (nextItem->piece == nullptr) {
                     if (after_piece) {
-                        item->actions.xray.insert_to(nextItem->square.point.hash());
-                        nextItem->actions.xray.insert_by(item->square.point.hash());
+                        item->actions.xray.insertTo(nextItem->square.point.hash());
+                        nextItem->actions.xray.insertBy(item->square.point.hash());
                     } else {
-                        item->actions.place.insert_to(nextItem->square.point.hash());
-                        nextItem->actions.place.insert_by(item->square.point.hash());
+                        item->actions.place.insertTo(nextItem->square.point.hash());
+                        nextItem->actions.place.insertBy(item->square.point.hash());
                     }
                 } else {
                     if (after_piece) {

@@ -1,15 +1,20 @@
 #include <unordered_set>
 
-class BoardItemAction {
-public:
-    std::unordered_set<int> to;
-    std::unordered_set<int> by;
+using BoardItemActionHashes = std::unordered_set<int>;
 
+class BoardItemAction {
+private:
+    BoardItemActionHashes to;
+    BoardItemActionHashes by;
+
+public:
     BoardItemAction();
 
     void clear();
-    void insert_to(int hash);
-    void insert_by(int hash);
+    void insertTo(int hash);
+    void insertBy(int hash);
+    const BoardItemActionHashes& getTo() const;
+    const BoardItemActionHashes& getBy() const;
 };
 
 class BoardItemActions {

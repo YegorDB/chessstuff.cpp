@@ -7,12 +7,20 @@ void BoardItemAction::clear() {
     by.clear();
 };
 
-void BoardItemAction::insert_to(int hash) {
+void BoardItemAction::insertTo(int hash) {
     to.insert(hash);
 };
 
-void BoardItemAction::insert_by(int hash) {
+void BoardItemAction::insertBy(int hash) {
     by.insert(hash);
+};
+
+const BoardItemActionHashes& BoardItemAction::getTo() const {
+    return to;
+};
+
+const BoardItemActionHashes& BoardItemAction::getBy() const {
+    return by;
 };
 
 BoardItemActions::BoardItemActions() {};
