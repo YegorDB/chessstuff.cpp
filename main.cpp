@@ -180,6 +180,41 @@ void test_board_item_action() {
     assert(action.getBy().empty());
 }
 
+void test_board_item_actions() {
+    BoardItemActions actions{};
+
+    actions.getThreat().insertTo(1);
+    actions.getThreat().insertBy(11);
+    assert(!actions.getThreat().getTo().empty());
+    assert(!actions.getThreat().getBy().empty());
+
+    actions.getSupport().insertTo(2);
+    actions.getSupport().insertBy(12);
+    assert(!actions.getSupport().getTo().empty());
+    assert(!actions.getSupport().getBy().empty());
+
+    actions.getPlace().insertTo(3);
+    actions.getPlace().insertBy(13);
+    assert(!actions.getPlace().getTo().empty());
+    assert(!actions.getPlace().getBy().empty());
+
+    actions.getXray().insertTo(4);
+    actions.getXray().insertBy(14);
+    assert(!actions.getXray().getTo().empty());
+    assert(!actions.getXray().getBy().empty());
+
+    actions.clear();
+
+    assert(actions.getThreat().getTo().empty());
+    assert(actions.getThreat().getBy().empty());
+    assert(actions.getSupport().getTo().empty());
+    assert(actions.getSupport().getBy().empty());
+    assert(actions.getPlace().getTo().empty());
+    assert(actions.getPlace().getBy().empty());
+    assert(actions.getXray().getTo().empty());
+    assert(actions.getXray().getBy().empty());
+}
+
 int main() {
     // Piece k{PieceType::KING, false};
     // std::cout << static_cast<int>(k.type) << " " << k.getColorName() << std::endl;
@@ -239,6 +274,7 @@ int main() {
     test_piece();
     test_piece_pack();
     test_board_item_action();
+    test_board_item_actions();
 
     std::cout << "OK" << std::endl;
 }

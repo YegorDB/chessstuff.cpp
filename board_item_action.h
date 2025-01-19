@@ -4,8 +4,8 @@ using BoardItemActionHashes = std::unordered_set<int>;
 
 class BoardItemAction {
 private:
-    BoardItemActionHashes to;
-    BoardItemActionHashes by;
+    BoardItemActionHashes _to;
+    BoardItemActionHashes _by;
 
 public:
     BoardItemAction();
@@ -18,13 +18,19 @@ public:
 };
 
 class BoardItemActions {
-public:
-    BoardItemAction threat;
-    BoardItemAction support;
-    BoardItemAction place;
-    BoardItemAction xray;
+private:
+    BoardItemAction _threat;
+    BoardItemAction _support;
+    BoardItemAction _place;
+    BoardItemAction _xray;
 
+public:
     BoardItemActions();
 
     void clear();
+
+    BoardItemAction& getThreat();
+    BoardItemAction& getSupport();
+    BoardItemAction& getPlace();
+    BoardItemAction& getXray();
 };

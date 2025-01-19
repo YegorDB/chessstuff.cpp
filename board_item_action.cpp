@@ -3,31 +3,47 @@
 BoardItemAction::BoardItemAction() {};
 
 void BoardItemAction::clear() {
-    to.clear();
-    by.clear();
+    _to.clear();
+    _by.clear();
 };
 
 void BoardItemAction::insertTo(int hash) {
-    to.insert(hash);
+    _to.insert(hash);
 };
 
 void BoardItemAction::insertBy(int hash) {
-    by.insert(hash);
+    _by.insert(hash);
 };
 
 const BoardItemActionHashes& BoardItemAction::getTo() const {
-    return to;
+    return _to;
 };
 
 const BoardItemActionHashes& BoardItemAction::getBy() const {
-    return by;
+    return _by;
 };
 
 BoardItemActions::BoardItemActions() {};
 
 void BoardItemActions::clear() {
-    threat.clear();
-    support.clear();
-    place.clear();
-    xray.clear();
+    _threat.clear();
+    _support.clear();
+    _place.clear();
+    _xray.clear();
+};
+
+BoardItemAction& BoardItemActions::getThreat() {
+    return _threat;
+};
+
+BoardItemAction& BoardItemActions::getSupport() {
+    return _support;
+};
+
+BoardItemAction& BoardItemActions::getPlace() {
+    return _place;
+};
+
+BoardItemAction& BoardItemActions::getXray() {
+    return _xray;
 };
