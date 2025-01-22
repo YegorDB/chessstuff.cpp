@@ -215,6 +215,21 @@ void test_board_item_actions() {
     assert(actions.getXray().getBy().empty());
 }
 
+void test_board_item() {
+    Square emptySquare{"a1"};
+    BoardItem itemWithoutPiece{emptySquare};
+    assert((itemWithoutPiece.square.point == Point{0, 7}));
+    assert(!BoardItem::hasPiece(itemWithoutPiece));
+
+    Square square{"b8"};
+    Piece king{PieceType::KING, true};
+    BoardItem itemWithPiece{square, &king};
+    assert((itemWithPiece.square.point == Point{1, 0}));
+    assert((itemWithPiece.piece->type == PieceType::KING));
+    assert(itemWithPiece.piece->isWhiteColor);
+    assert(BoardItem::hasPiece(itemWithPiece));
+}
+
 int main() {
     // Piece k{PieceType::KING, false};
     // std::cout << static_cast<int>(k.type) << " " << k.getColorName() << std::endl;
@@ -275,6 +290,7 @@ int main() {
     test_piece_pack();
     test_board_item_action();
     test_board_item_actions();
+    test_board_item();
 
     std::cout << "OK" << std::endl;
 }
