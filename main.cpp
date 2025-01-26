@@ -230,6 +230,60 @@ void test_board_item() {
     assert(BoardItem::hasPiece(itemWithPiece));
 }
 
+void test_board_items() {
+    BoardItems items{};
+
+    int i = 0;
+    for (BoardItem* item : items.sequence()) {
+        assert(item->piece == nullptr);
+        assert((item->square.point == Point{i % 8, i / 8}));
+        ++i;
+    }
+    assert(i == 64);
+
+    i = 0;
+    for (BoardItem* item : items.sequenceWithPieces()) {
+        ++i;
+    }
+    assert(i == 0);
+
+    i = 0;
+    for (BoardItem* item : items.sequenceByDirection(Point{1, 2}, Direction{1, 1, 7}, true)) {
+        assert((item->square.point == Point{1 + i, 2 + i}));
+        ++i;
+    }
+    assert(i == 6);
+
+    i = 0;
+    for (BoardItem* item : items.sequenceByDirection(Point{1, 2}, Direction{1, 1, 7})) {
+        ++i;
+        assert((item->square.point == Point{1 + i, 2 + i}));
+    }
+    assert(i == 5);
+
+    Point piecePoint{5, 3};
+    Piece king{PieceType::KING, true};
+    items.placePiece(king, piecePoint);
+
+    i = 0;
+    for (BoardItem* item : items.sequenceWithPieces()) {
+        assert(item->piece != nullptr);
+        assert(item->piece->type == PieceType::KING);
+        assert(item->piece->isWhiteColor);
+        assert(item->square.point == piecePoint);
+        ++i;
+    }
+    assert(i == 1);
+
+    BoardItem itemWithPiece = items.getItem(piecePoint);
+    assert(itemWithPiece.piece != nullptr);
+    assert(itemWithPiece.piece->type == PieceType::KING);
+    assert(itemWithPiece.piece->isWhiteColor);
+
+    BoardItem itemWithoutPiece = items.getItem(Point{1, 2});
+    assert(itemWithoutPiece.piece == nullptr);
+}
+
 int main() {
     // Piece k{PieceType::KING, false};
     // std::cout << static_cast<int>(k.type) << " " << k.getColorName() << std::endl;
@@ -291,6 +345,7 @@ int main() {
     test_board_item_action();
     test_board_item_actions();
     test_board_item();
+    test_board_items();
 
     std::cout << "OK" << std::endl;
 }

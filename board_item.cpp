@@ -36,10 +36,10 @@ BoardItems::Sequence BoardItems::sequenceWithPieces() {
     };
 };
 
-BoardItems::SequenceByDirection BoardItems::sequenceByDirection(const Point& point, const Direction& direction) {
+BoardItems::SequenceByDirection BoardItems::sequenceByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
     return SequenceByDirection{
-        IteratorWithDitrection{_matrix, point, direction},
-        IteratorWithDitrection{_matrix, Point{8, 8}, direction},
+        IteratorWithDitrection{_matrix, point, direction, withStartPoint},
+        IteratorWithDitrection{_matrix, Point{8, 8}, direction, withStartPoint},
     };
 };
 
@@ -82,17 +82,12 @@ BoardItems::Iterator::Iterator(Matrix& matrix, int index) : _matrix{matrix}, _in
 
 BoardItems::Iterator::Iterator(Matrix& matrix, int index, Filter* filter) : BoardItems::Iterator(matrix, index) {
     _filter = filter;
+    filterItems();
 }
 
 BoardItems::Iterator& BoardItems::Iterator::operator++() {
-    while (_index < 64) {
-        ++_index;
-        _point = Point{_index % 8, _index / 8};
-        if (!_point.isValid() || _filter == nullptr) break;
-
-        BoardItem item = _matrix[_point.y()][_point.x()];
-        if ((*_filter)(item)) break;
-    }
+    nextStep();
+    filterItems();
     return *this;
 }
 
@@ -106,6 +101,19 @@ bool BoardItems::Iterator::operator==(const BoardItems::Iterator& other) const {
 
 bool BoardItems::Iterator::operator!=(const BoardItems::Iterator& other) const {
     return this->_index != other._index;
+};
+
+void BoardItems::Iterator::nextStep() {
+    ++_index;
+    _point = Point{_index % 8, _index / 8};
+}
+
+void BoardItems::Iterator::filterItems() {
+    if (_filter == nullptr) return;
+
+    while (_point.isValid() && !(*_filter)(_matrix[_point.y()][_point.x()])) {
+        nextStep();
+    }
 };
 
 BoardItems::IteratorWithDitrection::IteratorWithDitrection(

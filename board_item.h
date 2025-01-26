@@ -28,6 +28,8 @@ public:
         int _index;
         Filter* _filter = nullptr;
         Point _point;
+        void nextStep();
+        void filterItems();
     public:
         Iterator(Matrix& matrix, int index);
         Iterator(Matrix& matrix, int index, Filter* filter);
@@ -73,7 +75,7 @@ public:
     BoardItems();
     Sequence sequence();
     Sequence sequenceWithPieces();
-    SequenceByDirection sequenceByDirection(const Point& point, const Direction& direction);
+    SequenceByDirection sequenceByDirection(const Point& point, const Direction& direction, bool withStartPoint = false);
 
     const BoardItem& getItem(const Point& point) const;
     void placePiece(Piece& piece, const Point& point);
