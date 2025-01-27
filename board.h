@@ -22,5 +22,5 @@ private:
 public:
     Board();
 
-    const BoardItems& getItems() const;
+    BoardItems& getItems();
 };

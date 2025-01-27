@@ -42,7 +42,7 @@ void Board::initPieces() {
     initOneSidePieces(false);
 }
 
-const BoardItems& Board::getItems() const {
+BoardItems& Board::getItems() {
     return items;
 }
 

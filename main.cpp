@@ -284,6 +284,39 @@ void test_board_items() {
     assert(itemWithoutPiece.piece == nullptr);
 }
 
+void test_board() {
+    Board board{};
+
+    int i = 0;
+    for (BoardItem* item : board.getItems().sequence()) {
+        if (item->square.point.y() > 1 && item->square.point.y() < 6) {
+            assert(item->piece == nullptr);
+        } else {
+            assert(item->piece != nullptr);
+        }
+
+        if (item->square.point.y() == 0 || item->square.point.y() == 7) {
+            assert(!item->piece->isWhiteColor == (item->square.point.y() == 7));
+            if (item->square.point.x() == 0 || item->square.point.x() == 7) {
+                assert(item->piece->type == PieceType::ROOK);
+            } else if (item->square.point.x() == 1 || item->square.point.x() == 6) {
+                assert(item->piece->type == PieceType::KNIGHT);
+            } else if (item->square.point.x() == 2 || item->square.point.x() == 5) {
+                assert(item->piece->type == PieceType::BISHOP);
+            } else if (item->square.point.x() == 3) {
+                assert(item->piece->type == PieceType::QUEEN);
+            } else {
+                assert(item->piece->type == PieceType::KING);
+            }
+        } else if (item->square.point.y() == 1 || item->square.point.y() == 6) {
+            assert(!item->piece->isWhiteColor == (item->square.point.y() == 6));
+            assert(item->piece->type == PieceType::PAWN);
+        }
+        ++i;
+    }
+    assert(i == 64);
+}
+
 int main() {
     // Piece k{PieceType::KING, false};
     // std::cout << static_cast<int>(k.type) << " " << k.getColorName() << std::endl;
@@ -346,6 +379,7 @@ int main() {
     test_board_item_actions();
     test_board_item();
     test_board_items();
+    test_board();
 
     std::cout << "OK" << std::endl;
 }
