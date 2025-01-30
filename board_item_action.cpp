@@ -2,48 +2,32 @@
 
 BoardItemAction::BoardItemAction() {};
 
+void BoardItemAction::insert(BoardItemActionRelation relation, int hash) {
+    _relations[relation].insert(hash);
+};
+
 void BoardItemAction::clear() {
-    _to.clear();
-    _by.clear();
+    _relations[BoardItemActionRelation::TO].clear();
+    _relations[BoardItemActionRelation::BY].clear();
 };
 
-void BoardItemAction::insertTo(int hash) {
-    _to.insert(hash);
-};
-
-void BoardItemAction::insertBy(int hash) {
-    _by.insert(hash);
-};
-
-const BoardItemActionHashes& BoardItemAction::getTo() const {
-    return _to;
-};
-
-const BoardItemActionHashes& BoardItemAction::getBy() const {
-    return _by;
+const BoardItemActionHashes& BoardItemAction::get(BoardItemActionRelation relation) const {
+    return _relations.at(relation);
 };
 
 BoardItemActions::BoardItemActions() {};
 
+void BoardItemActions::insert(BoardItemActionType type, BoardItemActionRelation relation, int hash) {
+    _inners[type].insert(relation, hash);
+};
+
 void BoardItemActions::clear() {
-    _threat.clear();
-    _support.clear();
-    _place.clear();
-    _xray.clear();
+    _inners[BoardItemActionType::THREAT].clear();
+    _inners[BoardItemActionType::SUPPORT].clear();
+    _inners[BoardItemActionType::PLACE].clear();
+    _inners[BoardItemActionType::XRAY].clear();
 };
 
-BoardItemAction& BoardItemActions::getThreat() {
-    return _threat;
-};
-
-BoardItemAction& BoardItemActions::getSupport() {
-    return _support;
-};
-
-BoardItemAction& BoardItemActions::getPlace() {
-    return _place;
-};
-
-BoardItemAction& BoardItemActions::getXray() {
-    return _xray;
+const BoardItemAction& BoardItemActions::get(BoardItemActionType type) const {
+    return _inners.at(type);
 };

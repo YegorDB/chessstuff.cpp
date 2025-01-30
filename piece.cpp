@@ -113,3 +113,7 @@ const std::vector<Direction>& Piece::getThreatDirections() const {
 const std::string& Piece::getColorName() const {
     return COLOR_NAMES[isWhiteColor ? 0 : 1];
 }
+
+const bool Piece::hasSameColor(Piece* other) const {
+    return this->isWhiteColor == other->isWhiteColor;
+};

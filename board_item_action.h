@@ -1,36 +1,48 @@
+#include <unordered_map>
 #include <unordered_set>
 
 using BoardItemActionHashes = std::unordered_set<int>;
 
+enum class BoardItemActionRelation {
+    BY = 0,
+    TO = 1
+};
+
+enum class BoardItemActionType {
+    THREAT = 0,
+    SUPPORT = 1,
+    PLACE = 2,
+    XRAY = 3
+};
+
 class BoardItemAction {
 private:
-    BoardItemActionHashes _to;
-    BoardItemActionHashes _by;
+    std::unordered_map<BoardItemActionRelation, BoardItemActionHashes> _relations {
+        {BoardItemActionRelation::BY, BoardItemActionHashes{}},
+        {BoardItemActionRelation::TO, BoardItemActionHashes{}}
+    };
 
 public:
     BoardItemAction();
 
+    void insert(BoardItemActionRelation relation, int hash);
     void clear();
-    void insertTo(int hash);
-    void insertBy(int hash);
-    const BoardItemActionHashes& getTo() const;
-    const BoardItemActionHashes& getBy() const;
+    const BoardItemActionHashes& get(BoardItemActionRelation relation) const;
 };
 
 class BoardItemActions {
 private:
-    BoardItemAction _threat;
-    BoardItemAction _support;
-    BoardItemAction _place;
-    BoardItemAction _xray;
+    std::unordered_map<BoardItemActionType, BoardItemAction> _inners{
+        {BoardItemActionType::THREAT, BoardItemAction{}},
+        {BoardItemActionType::SUPPORT, BoardItemAction{}},
+        {BoardItemActionType::PLACE, BoardItemAction{}},
+        {BoardItemActionType::XRAY, BoardItemAction{}}
+    };
 
 public:
     BoardItemActions();
 
+    void insert(BoardItemActionType type, BoardItemActionRelation relation, int hash);
     void clear();
-
-    BoardItemAction& getThreat();
-    BoardItemAction& getSupport();
-    BoardItemAction& getPlace();
-    BoardItemAction& getXray();
+    const BoardItemAction& get(BoardItemActionType type) const;
 };

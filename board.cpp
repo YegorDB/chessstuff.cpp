@@ -53,21 +53,24 @@ void Board::clearActions() {
 };
 
 void Board::setActions() {
-    for (auto item : items.sequenceWithPieces()) {
-        for (auto direction : item->piece->getPlaceDirections()) {
+    for (BoardItem* item : items.sequenceWithPieces()) {
+        for (Direction direction : item->piece->getPlaceDirections()) {
             bool after_piece = false;
-            for (auto nextItem : items.sequenceByDirection(item->square.point, direction)) {
+            for (BoardItem* nextItem : items.sequenceByDirection(item->square.point, direction)) {
                 if (nextItem->piece == nullptr) {
                     if (after_piece) {
-                        item->actions.getXray().insertTo(nextItem->square.point.hash());
-                        nextItem->actions.getXray().insertBy(item->square.point.hash());
+                        item->insertAction(BoardItemActionType::XRAY, nextItem);
                     } else {
-                        item->actions.getPlace().insertTo(nextItem->square.point.hash());
-                        nextItem->actions.getPlace().insertBy(item->square.point.hash());
+                        item->insertAction(BoardItemActionType::PLACE, nextItem);
                     }
                 } else {
                     if (after_piece) {
+                        item->insertAction(BoardItemActionType::XRAY, nextItem);
                         break;
+                    } else if (item->piece->hasSameColor(nextItem->piece)) {
+                        item->insertAction(BoardItemActionType::SUPPORT, nextItem);
+                    } else {
+                        item->insertAction(BoardItemActionType::THREAT, nextItem);
                     }
                     after_piece = true;
                 }

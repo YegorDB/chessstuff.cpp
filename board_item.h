@@ -11,6 +11,8 @@ public:
     BoardItem(Square square);
     BoardItem(Square square, Piece* piece);
 
+    void insertAction(BoardItemActionType type, BoardItem* other);
+
     static bool hasPiece(const BoardItem& item);
 };
 

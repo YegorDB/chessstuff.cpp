@@ -120,6 +120,9 @@ void test_piece() {
     assert((pawn2.getPlaceDirections()[0] == Direction{0, -1}));
     assert((pawn2.getThreatDirections()[0] == Direction{-1, -1}));
     assert((pawn2.getThreatDirections()[1] == Direction{1, -1}));
+
+    assert(pawn1.hasSameColor(&queen));
+    assert(!pawn1.hasSameColor(&pawn2));
 }
 
 void test_piece_pack() {
@@ -162,57 +165,57 @@ void test_piece_pack() {
 void test_board_item_action() {
     BoardItemAction action{};
 
-    action.insertTo(1);
+    action.insert(BoardItemActionRelation::TO, 1);
 
-    BoardItemActionHashes toValues = action.getTo();
+    BoardItemActionHashes toValues = action.get(BoardItemActionRelation::TO);
     assert(toValues.size() == 1);
     assert(toValues.find(1) != toValues.end());
 
-    action.insertBy(2);
+    action.insert(BoardItemActionRelation::BY, 2);
 
-    BoardItemActionHashes byValues = action.getBy();
+    BoardItemActionHashes byValues = action.get(BoardItemActionRelation::BY);
     assert(byValues.size() == 1);
     assert(byValues.find(2) != byValues.end());
 
     action.clear();
 
-    assert(action.getTo().empty());
-    assert(action.getBy().empty());
+    assert(action.get(BoardItemActionRelation::TO).empty());
+    assert(action.get(BoardItemActionRelation::BY).empty());
 }
 
 void test_board_item_actions() {
     BoardItemActions actions{};
 
-    actions.getThreat().insertTo(1);
-    actions.getThreat().insertBy(11);
-    assert(!actions.getThreat().getTo().empty());
-    assert(!actions.getThreat().getBy().empty());
+    actions.insert(BoardItemActionType::THREAT, BoardItemActionRelation::BY, 11);
+    actions.insert(BoardItemActionType::THREAT, BoardItemActionRelation::TO, 1);
+    assert(!actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::TO).empty());
+    assert(!actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::BY).empty());
 
-    actions.getSupport().insertTo(2);
-    actions.getSupport().insertBy(12);
-    assert(!actions.getSupport().getTo().empty());
-    assert(!actions.getSupport().getBy().empty());
+    actions.insert(BoardItemActionType::SUPPORT, BoardItemActionRelation::TO, 2);
+    actions.insert(BoardItemActionType::SUPPORT, BoardItemActionRelation::BY, 12);
+    assert(!actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::TO).empty());
+    assert(!actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::BY).empty());
 
-    actions.getPlace().insertTo(3);
-    actions.getPlace().insertBy(13);
-    assert(!actions.getPlace().getTo().empty());
-    assert(!actions.getPlace().getBy().empty());
+    actions.insert(BoardItemActionType::PLACE, BoardItemActionRelation::TO, 3);
+    actions.insert(BoardItemActionType::PLACE, BoardItemActionRelation::BY, 13);
+    assert(!actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::TO).empty());
+    assert(!actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::BY).empty());
 
-    actions.getXray().insertTo(4);
-    actions.getXray().insertBy(14);
-    assert(!actions.getXray().getTo().empty());
-    assert(!actions.getXray().getBy().empty());
+    actions.insert(BoardItemActionType::XRAY, BoardItemActionRelation::TO, 4);
+    actions.insert(BoardItemActionType::XRAY, BoardItemActionRelation::BY, 14);
+    assert(!actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::TO).empty());
+    assert(!actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::BY).empty());
 
     actions.clear();
 
-    assert(actions.getThreat().getTo().empty());
-    assert(actions.getThreat().getBy().empty());
-    assert(actions.getSupport().getTo().empty());
-    assert(actions.getSupport().getBy().empty());
-    assert(actions.getPlace().getTo().empty());
-    assert(actions.getPlace().getBy().empty());
-    assert(actions.getXray().getTo().empty());
-    assert(actions.getXray().getBy().empty());
+    assert(actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::TO).empty());
+    assert(actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::BY).empty());
+    assert(actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::TO).empty());
+    assert(actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::BY).empty());
+    assert(actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::TO).empty());
+    assert(actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::BY).empty());
+    assert(actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::TO).empty());
+    assert(actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::BY).empty());
 }
 
 void test_board_item() {
@@ -318,58 +321,6 @@ void test_board() {
 }
 
 int main() {
-    // Piece k{PieceType::KING, false};
-    // std::cout << static_cast<int>(k.type) << " " << k.getColorName() << std::endl;
-
-    // for (auto dd : k.getPlaceDirections()) {
-    //     std::cout << dd.dx << " " << dd.dy << " " << dd.maxDistance << std::endl;
-    // }
-
-    // for (auto dd : k.getThreatDirections()) {
-    //     std::cout << dd.dx << " " << dd.dy << " " << dd.maxDistance << std::endl;
-    // }
-
-    // Square s4{1, 2};
-    // Piece pi{PieceType::KING, false};
-
-    // BoardItem bi{s4, &pi};
-    // std::cout << bi.square.toString() << std::endl;
-
-    // Board b{};
-    // auto items = b.getItems();
-
-    // int i = 0;
-    // for (auto item : items.sequence()) {
-    //     std::cout << item->square.getName() << " ";
-    //     if (++i % 8 == 0) {
-    //         std::cout << std::endl;
-    //     }
-    // }
-
-    // std::cout << std::endl;
-
-    // i = 0;
-    // for (auto item : items.sequenceWithPieces()) {
-    //     std::cout << item->square.getName() << " ";
-    //     if (++i % 8 == 0) {
-    //         std::cout << std::endl;
-    //     }
-    // }
-
-    // std::cout << std::endl;
-
-    // std::cout << (items.getItem(Point{3, 2}).piece == nullptr) << std::endl;
-    // std::cout << (items.getItem(Point{3, 7}).piece != nullptr) << std::endl;
-    // std::cout << (items.getItem(Point{4, 0}).piece != nullptr) << std::endl;
-
-    // std::cout << (items.getItem(Point{4, 0}).piece->type == PieceType::KING) << std::endl;
-    // Piece k3 = *items.getItem(Point{4, 0}).piece;
-    // std::cout << static_cast<int>(k3.type) << " " << k3.getColorName() << std::endl;
-
-    // std::cout << (items.getItem(Point{3, 7}).piece->type == PieceType::QUEEN) << std::endl;
-    // Piece q3 = *items.getItem(Point{3, 7}).piece;
-    // std::cout << static_cast<int>(q3.type) << " " << q3.getColorName() << std::endl;
-
     test_direction();
     test_point();
     test_square();

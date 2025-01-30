@@ -34,4 +34,5 @@ public:
     const std::vector<Direction>& getPlaceDirections() const;
     const std::vector<Direction>& getThreatDirections() const;
     const std::string& getColorName() const;
+    const bool hasSameColor(Piece* other) const;
 };

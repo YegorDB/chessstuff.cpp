@@ -6,6 +6,11 @@ BoardItem::BoardItem(Square square) : square(square) {};
 
 BoardItem::BoardItem(Square square, Piece* piece) : square(square), piece(piece) {};
 
+void BoardItem::insertAction(BoardItemActionType type, BoardItem* other) {
+    this->actions.insert(type, BoardItemActionRelation::TO, other->square.point.hash());
+    other->actions.insert(type, BoardItemActionRelation::BY, this->square.point.hash());
+};
+
 bool BoardItem::hasPiece(const BoardItem& item) {
     return item.piece != nullptr;
 };
