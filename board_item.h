@@ -1,4 +1,4 @@
-#include "board_item_action.h"
+#include "action.h"
 #include "piece_pack.h"
 #include "square.h"
 
@@ -6,12 +6,10 @@ class BoardItem {
 public:
     Square square;
     Piece* piece = nullptr;
-    BoardItemActions actions;
+    Actions actions;
 
     BoardItem(Square square);
     BoardItem(Square square, Piece* piece);
-
-    void insertAction(BoardItemActionType type, BoardItem* other);
 
     static bool hasPiece(const BoardItem& item);
 };

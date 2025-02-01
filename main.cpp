@@ -163,59 +163,63 @@ void test_piece_pack() {
 }
 
 void test_board_item_action() {
-    BoardItemAction action{};
+    Action action{};
+    Square square1{"e3"};
+    Square square2{"g7"};
 
-    action.insert(BoardItemActionRelation::TO, 1);
+    action.insert(ActionRelation::TO, square1);
 
-    BoardItemActionHashes toValues = action.get(BoardItemActionRelation::TO);
+    ActionHashes toValues = action.get(ActionRelation::TO);
     assert(toValues.size() == 1);
-    assert(toValues.find(1) != toValues.end());
+    assert(toValues.find(square1.point.hash()) != toValues.end());
 
-    action.insert(BoardItemActionRelation::BY, 2);
+    action.insert(ActionRelation::BY, square2);
 
-    BoardItemActionHashes byValues = action.get(BoardItemActionRelation::BY);
+    ActionHashes byValues = action.get(ActionRelation::BY);
     assert(byValues.size() == 1);
-    assert(byValues.find(2) != byValues.end());
+    assert(byValues.find(square2.point.hash()) != byValues.end());
 
     action.clear();
 
-    assert(action.get(BoardItemActionRelation::TO).empty());
-    assert(action.get(BoardItemActionRelation::BY).empty());
+    assert(action.get(ActionRelation::TO).empty());
+    assert(action.get(ActionRelation::BY).empty());
 }
 
 void test_board_item_actions() {
-    BoardItemActions actions{};
+    Actions actions{};
+    Square square1{"b8"};
+    Square square2{"h1"};
 
-    actions.insert(BoardItemActionType::THREAT, BoardItemActionRelation::BY, 11);
-    actions.insert(BoardItemActionType::THREAT, BoardItemActionRelation::TO, 1);
-    assert(!actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::TO).empty());
-    assert(!actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::BY).empty());
+    actions.insert(ActionType::THREAT, ActionRelation::BY, square1);
+    actions.insert(ActionType::THREAT, ActionRelation::TO, square2);
+    assert(!actions.get(ActionType::THREAT).get(ActionRelation::TO).empty());
+    assert(!actions.get(ActionType::THREAT).get(ActionRelation::BY).empty());
 
-    actions.insert(BoardItemActionType::SUPPORT, BoardItemActionRelation::TO, 2);
-    actions.insert(BoardItemActionType::SUPPORT, BoardItemActionRelation::BY, 12);
-    assert(!actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::TO).empty());
-    assert(!actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::BY).empty());
+    actions.insert(ActionType::SUPPORT, ActionRelation::TO, square1);
+    actions.insert(ActionType::SUPPORT, ActionRelation::BY, square2);
+    assert(!actions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
+    assert(!actions.get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
 
-    actions.insert(BoardItemActionType::PLACE, BoardItemActionRelation::TO, 3);
-    actions.insert(BoardItemActionType::PLACE, BoardItemActionRelation::BY, 13);
-    assert(!actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::TO).empty());
-    assert(!actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::BY).empty());
+    actions.insert(ActionType::PLACE, ActionRelation::TO, square1);
+    actions.insert(ActionType::PLACE, ActionRelation::BY, square2);
+    assert(!actions.get(ActionType::PLACE).get(ActionRelation::TO).empty());
+    assert(!actions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
 
-    actions.insert(BoardItemActionType::XRAY, BoardItemActionRelation::TO, 4);
-    actions.insert(BoardItemActionType::XRAY, BoardItemActionRelation::BY, 14);
-    assert(!actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::TO).empty());
-    assert(!actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::BY).empty());
+    actions.insert(ActionType::XRAY, ActionRelation::TO, square1);
+    actions.insert(ActionType::XRAY, ActionRelation::BY, square2);
+    assert(!actions.get(ActionType::XRAY).get(ActionRelation::TO).empty());
+    assert(!actions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
     actions.clear();
 
-    assert(actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::TO).empty());
-    assert(actions.get(BoardItemActionType::THREAT).get(BoardItemActionRelation::BY).empty());
-    assert(actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::TO).empty());
-    assert(actions.get(BoardItemActionType::SUPPORT).get(BoardItemActionRelation::BY).empty());
-    assert(actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::TO).empty());
-    assert(actions.get(BoardItemActionType::PLACE).get(BoardItemActionRelation::BY).empty());
-    assert(actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::TO).empty());
-    assert(actions.get(BoardItemActionType::XRAY).get(BoardItemActionRelation::BY).empty());
+    assert(actions.get(ActionType::THREAT).get(ActionRelation::TO).empty());
+    assert(actions.get(ActionType::THREAT).get(ActionRelation::BY).empty());
+    assert(actions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
+    assert(actions.get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
+    assert(actions.get(ActionType::PLACE).get(ActionRelation::TO).empty());
+    assert(actions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
+    assert(actions.get(ActionType::XRAY).get(ActionRelation::TO).empty());
+    assert(actions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 }
 
 void test_board_item() {

@@ -18,6 +18,7 @@ private:
 
     void clearActions();
     void setActions();
+    void setAction(ActionType type, BoardItem* byItem, BoardItem* toItem);
 
 public:
     Board();

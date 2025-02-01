@@ -59,18 +59,18 @@ void Board::setActions() {
             for (BoardItem* nextItem : items.sequenceByDirection(item->square.point, direction)) {
                 if (nextItem->piece == nullptr) {
                     if (after_piece) {
-                        item->insertAction(BoardItemActionType::XRAY, nextItem);
+                        setAction(ActionType::XRAY, item, nextItem);
                     } else {
-                        item->insertAction(BoardItemActionType::PLACE, nextItem);
+                        setAction(ActionType::PLACE, item, nextItem);
                     }
                 } else {
                     if (after_piece) {
-                        item->insertAction(BoardItemActionType::XRAY, nextItem);
+                        setAction(ActionType::XRAY, item, nextItem);
                         break;
                     } else if (item->piece->hasSameColor(nextItem->piece)) {
-                        item->insertAction(BoardItemActionType::SUPPORT, nextItem);
+                        setAction(ActionType::SUPPORT, item, nextItem);
                     } else {
-                        item->insertAction(BoardItemActionType::THREAT, nextItem);
+                        setAction(ActionType::THREAT, item, nextItem);
                     }
                     after_piece = true;
                 }
@@ -78,4 +78,9 @@ void Board::setActions() {
         }
         break; // test
     }
+};
+
+void Board::setAction(ActionType type, BoardItem* byItem, BoardItem* toItem) {
+    byItem->actions.insert(type, ActionRelation::TO, toItem->square);
+    toItem->actions.insert(type, ActionRelation::BY, byItem->square);
 };
