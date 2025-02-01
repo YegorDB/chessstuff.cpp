@@ -39,7 +39,7 @@ BoardItems::Sequence BoardItems::sequenceWithPieces() {
 BoardItems::SequenceByDirection BoardItems::sequenceByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
     return SequenceByDirection{
         IteratorWithDitrection{_matrix, point, direction, withStartPoint},
-        IteratorWithDitrection{_matrix, Point{8, 8}, direction, withStartPoint},
+        IteratorWithDitrection{_matrix, Point{8, 8}, direction, true},
     };
 };
 

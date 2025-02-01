@@ -14,7 +14,8 @@ enum class ActionType {
     THREAT = 0,
     SUPPORT = 1,
     PLACE = 2,
-    XRAY = 3
+    XRAY = 3,
+    BIND = 4
 };
 
 class Action {

@@ -55,28 +55,34 @@ void Board::clearActions() {
 void Board::setActions() {
     for (BoardItem* item : items.sequenceWithPieces()) {
         for (Direction direction : item->piece->getPlaceDirections()) {
-            bool after_piece = false;
             for (BoardItem* nextItem : items.sequenceByDirection(item->square.point, direction)) {
-                if (nextItem->piece == nullptr) {
-                    if (after_piece) {
-                        setAction(ActionType::XRAY, item, nextItem);
-                    } else {
-                        setAction(ActionType::PLACE, item, nextItem);
-                    }
-                } else {
-                    if (after_piece) {
-                        setAction(ActionType::XRAY, item, nextItem);
-                        break;
-                    } else if (item->piece->hasSameColor(nextItem->piece)) {
-                        setAction(ActionType::SUPPORT, item, nextItem);
-                    } else {
-                        setAction(ActionType::THREAT, item, nextItem);
-                    }
-                    after_piece = true;
+                if (nextItem->piece != nullptr) {
+                    break;
                 }
+                setAction(ActionType::PLACE, item, nextItem);
             }
         }
-        break; // test
+        for (Direction direction : item->piece->getThreatDirections()) {
+            BoardItem* prevItem = nullptr;
+            for (BoardItem* nextItem : items.sequenceByDirection(item->square.point, direction)) {
+                if (nextItem->piece == nullptr) {
+                    continue;
+                }
+                if (prevItem != nullptr) {
+                    setAction(ActionType::XRAY, item, nextItem);
+                    if (nextItem->piece->type == PieceType::KING && nextItem->piece->hasSameColor(prevItem->piece)) {
+                        setAction(ActionType::BIND, item, prevItem);
+                    }
+                    break;
+                }
+                if (item->piece->hasSameColor(nextItem->piece)) {
+                    setAction(ActionType::SUPPORT, item, nextItem);
+                } else {
+                    setAction(ActionType::THREAT, item, nextItem);
+                }
+                prevItem = nextItem;
+            }
+        }
     }
 };
 
