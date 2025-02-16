@@ -39,7 +39,8 @@ private:
         {ActionType::THREAT, Action{}},
         {ActionType::SUPPORT, Action{}},
         {ActionType::PLACE, Action{}},
-        {ActionType::XRAY, Action{}}
+        {ActionType::XRAY, Action{}},
+        {ActionType::BIND, Action{}}
     };
 
 public:

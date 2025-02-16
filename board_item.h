@@ -24,7 +24,7 @@ private:
 public:
     class Iterator {
     private:
-        Matrix _matrix;
+        Matrix& _matrix;
         int _index;
         Filter* _filter = nullptr;
         Point _point;
@@ -41,7 +41,7 @@ public:
 
     class IteratorWithDitrection {
     private:
-        Matrix _matrix;
+        Matrix& _matrix;
         Point _point;
         Direction _direction;
         int _distance = 0;
