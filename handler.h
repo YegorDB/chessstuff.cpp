@@ -1,11 +1,12 @@
-#include "board_item.h"
+#include "board.h"
+#include "piece_pack.h"
 
 class Handler {
 private:
-    BoardItems items;
+    Board board;
     std::vector<PiecePack> piecePacks;
 
-    void initItems();
+    void initBoard();
     void initPiecePacks();
     void initOneSidePieces(bool isWhiteColor);
     void initPieces();
@@ -17,5 +18,5 @@ private:
 public:
     Handler();
 
-    BoardItems& getItems();
+    Board& getBoard();
 };

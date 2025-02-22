@@ -1,7 +1,7 @@
 #include "handler.h"
 
 Handler::Handler() {
-    initItems();
+    initBoard();
     initPiecePacks();
     initPieces();
 
@@ -9,8 +9,8 @@ Handler::Handler() {
     setActions();
 }
 
-void Handler::initItems() {
-    items = BoardItems{};
+void Handler::initBoard() {
+    board = Board{};
 }
 
 void Handler::initPiecePacks() {
@@ -24,16 +24,16 @@ void Handler::initOneSidePieces(bool isWhiteColor) {
     int firstLine = isWhiteColor ? 0 : 7;
     int secondLine = isWhiteColor ? 1 : 6;
 
-    items.placePiece(piecePacks[pack].rooks[0], Point{0, firstLine});
-    items.placePiece(piecePacks[pack].knights[0], Point{1, firstLine});
-    items.placePiece(piecePacks[pack].bishops[0], Point{2, firstLine});
-    items.placePiece(piecePacks[pack].queens[0], Point{3, firstLine});
-    items.placePiece(piecePacks[pack].king, Point{4, firstLine});
-    items.placePiece(piecePacks[pack].bishops[1], Point{5, firstLine});
-    items.placePiece(piecePacks[pack].knights[1], Point{6, firstLine});
-    items.placePiece(piecePacks[pack].rooks[1], Point{7, firstLine});
+    board.placePiece(piecePacks[pack].rooks[0], Point{0, firstLine});
+    board.placePiece(piecePacks[pack].knights[0], Point{1, firstLine});
+    board.placePiece(piecePacks[pack].bishops[0], Point{2, firstLine});
+    board.placePiece(piecePacks[pack].queens[0], Point{3, firstLine});
+    board.placePiece(piecePacks[pack].king, Point{4, firstLine});
+    board.placePiece(piecePacks[pack].bishops[1], Point{5, firstLine});
+    board.placePiece(piecePacks[pack].knights[1], Point{6, firstLine});
+    board.placePiece(piecePacks[pack].rooks[1], Point{7, firstLine});
     for (int i = 0; i < 8; ++i) {
-        items.placePiece(piecePacks[pack].pawns[i], Point{i, secondLine});
+        board.placePiece(piecePacks[pack].pawns[i], Point{i, secondLine});
     }
 }
 
@@ -42,20 +42,20 @@ void Handler::initPieces() {
     initOneSidePieces(false);
 }
 
-BoardItems& Handler::getItems() {
-    return items;
+Board& Handler::getBoard() {
+    return board;
 }
 
 void Handler::clearActions() {
-    for (auto item : items.sequence()) {
+    for (auto item : board.sequence()) {
         item->actions.clear();
     }
 };
 
 void Handler::setActions() {
-    for (BoardItem* item : items.sequenceWithPieces()) {
+    for (BoardItem* item : board.sequenceWithPieces()) {
         for (Direction direction : item->piece->getPlaceDirections()) {
-            for (BoardItem* nextItem : items.sequenceByDirection(item->square.point, direction)) {
+            for (BoardItem* nextItem : board.sequenceByDirection(item->square.point, direction)) {
                 if (nextItem->piece != nullptr) {
                     break;
                 }
@@ -64,7 +64,7 @@ void Handler::setActions() {
         }
         for (Direction direction : item->piece->getThreatDirections()) {
             BoardItem* prevItem = nullptr;
-            for (BoardItem* nextItem : items.sequenceByDirection(item->square.point, direction)) {
+            for (BoardItem* nextItem : board.sequenceByDirection(item->square.point, direction)) {
                 if (nextItem->piece == nullptr) {
                     continue;
                 }
