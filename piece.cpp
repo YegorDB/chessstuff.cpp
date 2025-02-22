@@ -114,6 +114,10 @@ const std::string& Piece::getColorName() const {
     return COLOR_NAMES[isWhiteColor ? 0 : 1];
 }
 
-const bool Piece::hasSameColor(Piece* other) const {
-    return this->isWhiteColor == other->isWhiteColor;
+const bool Piece::hasSameColor(const Piece* other) const {
+    return other != nullptr && isWhiteColor == other->isWhiteColor;
+};
+
+const bool Piece::isKing() const {
+    return type == PieceType::KING;
 };

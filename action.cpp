@@ -2,8 +2,8 @@
 
 Action::Action() {};
 
-void Action::insert(ActionRelation relation, Square square) {
-    _relations[relation].insert(square.point.hash());
+void Action::insert(ActionRelation relation, Point point) {
+    _relations[relation].insert(point.hash());
 };
 
 void Action::clear() {
@@ -17,8 +17,8 @@ const ActionHashes& Action::get(ActionRelation relation) const {
 
 Actions::Actions() {};
 
-void Actions::insert(ActionType type, ActionRelation relation, Square square) {
-    _inners[type].insert(relation, square);
+void Actions::insert(ActionType type, ActionRelation relation, Point point) {
+    _inners[type].insert(relation, point);
 };
 
 void Actions::clear() {

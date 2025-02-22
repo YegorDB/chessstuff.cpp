@@ -8,65 +8,65 @@ Board::Board() {
         _matrix.push_back({});
         for (int j = 0; j < 8; ++j) {
             Square s{j, i};
-            BoardItem bi{s};
+            Square bi{s};
             _matrix[i].push_back(bi);
         }
     }
 };
 
-Board::Sequence Board::sequence() {
-    return Sequence{
+Board::Squares Board::squares() {
+    return Squares{
         Iterator{_matrix, 0},
         Iterator{_matrix, 64},
     };
 };
 
-Board::Sequence Board::sequenceWithPieces() {
-    return Sequence{
-        Iterator{_matrix, 0, &BoardItem::hasPiece},
-        Iterator{_matrix, 64, &BoardItem::hasPiece},
+Board::Squares Board::squaresWithPieces() {
+    return Squares{
+        Iterator{_matrix, 0, &Square::hasPiece},
+        Iterator{_matrix, 64, &Square::hasPiece},
     };
 };
 
-Board::SequenceByDirection Board::sequenceByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
-    return SequenceByDirection{
+Board::SquaresByDirection Board::squaresByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
+    return SquaresByDirection{
         IteratorWithDitrection{_matrix, point, direction, withStartPoint},
         IteratorWithDitrection{_matrix, Point{8, 8}, direction, true},
     };
 };
 
-const BoardItem& Board::getItem(const Point& point) const {
+const Square& Board::getSquare(const Point& point) const {
     return _matrix[point.y()][point.x()];
 };
 
-void Board::placePiece(Piece& piece, const Point& to) {
+void Board::placePiece(Piece* piece, const Point& to) {
     if (!to.isValid()) {
         throw std::runtime_error{"Invalid point to place a piece."};
     }
-    _matrix[to.y()][to.x()].piece = &piece;
+    _matrix[to.y()][to.x()].placePiece(piece);
 };
 
-Board::Sequence::Sequence(Board::Iterator begin, Board::Iterator end) : _begin{begin}, _end{end} {
+Board::Squares::Squares(Board::Iterator begin, Board::Iterator end) : _begin{begin}, _end{end} {
 };
 
-Board::Iterator Board::Sequence::begin() const {
+Board::Iterator Board::Squares::begin() const {
     return _begin;
 };
 
-Board::Iterator Board::Sequence::end() const {
+Board::Iterator Board::Squares::end() const {
     return _end;
 };
 
-Board::SequenceByDirection::SequenceByDirection(
+Board::SquaresByDirection::SquaresByDirection(
     Board::IteratorWithDitrection begin,
     Board::IteratorWithDitrection end
 ) : _begin{begin}, _end{end} {};
 
-Board::IteratorWithDitrection Board::SequenceByDirection::begin() const {
+Board::IteratorWithDitrection Board::SquaresByDirection::begin() const {
     return _begin;
 };
 
-Board::IteratorWithDitrection Board::SequenceByDirection::end() const {
+Board::IteratorWithDitrection Board::SquaresByDirection::end() const {
     return _end;
 };
 
@@ -74,16 +74,16 @@ Board::Iterator::Iterator(Matrix& matrix, int index) : _matrix{matrix}, _index{i
 
 Board::Iterator::Iterator(Matrix& matrix, int index, Filter* filter) : Board::Iterator(matrix, index) {
     _filter = filter;
-    filterItems();
+    filterSquares();
 }
 
 Board::Iterator& Board::Iterator::operator++() {
     nextStep();
-    filterItems();
+    filterSquares();
     return *this;
 }
 
-BoardItem* Board::Iterator::operator*() {
+Square* Board::Iterator::operator*() {
     return &_matrix[_point.y()][_point.x()];
 }
 
@@ -100,7 +100,7 @@ void Board::Iterator::nextStep() {
     _point = Point{_index % 8, _index / 8};
 }
 
-void Board::Iterator::filterItems() {
+void Board::Iterator::filterSquares() {
     if (_filter == nullptr) return;
 
     while (_point.isValid() && !(*_filter)(_matrix[_point.y()][_point.x()])) {
@@ -124,7 +124,7 @@ Board::IteratorWithDitrection& Board::IteratorWithDitrection::operator++() {
     return *this;
 }
 
-BoardItem* Board::IteratorWithDitrection::operator*() {
+Square* Board::IteratorWithDitrection::operator*() {
     return &_matrix[_point.y()][_point.x()];
 }
 

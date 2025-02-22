@@ -13,7 +13,7 @@ private:
 
     void clearActions();
     void setActions();
-    void setAction(ActionType type, BoardItem* byItem, BoardItem* toItem);
+    void setAction(ActionType type, Square* bySquare, Square* toSquare);
 
 public:
     Handler();

@@ -1,7 +1,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "square.h"
+#include "point.h"
 
 using ActionHashes = std::unordered_set<int>;
 
@@ -28,7 +28,7 @@ private:
 public:
     Action();
 
-    void insert(ActionRelation relation, Square square);
+    void insert(ActionRelation relation, Point point);
     void clear();
     const ActionHashes& get(ActionRelation relation) const;
 };
@@ -46,7 +46,7 @@ private:
 public:
     Actions();
 
-    void insert(ActionType type, ActionRelation relatio, Square square);
+    void insert(ActionType type, ActionRelation relation, Point point);
     void clear();
     const Action& get(ActionType type) const;
 };

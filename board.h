@@ -1,8 +1,8 @@
-#include "board_item.h"
+#include "square.h"
 
 class Board {
-using Matrix = std::vector<std::vector<BoardItem>>;
-using Filter = bool(const BoardItem&);
+using Matrix = std::vector<std::vector<Square>>;
+using Filter = bool(const Square&);
 
 private:
     Matrix _matrix;
@@ -15,12 +15,12 @@ public:
         Filter* _filter = nullptr;
         Point _point;
         void nextStep();
-        void filterItems();
+        void filterSquares();
     public:
         Iterator(Matrix& matrix, int index);
         Iterator(Matrix& matrix, int index, Filter* filter);
         Iterator& operator++();
-        BoardItem* operator*();
+        Square* operator*();
         bool operator==(const Iterator& other) const;
         bool operator!=(const Iterator& other) const;
     };
@@ -35,34 +35,34 @@ public:
     public:
         IteratorWithDitrection(Matrix& matrix, const Point& point, const Direction& direction, bool withStartPoint = false);
         IteratorWithDitrection& operator++();
-        BoardItem* operator*();
+        Square* operator*();
         bool operator==(const IteratorWithDitrection& other) const;
         bool operator!=(const IteratorWithDitrection& other) const;
     };
 
-    class Sequence {
+    class Squares {
     private:
         Iterator _begin, _end;
     public:
-        Sequence(Iterator begin, Iterator end);
+        Squares(Iterator begin, Iterator end);
         Iterator begin() const;
         Iterator end() const;
     };
 
-    class SequenceByDirection {
+    class SquaresByDirection {
     private:
         IteratorWithDitrection _begin, _end;
     public:
-        SequenceByDirection(IteratorWithDitrection begin, IteratorWithDitrection end);
+        SquaresByDirection(IteratorWithDitrection begin, IteratorWithDitrection end);
         IteratorWithDitrection begin() const;
         IteratorWithDitrection end() const;
     };
 
     Board();
-    Sequence sequence();
-    Sequence sequenceWithPieces();
-    SequenceByDirection sequenceByDirection(const Point& point, const Direction& direction, bool withStartPoint = false);
+    Squares squares();
+    Squares squaresWithPieces();
+    SquaresByDirection squaresByDirection(const Point& point, const Direction& direction, bool withStartPoint = false);
 
-    const BoardItem& getItem(const Point& point) const;
-    void placePiece(Piece& piece, const Point& point);
+    const Square& getSquare(const Point& point) const;
+    void placePiece(Piece* piece, const Point& point);
 };

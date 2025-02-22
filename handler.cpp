@@ -24,16 +24,16 @@ void Handler::initOneSidePieces(bool isWhiteColor) {
     int firstLine = isWhiteColor ? 0 : 7;
     int secondLine = isWhiteColor ? 1 : 6;
 
-    board.placePiece(piecePacks[pack].rooks[0], Point{0, firstLine});
-    board.placePiece(piecePacks[pack].knights[0], Point{1, firstLine});
-    board.placePiece(piecePacks[pack].bishops[0], Point{2, firstLine});
-    board.placePiece(piecePacks[pack].queens[0], Point{3, firstLine});
-    board.placePiece(piecePacks[pack].king, Point{4, firstLine});
-    board.placePiece(piecePacks[pack].bishops[1], Point{5, firstLine});
-    board.placePiece(piecePacks[pack].knights[1], Point{6, firstLine});
-    board.placePiece(piecePacks[pack].rooks[1], Point{7, firstLine});
+    board.placePiece(&piecePacks[pack].rooks[0], Point{0, firstLine});
+    board.placePiece(&piecePacks[pack].knights[0], Point{1, firstLine});
+    board.placePiece(&piecePacks[pack].bishops[0], Point{2, firstLine});
+    board.placePiece(&piecePacks[pack].queens[0], Point{3, firstLine});
+    board.placePiece(&piecePacks[pack].king, Point{4, firstLine});
+    board.placePiece(&piecePacks[pack].bishops[1], Point{5, firstLine});
+    board.placePiece(&piecePacks[pack].knights[1], Point{6, firstLine});
+    board.placePiece(&piecePacks[pack].rooks[1], Point{7, firstLine});
     for (int i = 0; i < 8; ++i) {
-        board.placePiece(piecePacks[pack].pawns[i], Point{i, secondLine});
+        board.placePiece(&piecePacks[pack].pawns[i], Point{i, secondLine});
     }
 }
 
@@ -47,46 +47,46 @@ Board& Handler::getBoard() {
 }
 
 void Handler::clearActions() {
-    for (auto item : board.sequence()) {
-        item->actions.clear();
+    for (Square* square : board.squares()) {
+        square->clearActions();
     }
 };
 
 void Handler::setActions() {
-    for (BoardItem* item : board.sequenceWithPieces()) {
-        for (Direction direction : item->piece->getPlaceDirections()) {
-            for (BoardItem* nextItem : board.sequenceByDirection(item->square.point, direction)) {
-                if (nextItem->piece != nullptr) {
+    for (Square* square : board.squaresWithPieces()) {
+        for (Direction direction : square->getPiece()->getPlaceDirections()) {
+            for (Square* nextSquare : board.squaresByDirection(square->point, direction)) {
+                if (Square::hasPiece(*nextSquare)) {
                     break;
                 }
-                setAction(ActionType::PLACE, item, nextItem);
+                setAction(ActionType::PLACE, square, nextSquare);
             }
         }
-        for (Direction direction : item->piece->getThreatDirections()) {
-            BoardItem* prevItem = nullptr;
-            for (BoardItem* nextItem : board.sequenceByDirection(item->square.point, direction)) {
-                if (nextItem->piece == nullptr) {
+        for (Direction direction : square->getPiece()->getThreatDirections()) {
+            Square* prevSquare = nullptr;
+            for (Square* nextSquare : board.squaresByDirection(square->point, direction)) {
+                if (!Square::hasPiece(*nextSquare)) {
                     continue;
                 }
-                if (prevItem != nullptr) {
-                    setAction(ActionType::XRAY, item, nextItem);
-                    if (nextItem->piece->type == PieceType::KING && nextItem->piece->hasSameColor(prevItem->piece)) {
-                        setAction(ActionType::BIND, item, prevItem);
+                if (prevSquare != nullptr) {
+                    setAction(ActionType::XRAY, square, nextSquare);
+                    if (nextSquare->getPiece()->isKing() && nextSquare->hasSameColorPieces(prevSquare)) {
+                        setAction(ActionType::BIND, square, prevSquare);
                     }
                     break;
                 }
-                if (item->piece->hasSameColor(nextItem->piece)) {
-                    setAction(ActionType::SUPPORT, item, nextItem);
+                if (square->hasSameColorPieces(nextSquare)) {
+                    setAction(ActionType::SUPPORT, square, nextSquare);
                 } else {
-                    setAction(ActionType::THREAT, item, nextItem);
+                    setAction(ActionType::THREAT, square, nextSquare);
                 }
-                prevItem = nextItem;
+                prevSquare = nextSquare;
             }
         }
     }
 };
 
-void Handler::setAction(ActionType type, BoardItem* byItem, BoardItem* toItem) {
-    byItem->actions.insert(type, ActionRelation::TO, toItem->square);
-    toItem->actions.insert(type, ActionRelation::BY, byItem->square);
+void Handler::setAction(ActionType type, Square* bySquare, Square* toSquare) {
+    bySquare->setAction(type, ActionRelation::TO, toSquare);
+    toSquare->setAction(type, ActionRelation::BY, bySquare);
 };
