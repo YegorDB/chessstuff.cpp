@@ -1,4 +1,4 @@
-#include "board.h"
+#include "handler.h"
 #include <cassert>
 #include <iostream>
 #include <vector>
@@ -292,11 +292,11 @@ void test_board_items() {
     assert(itemWithoutPiece.piece == nullptr);
 }
 
-void test_board_pieces() {
-    Board board{};
+void test_initial_pieces() {
+    Handler handler{};
 
     int i = 0;
-    for (BoardItem* item : board.getItems().sequence()) {
+    for (BoardItem* item : handler.getItems().sequence()) {
         if (item->square.point.y() > 1 && item->square.point.y() < 6) {
             assert(item->piece == nullptr);
         } else {
@@ -325,9 +325,9 @@ void test_board_pieces() {
     assert(i == 64);
 }
 
-void test_board_init_actions() {
-    Board board{};
-    BoardItems items = board.getItems();
+void test_initial_actions() {
+    Handler handler{};
+    BoardItems items = handler.getItems();
 
     for (BoardItem* item : items.sequence()) {
         assert(item->actions.get(ActionType::THREAT).get(ActionRelation::TO).empty());
@@ -556,8 +556,8 @@ int main() {
     test_board_item_actions();
     test_board_item();
     test_board_items();
-    test_board_pieces();
-    test_board_init_actions();
+    test_initial_pieces();
+    test_initial_actions();
 
     std::cout << "OK" << std::endl;
 }

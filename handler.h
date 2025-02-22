@@ -1,6 +1,6 @@
 #include "board_item.h"
 
-class Board {
+class Handler {
 private:
     BoardItems items;
     std::vector<PiecePack> piecePacks;
@@ -15,7 +15,7 @@ private:
     void setAction(ActionType type, BoardItem* byItem, BoardItem* toItem);
 
 public:
-    Board();
+    Handler();
 
     BoardItems& getItems();
 };

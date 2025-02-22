@@ -1,6 +1,6 @@
-#include "board.h"
+#include "handler.h"
 
-Board::Board() {
+Handler::Handler() {
     initItems();
     initPiecePacks();
     initPieces();
@@ -9,17 +9,17 @@ Board::Board() {
     setActions();
 }
 
-void Board::initItems() {
+void Handler::initItems() {
     items = BoardItems{};
 }
 
-void Board::initPiecePacks() {
+void Handler::initPiecePacks() {
     piecePacks.clear();
     piecePacks.push_back(PiecePack(true));
     piecePacks.push_back(PiecePack(false));
 }
 
-void Board::initOneSidePieces(bool isWhiteColor) {
+void Handler::initOneSidePieces(bool isWhiteColor) {
     int pack = isWhiteColor ? 0 : 1;
     int firstLine = isWhiteColor ? 0 : 7;
     int secondLine = isWhiteColor ? 1 : 6;
@@ -37,22 +37,22 @@ void Board::initOneSidePieces(bool isWhiteColor) {
     }
 }
 
-void Board::initPieces() {
+void Handler::initPieces() {
     initOneSidePieces(true);
     initOneSidePieces(false);
 }
 
-BoardItems& Board::getItems() {
+BoardItems& Handler::getItems() {
     return items;
 }
 
-void Board::clearActions() {
+void Handler::clearActions() {
     for (auto item : items.sequence()) {
         item->actions.clear();
     }
 };
 
-void Board::setActions() {
+void Handler::setActions() {
     for (BoardItem* item : items.sequenceWithPieces()) {
         for (Direction direction : item->piece->getPlaceDirections()) {
             for (BoardItem* nextItem : items.sequenceByDirection(item->square.point, direction)) {
@@ -86,7 +86,7 @@ void Board::setActions() {
     }
 };
 
-void Board::setAction(ActionType type, BoardItem* byItem, BoardItem* toItem) {
+void Handler::setAction(ActionType type, BoardItem* byItem, BoardItem* toItem) {
     byItem->actions.insert(type, ActionRelation::TO, toItem->square);
     toItem->actions.insert(type, ActionRelation::BY, byItem->square);
 };
