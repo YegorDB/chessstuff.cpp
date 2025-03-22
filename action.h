@@ -1,9 +1,6 @@
 #include <unordered_map>
-#include <unordered_set>
 
 #include "point.h"
-
-using ActionHashes = std::unordered_set<int>;
 
 enum class ActionRelation {
     BY = 0,
@@ -20,9 +17,9 @@ enum class ActionType {
 
 class Action {
 private:
-    std::unordered_map<ActionRelation, ActionHashes> _relations {
-        {ActionRelation::BY, ActionHashes{}},
-        {ActionRelation::TO, ActionHashes{}}
+    std::unordered_map<ActionRelation, PointSet> _relations {
+        {ActionRelation::BY, PointSet{}},
+        {ActionRelation::TO, PointSet{}}
     };
 
 public:
@@ -30,7 +27,7 @@ public:
 
     void insert(ActionRelation relation, Point point);
     void clear();
-    const ActionHashes& get(ActionRelation relation) const;
+    const PointSet& get(ActionRelation relation) const;
 };
 
 class Actions {

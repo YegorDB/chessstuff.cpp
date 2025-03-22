@@ -3,7 +3,7 @@
 Action::Action() {};
 
 void Action::insert(ActionRelation relation, Point point) {
-    _relations[relation].insert(point.hash());
+    _relations[relation].insert(point);
 };
 
 void Action::clear() {
@@ -11,7 +11,7 @@ void Action::clear() {
     _relations[ActionRelation::BY].clear();
 };
 
-const ActionHashes& Action::get(ActionRelation relation) const {
+const PointSet& Action::get(ActionRelation relation) const {
     return _relations.at(relation);
 };
 

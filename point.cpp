@@ -9,7 +9,7 @@ void Point::operator=(Point other) {
 };
 
 bool Point::operator==(const Point& other) const {
-    return this->_hash == other._hash;
+    return _hash == other._hash;
 };
 
 int Point::x() const {
@@ -35,3 +35,7 @@ bool Point::isValid() const {
 const std::string Point::toString() const {
     return "(" + std::to_string(_x) + ", " + std::to_string(_y) + ")";
 };
+
+int PointHasher::operator()(const Point& point) const {
+    return point.hash();
+}

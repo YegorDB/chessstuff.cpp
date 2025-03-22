@@ -1,4 +1,5 @@
 #include "handler.h"
+#include "piece_places.h"
 #include <cassert>
 #include <iostream>
 #include <vector>
@@ -147,15 +148,15 @@ void test_action() {
 
     action.insert(ActionRelation::TO, square1.point);
 
-    ActionHashes toValues = action.get(ActionRelation::TO);
-    assert(toValues.size() == 1);
-    assert(toValues.find(square1.point.hash()) != toValues.end());
+    PointSet toPoints = action.get(ActionRelation::TO);
+    assert(toPoints.size() == 1);
+    assert(toPoints.find(square1.point) != toPoints.end());
 
     action.insert(ActionRelation::BY, square2.point);
 
-    ActionHashes byValues = action.get(ActionRelation::BY);
-    assert(byValues.size() == 1);
-    assert(byValues.find(square2.point.hash()) != byValues.end());
+    PointSet byPoints = action.get(ActionRelation::BY);
+    assert(byPoints.size() == 1);
+    assert(byPoints.find(square2.point) != byPoints.end());
 
     action.clear();
 
@@ -341,134 +342,134 @@ void test_initial_actions() {
         Square rookA = board.getSquare(Point{0, yRows[i][0]});
         assert(rookA.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
         assert(rookA.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((rookA.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][0] * 10 + 1, yRows[i][1] * 10}));
+        assert((rookA.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{1, yRows[i][0]}, Point{0, yRows[i][1]}}));
         assert(rookA.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
-        assert((rookA.getActions().get(ActionType::XRAY).get(ActionRelation::TO) == ActionHashes{yRows[i][0] * 10 + 2, yRows[i][6] * 10}));
+        assert((rookA.getActions().get(ActionType::XRAY).get(ActionRelation::TO) == PointSet{Point{2, yRows[i][0]}, Point{0, yRows[i][6]}}));
         assert(rookA.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square knightB = board.getSquare(Point{1, yRows[i][0]});
-        assert((knightB.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10, yRows[i][2] * 10 + 2}));
+        assert((knightB.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{0, yRows[i][2]}, Point{2, yRows[i][2]}}));
         assert(knightB.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((knightB.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][1] * 10 + 3}));
-        assert((knightB.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10}));
+        assert((knightB.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{3, yRows[i][1]}}));
+        assert((knightB.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == PointSet{Point{0, yRows[i][0]}}));
         assert(knightB.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
-        assert((knightB.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10 + 3}));
+        assert((knightB.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{3, yRows[i][0]}}));
 
         Square bishopC = board.getSquare(Point{2, yRows[i][0]});
         assert(bishopC.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
         assert(bishopC.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((bishopC.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][1] * 10 + 1, yRows[i][1] * 10 + 3}));
-        assert((bishopC.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10 + 3}));
+        assert((bishopC.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{1, yRows[i][1]}, Point{3, yRows[i][1]}}));
+        assert((bishopC.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == PointSet{Point{3, yRows[i][0]}}));
         assert(bishopC.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
-        assert((bishopC.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10}));
+        assert((bishopC.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{0, yRows[i][0]}}));
 
         Square queen = board.getSquare(Point{3, yRows[i][0]});
         assert(queen.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
         assert(queen.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((queen.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][0] * 10 + 2, yRows[i][0] * 10 + 4, yRows[i][1] * 10 + 2, yRows[i][1] * 10 + 3, yRows[i][1] * 10 + 4}));
-        assert((queen.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10 + 4}));
-        assert((queen.getActions().get(ActionType::XRAY).get(ActionRelation::TO) == ActionHashes{yRows[i][0] * 10 + 1, yRows[i][0] * 10 + 5, yRows[i][6] * 10 + 3}));
+        assert((queen.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{2, yRows[i][0]}, Point{4, yRows[i][0]}, Point{2, yRows[i][1]}, Point{3, yRows[i][1]}, Point{4, yRows[i][1]}}));
+        assert((queen.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == PointSet{Point{4, yRows[i][0]}}));
+        assert((queen.getActions().get(ActionType::XRAY).get(ActionRelation::TO) == PointSet{Point{1, yRows[i][0]}, Point{5, yRows[i][0]}, Point{3, yRows[i][6]}}));
         assert(queen.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square king = board.getSquare(Point{4, yRows[i][0]});
         assert(king.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
         assert(king.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((king.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][0] * 10 + 3, yRows[i][0] * 10 + 5, yRows[i][1] * 10 + 3, yRows[i][1] * 10 + 4, yRows[i][1] * 10 + 5}));
-        assert((king.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10 + 3}));
+        assert((king.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{3, yRows[i][0]}, Point{5, yRows[i][0]}, Point{3, yRows[i][1]}, Point{4, yRows[i][1]}, Point{5, yRows[i][1]}}));
+        assert((king.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == PointSet{Point{3, yRows[i][0]}}));
         assert(king.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
         assert(king.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square bishopF = board.getSquare(Point{5, yRows[i][0]});
         assert(bishopF.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
         assert(bishopF.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((bishopF.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][1] * 10 + 4, yRows[i][1] * 10 + 6}));
-        assert((bishopF.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10 + 4}));
+        assert((bishopF.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{4, yRows[i][1]}, Point{6, yRows[i][1]}}));
+        assert((bishopF.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == PointSet{Point{4, yRows[i][0]}}));
         assert(bishopF.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
-        assert((bishopF.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10 + 3, yRows[i][0] * 10 + 7}));
+        assert((bishopF.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{3, yRows[i][0]}, Point{7, yRows[i][0]}}));
 
         Square knightG = board.getSquare(Point{6, yRows[i][0]});
-        assert((knightG.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 5, yRows[i][2] * 10 + 7}));
+        assert((knightG.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{5, yRows[i][2]}, Point{7, yRows[i][2]}}));
         assert(knightG.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((knightG.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][1] * 10 + 4}));
-        assert((knightG.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == ActionHashes{yRows[i][0] * 10 + 7}));
+        assert((knightG.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{4, yRows[i][1]}}));
+        assert((knightG.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY) == PointSet{Point{7, yRows[i][0]}}));
         assert(knightG.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
         assert(knightG.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square rookH = board.getSquare(Point{7, yRows[i][0]});
         assert(rookH.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
         assert(rookH.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
-        assert((rookH.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == ActionHashes{yRows[i][0] * 10 + 6, yRows[i][1] * 10 + 7}));
+        assert((rookH.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO) == PointSet{Point{6, yRows[i][0]}, Point{7, yRows[i][1]}}));
         assert(rookH.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
-        assert((rookH.getActions().get(ActionType::XRAY).get(ActionRelation::TO) == ActionHashes{yRows[i][0] * 10 + 5, yRows[i][6] * 10 + 7}));
+        assert((rookH.getActions().get(ActionType::XRAY).get(ActionRelation::TO) == PointSet{Point{5, yRows[i][0]}, Point{7, yRows[i][6]}}));
         assert(rookH.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square pawnA = board.getSquare(Point{0, yRows[i][1]});
-        assert((pawnA.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10}));
+        assert((pawnA.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{0, yRows[i][2]}}));
         assert(pawnA.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnA.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnA.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10}));
+        assert((pawnA.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{0, yRows[i][0]}}));
         assert(pawnA.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
-        assert((pawnA.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == ActionHashes{yRows[i][7] * 10}));
+        assert((pawnA.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{0, yRows[i][7]}}));
 
         Square pawnB = board.getSquare(Point{1, yRows[i][1]});
-        assert((pawnB.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 1}));
+        assert((pawnB.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{1, yRows[i][2]}}));
         assert(pawnB.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnB.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnB.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10 + 2}));
+        assert((pawnB.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{2, yRows[i][0]}}));
         assert(pawnB.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
         assert(pawnB.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square pawnC = board.getSquare(Point{2, yRows[i][1]});
-        assert((pawnC.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 2}));
+        assert((pawnC.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{2, yRows[i][2]}}));
         assert(pawnC.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnC.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnC.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10 + 3}));
+        assert((pawnC.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{3, yRows[i][0]}}));
         assert(pawnC.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
         assert(pawnC.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square pawnD = board.getSquare(Point{3, yRows[i][1]});
-        assert((pawnD.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 3}));
+        assert((pawnD.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{3, yRows[i][2]}}));
         assert(pawnD.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnD.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnD.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10 + 1, yRows[i][0] * 10 + 2, yRows[i][0] * 10 + 3, yRows[i][0] * 10 + 4}));
+        assert((pawnD.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{1, yRows[i][0]}, Point{2, yRows[i][0]}, Point{3, yRows[i][0]}, Point{4, yRows[i][0]}}));
         assert(pawnD.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
-        assert((pawnD.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == ActionHashes{yRows[i][7] * 10 + 3}));
+        assert((pawnD.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{3, yRows[i][7]}}));
 
         Square pawnE = board.getSquare(Point{4, yRows[i][1]});
-        assert((pawnE.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 4}));
+        assert((pawnE.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{4, yRows[i][2]}}));
         assert(pawnE.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnE.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnE.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10 + 3, yRows[i][0] * 10 + 4, yRows[i][0] * 10 + 5, yRows[i][0] * 10 + 6}));
+        assert((pawnE.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{3, yRows[i][0]}, Point{4, yRows[i][0]}, Point{5, yRows[i][0]}, Point{6, yRows[i][0]}}));
         assert(pawnE.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
         assert(pawnE.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square pawnF = board.getSquare(Point{5, yRows[i][1]});
-        assert((pawnF.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 5}));
+        assert((pawnF.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{5, yRows[i][2]}}));
         assert(pawnF.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnF.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnF.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10 + 4}));
+        assert((pawnF.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{4, yRows[i][0]}}));
         assert(pawnF.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
         assert(pawnF.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square pawnG = board.getSquare(Point{6, yRows[i][1]});
-        assert((pawnG.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 6}));
+        assert((pawnG.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{6, yRows[i][2]}}));
         assert(pawnG.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnG.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnG.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10 + 5}));
+        assert((pawnG.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{5, yRows[i][0]}}));
         assert(pawnG.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
         assert(pawnG.getActions().get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
         Square pawnH = board.getSquare(Point{7, yRows[i][1]});
-        assert((pawnH.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == ActionHashes{yRows[i][2] * 10 + 7}));
+        assert((pawnH.getActions().get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{7, yRows[i][2]}}));
         assert(pawnH.getActions().get(ActionType::PLACE).get(ActionRelation::BY).empty());
         assert(pawnH.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-        assert((pawnH.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== ActionHashes{yRows[i][0] * 10 + 7}));
+        assert((pawnH.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{7, yRows[i][0]}}));
         assert(pawnH.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
-        assert((pawnH.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == ActionHashes{yRows[i][7] * 10 + 7}));
+        assert((pawnH.getActions().get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{7, yRows[i][7]}}));
 
         Square squareA2 = board.getSquare(Point{0, yRows[i][2]});
         assert(squareA2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareA2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10, yRows[i][0] * 10 + 1}));
+        assert((squareA2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{0, yRows[i][1]}, Point{1, yRows[i][0]}}));
         assert(squareA2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareA2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareA2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -476,7 +477,7 @@ void test_initial_actions() {
 
         Square squareB2 = board.getSquare(Point{1, yRows[i][2]});
         assert(squareB2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareB2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10 + 1}));
+        assert((squareB2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{1, yRows[i][1]}}));
         assert(squareB2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareB2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareB2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -484,7 +485,7 @@ void test_initial_actions() {
 
         Square squareC2 = board.getSquare(Point{2, yRows[i][2]});
         assert(squareC2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareC2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10 + 2, yRows[i][0] * 10 + 1}));
+        assert((squareC2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{2, yRows[i][1]}, Point{1, yRows[i][0]}}));
         assert(squareC2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareC2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareC2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -492,7 +493,7 @@ void test_initial_actions() {
 
         Square squareD2 = board.getSquare(Point{3, yRows[i][2]});
         assert(squareD2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareD2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10 + 3}));
+        assert((squareD2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{3, yRows[i][1]}}));
         assert(squareD2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareD2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareD2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -500,7 +501,7 @@ void test_initial_actions() {
 
         Square squareE2 = board.getSquare(Point{4, yRows[i][2]});
         assert(squareE2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareE2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10 + 4}));
+        assert((squareE2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{4, yRows[i][1]}}));
         assert(squareE2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareE2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareE2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -508,7 +509,7 @@ void test_initial_actions() {
 
         Square squareF2 = board.getSquare(Point{5, yRows[i][2]});
         assert(squareF2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareF2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10 + 5, yRows[i][0] * 10 + 6}));
+        assert((squareF2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{5, yRows[i][1]}, Point{6, yRows[i][0]}}));
         assert(squareF2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareF2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareF2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -516,7 +517,7 @@ void test_initial_actions() {
 
         Square squareG2 = board.getSquare(Point{6, yRows[i][2]});
         assert(squareG2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareG2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10 + 6}));
+        assert((squareG2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{6, yRows[i][1]}}));
         assert(squareG2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareG2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareG2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -524,7 +525,7 @@ void test_initial_actions() {
 
         Square squareH2 = board.getSquare(Point{7, yRows[i][2]});
         assert(squareH2.getActions().get(ActionType::PLACE).get(ActionRelation::TO).empty());
-        assert((squareH2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == ActionHashes{yRows[i][1] * 10 + 7, yRows[i][0] * 10 + 6}));
+        assert((squareH2.getActions().get(ActionType::PLACE).get(ActionRelation::BY) == PointSet{Point{7, yRows[i][1]}, Point{6, yRows[i][0]}}));
         assert(squareH2.getActions().get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
         assert(squareH2.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
         assert(squareH2.getActions().get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -542,6 +543,18 @@ void test_initial_actions() {
     }
 }
 
+void test_piece_places() {
+    PiecePlaces pp{
+        {Point{0, 4}, PieceInfo{PieceColor::WHITE, PieceType::KING}},
+        {Point{5, 2}, PieceInfo{PieceColor::BLACK, PieceType::KING}},
+    };
+
+    assert((pp.at(Point{0, 4}).color == PieceColor::WHITE));
+    assert((pp.at(Point{0, 4}).type == PieceType::KING));
+    assert((pp.at(Point{5, 2}).color == PieceColor::BLACK));
+    assert((pp.at(Point{5, 2}).type == PieceType::KING));
+}
+
 int main() {
     test_direction();
     test_point();
@@ -553,6 +566,7 @@ int main() {
     test_board();
     test_initial_pieces();
     test_initial_actions();
+    test_piece_places();
 
     std::cout << "OK" << std::endl;
 }

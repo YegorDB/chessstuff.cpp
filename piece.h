@@ -21,6 +21,11 @@ enum class PieceType {
     PAWN = 5
 };
 
+struct PieceInfo {
+    const PieceColor color;
+    const PieceType type;
+};
+
 class Piece {
 static const std::vector<std::string> COLOR_NAMES;
 static const std::unordered_map<PieceType, std::vector<Direction>> DIRECTIONS;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_set>
 
 #include "direction.h"
 
@@ -22,3 +23,9 @@ public:
     bool isValid() const;
     const std::string toString() const;
 };
+
+struct PointHasher {
+  int operator()(const Point& point) const;
+};
+
+using PointSet = std::unordered_set<Point, PointHasher>;
