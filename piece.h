@@ -22,8 +22,8 @@ enum class PieceType {
 };
 
 struct PieceInfo {
-    const PieceColor color;
-    const PieceType type;
+    PieceColor color;
+    PieceType type;
 };
 
 class Piece {
