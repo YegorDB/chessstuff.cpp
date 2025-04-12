@@ -1,6 +1,6 @@
 # CPP chess utils
 
 ```bash
-$ g++ *.cpp
+$ g++ --std c++20 *.cpp
 $ ./a.out
 ```

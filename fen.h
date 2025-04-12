@@ -2,13 +2,14 @@
 #include <vector>
 #include <unordered_map>
 
+#include "square.h"
 #include "state.h"
 
 class FEN {
-static const std::unordered_map<char, PieceInfo> PIECE_TYPE_SYMBOLS;
-static const std::unordered_map<char, PieceColor> PIECE_COLOR_SYMBOLS;
-
 private:
+    static const std::unordered_map<char, PieceInfo> PIECE_TYPE_SYMBOLS;
+    static const std::unordered_map<char, PieceColor> PIECE_COLOR_SYMBOLS;
+
     std::string _rawString;
     std::vector<std::string> _rawStringParts;
     State _state;
@@ -20,6 +21,7 @@ private:
     void _parseRawSringEnPassantPart();
     void _parseRawSringHalfmoveClockPart();
     void _parseRawSringMovesCountPart();
+    int _parseRawSringNumber(std::string number);
 
 public:
     FEN(std::string rawString);

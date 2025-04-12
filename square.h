@@ -7,16 +7,19 @@
 #include "point.h"
 
 class Square {
-static const std::string COLUMN_SIGNS;
-static const std::string ROW_SIGNS;
-static const std::vector<std::string> COLOR_NAMES;
-
 private:
+    static const std::string COLUMN_SIGNS;
+    static const std::string ROW_SIGNS;
+    static const std::vector<std::string> COLOR_NAMES;
+
     std::string _name;
     Piece* _piece = nullptr;
     Actions _actions;
 
 public:
+    static bool hasPiece(const Square& square);
+    static Point nameToPoint(std::string name);
+
     const Point point;
     const bool isLightColor;
 
@@ -34,6 +37,4 @@ public:
     void setAction(ActionType type, ActionRelation relation, Square* other);
     void clearActions();
     void placePiece(Piece* piece);
-
-    static bool hasPiece(const Square& square);
 };

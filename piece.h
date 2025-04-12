@@ -27,10 +27,11 @@ struct PieceInfo {
 };
 
 class Piece {
-static const std::vector<std::string> COLOR_NAMES;
-static const std::unordered_map<PieceType, std::vector<Direction>> DIRECTIONS;
-static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_PLACE_DIRECTIONS;
-static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_THREAT_DIRECTIONS;
+private:
+    static const std::vector<std::string> COLOR_NAMES;
+    static const std::unordered_map<PieceType, std::vector<Direction>> DIRECTIONS;
+    static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_PLACE_DIRECTIONS;
+    static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_THREAT_DIRECTIONS;
 
 public:
     const PieceType type;

@@ -51,13 +51,13 @@ void FEN::_splitRawString() {
         }
     }
     _rawStringParts.push_back(s);
+
+    if (_rawStringParts.size() != 6) {
+        throw std::runtime_error{"Wrong raw string parts count."};
+    }
 };
 
 void FEN::_parseRawSringPiecesPlacesPart() {
-    if (_rawStringParts.empty()) {
-        throw std::runtime_error{"Can't parse pieces plases part: there isn't first part."};
-    }
-
     int x = 0, y = 0;
     for (char c : _rawStringParts[0]) {
         if (c == '/') {
@@ -76,10 +76,6 @@ void FEN::_parseRawSringPiecesPlacesPart() {
 };
 
 void FEN::_parseRawSringActiveColorPart() {
-    if (_rawStringParts.size() < 2) {
-        throw std::runtime_error{"Can't parse pieces plases part: there isn't second part."};
-    }
-
     if (_rawStringParts[1].size() != 1 || !PIECE_COLOR_SYMBOLS.contains(_rawStringParts[1][0])) {
         throw std::runtime_error{"Wrong active color part."};
     }
@@ -87,10 +83,42 @@ void FEN::_parseRawSringActiveColorPart() {
     _state.activeColor = PIECE_COLOR_SYMBOLS.at(_rawStringParts[1][0]);
 };
 
-void FEN::_parseRawSringCastlesPart() {};
+void FEN::_parseRawSringCastlesPart() {
+    if (_rawStringParts[2] == "-") return;
 
-void FEN::_parseRawSringEnPassantPart() {};
+    for (char c : _rawStringParts[2]) {
+        if (c == 'K') {
+            _state.castles.whiteKingSide = true;
+        } else if (c == 'Q') {
+            _state.castles.whiteQueenSide = true;
+        } else if (c == 'k') {
+            _state.castles.blackKingSide = true;
+        } else if (c == 'q') {
+            _state.castles.blackQueenSide = true;
+        }
+    }
+};
 
-void FEN::_parseRawSringHalfmoveClockPart() {};
+void FEN::_parseRawSringEnPassantPart() {
+    if (_rawStringParts[3] == "-") return;
 
-void FEN::_parseRawSringMovesCountPart() {};
+    _state.enPassant = Square::nameToPoint(_rawStringParts[3]);
+};
+
+void FEN::_parseRawSringHalfmoveClockPart() {
+    _state.halfmoveClock = _parseRawSringNumber(_rawStringParts[4]);
+};
+
+void FEN::_parseRawSringMovesCountPart() {
+    _state.movesCount = _parseRawSringNumber(_rawStringParts[5]);
+};
+
+int FEN::_parseRawSringNumber(std::string number) {
+    try {
+        return std::stoi(number);
+    } catch(std::invalid_argument) {
+        throw std::runtime_error{"Invalid number argument."};
+    } catch(std::out_of_range) {
+        throw std::runtime_error{"Number argument out of range."};
+    }
+};
