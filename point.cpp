@@ -38,4 +38,4 @@ const std::string Point::toString() const {
 
 int PointHasher::operator()(const Point& point) const {
     return point.hash();
-}
+};

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "square.h"
 
 class Board {

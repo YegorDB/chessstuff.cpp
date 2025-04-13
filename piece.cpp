@@ -94,25 +94,25 @@ const std::unordered_map<PieceColor, std::vector<Direction>> Piece::PAWN_THREAT_
     }
 };
 
-Piece::Piece(PieceType type, bool isWhiteColor) : type(type), isWhiteColor(isWhiteColor) {}
+Piece::Piece(PieceType type, bool isWhiteColor) : type(type), isWhiteColor(isWhiteColor) {};
 
 const std::vector<Direction>& Piece::getPlaceDirections() const {
     if (type == PieceType::PAWN) {
         return PAWN_PLACE_DIRECTIONS.at(isWhiteColor ? PieceColor::WHITE : PieceColor::BLACK);
     }
     return DIRECTIONS.at(type);
-}
+};
 
 const std::vector<Direction>& Piece::getThreatDirections() const {
     if (type == PieceType::PAWN) {
         return PAWN_THREAT_DIRECTIONS.at(isWhiteColor ? PieceColor::WHITE : PieceColor::BLACK);
     }
     return DIRECTIONS.at(type);
-}
+};
 
 const std::string& Piece::getColorName() const {
     return COLOR_NAMES[isWhiteColor ? 0 : 1];
-}
+};
 
 const bool Piece::hasSameColor(const Piece* other) const {
     return other != nullptr && isWhiteColor == other->isWhiteColor;

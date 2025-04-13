@@ -7,17 +7,17 @@ Handler::Handler() {
 
     clearActions();
     setActions();
-}
+};
 
 void Handler::initBoard() {
     board = Board{};
-}
+};
 
 void Handler::initPiecePacks() {
     piecePacks.clear();
     piecePacks.push_back(PiecePack(true));
     piecePacks.push_back(PiecePack(false));
-}
+};
 
 void Handler::initOneSidePieces(bool isWhiteColor) {
     int pack = isWhiteColor ? 0 : 1;
@@ -35,16 +35,16 @@ void Handler::initOneSidePieces(bool isWhiteColor) {
     for (int i = 0; i < 8; ++i) {
         board.placePiece(&piecePacks[pack].pawns[i], Point{i, secondLine});
     }
-}
+};
 
 void Handler::initPieces() {
     initOneSidePieces(true);
     initOneSidePieces(false);
-}
+};
 
 Board& Handler::getBoard() {
     return board;
-}
+};
 
 void Handler::clearActions() {
     for (Square* square : board.squares()) {
