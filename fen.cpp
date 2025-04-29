@@ -122,3 +122,11 @@ int FEN::_parseRawSringNumber(std::string number) {
         throw std::runtime_error{"Number argument out of range."};
     }
 };
+
+const std::string& FEN::getRawString() const {
+    return _rawString;
+};
+
+const State& FEN::getState() const {
+    return _state;
+};

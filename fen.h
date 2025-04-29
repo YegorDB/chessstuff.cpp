@@ -26,4 +26,7 @@ private:
 public:
     FEN(std::string rawString);
     FEN(State state);
+
+    const std::string& getRawString() const;
+    const State& getState() const;
 };

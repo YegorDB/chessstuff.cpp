@@ -3,6 +3,7 @@
 #include "action/test_action.h"
 #include "board/test_board.h"
 #include "direction/test_direction.h"
+#include "fen/test_fen.h"
 #include "handler/test_handler.h"
 #include "piece/test_piece.h"
 #include "piece_pack/test_piece_pack.h"
@@ -14,6 +15,7 @@ int main() {
     testAction();
     testBoard();
     testDirection();
+    testFen();
     testHandler();
     testPiece();
     testPiecePack();
