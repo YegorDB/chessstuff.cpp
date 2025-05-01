@@ -2,7 +2,7 @@
 
 #include "fen.h"
 
-const std::unordered_map<char, PieceInfo> FEN::PIECE_TYPE_SYMBOLS{
+const std::unordered_map<char, PieceInfo> FEN::PIECE_TYPE_SYMBOLS_TO_PIECE_INFO{
     {'K', PieceInfo{PieceColor::WHITE, PieceType::KING}},
     {'Q', PieceInfo{PieceColor::WHITE, PieceType::QUEEN}},
     {'R', PieceInfo{PieceColor::WHITE, PieceType::ROOK}},
@@ -17,9 +17,39 @@ const std::unordered_map<char, PieceInfo> FEN::PIECE_TYPE_SYMBOLS{
     {'p', PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
 };
 
-const std::unordered_map<char, PieceColor> FEN::PIECE_COLOR_SYMBOLS{
+const std::unordered_map<char, PieceColor> FEN::PIECE_COLOR_SYMBOLS_TO_PIECE_COLOR{
     {'w', PieceColor::WHITE},
     {'b', PieceColor::BLACK},
+};
+
+const std::unordered_map<PieceColor, std::unordered_map<PieceType, char>> FEN::PIECE_INFO_TO_PIECE_TYPE_SYMBOLS{
+    {
+        PieceColor::WHITE,
+        {
+            {PieceType::KING, 'K'},
+            {PieceType::QUEEN, 'Q'},
+            {PieceType::ROOK, 'R'},
+            {PieceType::BISHOP, 'B'},
+            {PieceType::KNIGHT, 'N'},
+            {PieceType::PAWN, 'P'},
+        }
+    },
+    {
+        PieceColor::BLACK,
+        {
+            {PieceType::KING, 'k'},
+            {PieceType::QUEEN, 'q'},
+            {PieceType::ROOK, 'r'},
+            {PieceType::BISHOP, 'b'},
+            {PieceType::KNIGHT, 'n'},
+            {PieceType::PAWN, 'p'},
+        }
+    },
+};
+
+const std::unordered_map<PieceColor, char> FEN::PIECE_COLOR_TO_PIECE_COLOR_SYMBOLS{
+    {PieceColor::WHITE, 'w'},
+    {PieceColor::BLACK, 'b'},
 };
 
 FEN::FEN(std::string rawString) : _rawString(rawString) {
@@ -32,7 +62,22 @@ FEN::FEN(std::string rawString) : _rawString(rawString) {
     _parseRawSringMovesCountPart();
 };
 
-FEN::FEN(State state) : _rawString(""), _state(state) {};
+FEN::FEN(State state) : _state(state) {
+    _rawStringParts = {"", "", "", "", "", ""};
+
+    _stringifyPiecePlaces();
+    _stringifyAcivePieceColor();
+    _stringifyCastles();
+    _stringifyEnPassant();
+    _rawStringParts[4] = std::to_string(_state.halfmoveClock);
+    _rawStringParts[5] = std::to_string(_state.movesCount);
+
+    _rawString = _rawStringParts[0];
+    for (int i = 1; i < 6; ++i) {
+        _rawString.push_back(' ');
+        _rawString += _rawStringParts[i];
+    }
+};
 
 void FEN::_splitRawString() {
     _rawStringParts.clear();
@@ -66,21 +111,21 @@ void FEN::_parseRawSringPiecesPlacesPart() {
         } else if (c > 48 && c <= 57) {
             x += c - 48;
         } else {
-            if (!PIECE_TYPE_SYMBOLS.contains(c)) {
+            if (!PIECE_TYPE_SYMBOLS_TO_PIECE_INFO.contains(c)) {
                 throw std::runtime_error{"Wrong piece type symbol."};
             }
-            _state.piecePlaces[Point(x, y)] = PIECE_TYPE_SYMBOLS.at(c);
+            _state.piecePlaces[Point(x, y)] = PIECE_TYPE_SYMBOLS_TO_PIECE_INFO.at(c);
             x++;
         }
     }
 };
 
 void FEN::_parseRawSringActiveColorPart() {
-    if (_rawStringParts[1].size() != 1 || !PIECE_COLOR_SYMBOLS.contains(_rawStringParts[1][0])) {
+    if (_rawStringParts[1].size() != 1 || !PIECE_COLOR_SYMBOLS_TO_PIECE_COLOR.contains(_rawStringParts[1][0])) {
         throw std::runtime_error{"Wrong active color part."};
     }
 
-    _state.activeColor = PIECE_COLOR_SYMBOLS.at(_rawStringParts[1][0]);
+    _state.activeColor = PIECE_COLOR_SYMBOLS_TO_PIECE_COLOR.at(_rawStringParts[1][0]);
 };
 
 void FEN::_parseRawSringCastlesPart() {
@@ -120,6 +165,74 @@ int FEN::_parseRawSringNumber(std::string number) {
         throw std::runtime_error{"Invalid number argument."};
     } catch(std::out_of_range) {
         throw std::runtime_error{"Number argument out of range."};
+    }
+};
+
+void FEN::_stringifyPiecePlaces() {
+    _rawStringParts[0] = "";
+    for (int y = 0; y < 8; ++y) {
+        int emptyCount = 0;
+
+        for (int x = 0; x < 8; ++x) {
+            Point point{x, y};
+            if (!_state.piecePlaces.contains(point)) {
+                ++emptyCount;
+            } else {
+                if (emptyCount > 0) {
+                    _rawStringParts[0] += std::to_string(emptyCount);
+                    emptyCount = 0;
+                }
+                PieceInfo pi = _state.piecePlaces.at(point);
+                char symbol = PIECE_INFO_TO_PIECE_TYPE_SYMBOLS.at(pi.color).at(pi.type);
+                _rawStringParts[0].push_back(symbol);
+            }
+        }
+
+        if (emptyCount > 0) {
+            _rawStringParts[0] += std::to_string(emptyCount);
+        }
+
+        if (y < 7) {
+            _rawStringParts[0].push_back('/');
+        }
+    }
+};
+
+void FEN::_stringifyAcivePieceColor() {
+    _rawStringParts[1] = "";
+
+    char pieceColorSymbol = PIECE_COLOR_TO_PIECE_COLOR_SYMBOLS.at(_state.activeColor);
+    _rawStringParts[1].push_back(pieceColorSymbol);
+};
+
+void FEN::_stringifyCastles() {
+    _rawStringParts[2] = "";
+
+    if (_state.castles.whiteKingSide) {
+        _rawStringParts[2].push_back('K');
+    }
+    if (_state.castles.whiteQueenSide) {
+        _rawStringParts[2].push_back('Q');
+    }
+    if (_state.castles.blackKingSide) {
+        _rawStringParts[2].push_back('k');
+    }
+    if (_state.castles.blackQueenSide) {
+        _rawStringParts[2].push_back('q');
+    }
+    if (_rawStringParts[2].empty()) {
+        _rawStringParts[2].push_back('-');
+    }
+};
+
+void FEN::_stringifyEnPassant() {
+    _rawStringParts[3] = "";
+
+    if (!_state.enPassant.isValid()) {
+        _rawStringParts[3].push_back('-');
+    } else {
+        Square square{_state.enPassant};
+        _rawStringParts[3] = square.getName();
     }
 };
 
