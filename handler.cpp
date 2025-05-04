@@ -21,19 +21,19 @@ void Handler::initPiecePacks() {
 
 void Handler::initOneSidePieces(bool isWhiteColor) {
     int pack = isWhiteColor ? 0 : 1;
-    int firstLine = isWhiteColor ? 0 : 7;
-    int secondLine = isWhiteColor ? 1 : 6;
+    int firstLine = isWhiteColor ? 7 : 0;
+    int secondLine = isWhiteColor ? 6 : 1;
 
-    board.placePiece(&piecePacks[pack].rooks[0], Point{0, firstLine});
-    board.placePiece(&piecePacks[pack].knights[0], Point{1, firstLine});
-    board.placePiece(&piecePacks[pack].bishops[0], Point{2, firstLine});
-    board.placePiece(&piecePacks[pack].queens[0], Point{3, firstLine});
-    board.placePiece(&piecePacks[pack].king, Point{4, firstLine});
-    board.placePiece(&piecePacks[pack].bishops[1], Point{5, firstLine});
-    board.placePiece(&piecePacks[pack].knights[1], Point{6, firstLine});
-    board.placePiece(&piecePacks[pack].rooks[1], Point{7, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::ROOK), Point{0, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::KNIGHT), Point{1, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::BISHOP), Point{2, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::QUEEN), Point{3, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::KING), Point{4, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::BISHOP), Point{5, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::KNIGHT), Point{6, firstLine});
+    board.placePiece(piecePacks[pack].getPiece(PieceType::ROOK), Point{7, firstLine});
     for (int i = 0; i < 8; ++i) {
-        board.placePiece(&piecePacks[pack].pawns[i], Point{i, secondLine});
+        board.placePiece(piecePacks[pack].getPiece(PieceType::PAWN), Point{i, secondLine});
     }
 };
 

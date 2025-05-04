@@ -4,36 +4,45 @@ void testPiecePack() {
     for (bool isWhiteColor : {true, false}) {
         PiecePack piecePack{isWhiteColor};
 
-        assert(piecePack.king.type == PieceType::KING);
-        assert(piecePack.king.isWhiteColor == isWhiteColor);
+        Piece* king = piecePack.getPiece(PieceType::KING);
+        assert(king->getType() == PieceType::KING);
+        assert(king->isWhiteColor() == isWhiteColor);
 
-        assert(piecePack.queens.size() == 1);
-        assert(piecePack.queens[0].type == PieceType::QUEEN);
-        assert(piecePack.queens[0].isWhiteColor == isWhiteColor);
-
-        assert(piecePack.rooks.size() == 2);
-        for (int i = 0; i < 2; ++i) {
-            assert(piecePack.rooks[i].type == PieceType::ROOK);
-            assert(piecePack.rooks[i].isWhiteColor == isWhiteColor);
-        }
-
-        assert(piecePack.bishops.size() == 2);
-        for (int i = 0; i < 2; ++i) {
-            assert(piecePack.bishops[i].type == PieceType::BISHOP);
-            assert(piecePack.bishops[i].isWhiteColor == isWhiteColor);
-        }
-
-        assert(piecePack.knights.size() == 2);
-        for (int i = 0; i < 2; ++i) {
-            assert(piecePack.knights[i].type == PieceType::KNIGHT);
-            assert(piecePack.knights[i].isWhiteColor == isWhiteColor);
-        }
-
-        assert(piecePack.pawns.size() == 8);
         for (int i = 0; i < 8; ++i) {
-            assert(piecePack.pawns[i].type == PieceType::PAWN);
-            assert(piecePack.pawns[i].isWhiteColor == isWhiteColor);
+            for (PieceType pieceType : {PieceType::QUEEN, PieceType::ROOK, PieceType::BISHOP, PieceType::KNIGHT, PieceType::PAWN}) {
+                Piece* piece = piecePack.getPiece(pieceType);
+                assert(piece->getType() == pieceType);
+                assert(piece->isWhiteColor() == isWhiteColor);
+            }
         }
+
+        for (PieceType pieceType : {PieceType::KING, PieceType::QUEEN, PieceType::ROOK, PieceType::BISHOP, PieceType::KNIGHT, PieceType::PAWN}) {
+            bool errorWasThrown = false;
+            try {
+                piecePack.getPiece(pieceType);
+            } catch(std::runtime_error) {
+                errorWasThrown = true;
+            }
+            assert(errorWasThrown);
+        }
+
+        PiecePackPieces pieces = piecePack.getPieces();
+        std::unordered_map<PieceType, int> counter;
+        for (PieceType pieceType : {PieceType::KING, PieceType::QUEEN, PieceType::ROOK, PieceType::BISHOP, PieceType::KNIGHT, PieceType::PAWN}) {
+            for (Piece p : pieces.at(pieceType)) {
+                if (p.getType() == pieceType) {
+                    counter[pieceType]++;
+                } else {
+                    assert(p.getType() == PieceType::UNSET);
+                }
+            }
+        }
+        assert(counter.at(PieceType::KING) == 1);
+        assert(counter.at(PieceType::QUEEN) == 8);
+        assert(counter.at(PieceType::ROOK) == 8);
+        assert(counter.at(PieceType::BISHOP) == 8);
+        assert(counter.at(PieceType::KNIGHT) == 8);
+        assert(counter.at(PieceType::PAWN) == 8);
     }
 
     std::cout << "testPiecePack OK" << std::endl;

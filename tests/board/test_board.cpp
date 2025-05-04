@@ -39,7 +39,7 @@ void testBoard() {
     for (Square* square : board.squaresWithPieces()) {
         assert(square->getPiece() != nullptr);
         assert(square->getPiece()->isKing());
-        assert(square->getPiece()->isWhiteColor);
+        assert(square->getPiece()->isWhiteColor());
         assert(square->point == piecePoint);
         ++i;
     }
@@ -48,7 +48,7 @@ void testBoard() {
     Square squareWithPiece = board.getSquare(piecePoint);
     assert(squareWithPiece.getPiece() != nullptr);
     assert(squareWithPiece.getPiece()->isKing());
-    assert(squareWithPiece.getPiece()->isWhiteColor);
+    assert(squareWithPiece.getPiece()->isWhiteColor());
 
     Square squareWithoutPiece = board.getSquare(Point{1, 2});
     assert(squareWithoutPiece.getPiece() == nullptr);

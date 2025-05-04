@@ -66,13 +66,13 @@ const std::unordered_map<PieceColor, std::vector<Direction>> Piece::PAWN_PLACE_D
     {
         PieceColor::WHITE,
         {
-            Direction{0, 1}
+            Direction{0, -1}
         }
     },
     {
         PieceColor::BLACK,
         {
-            Direction{0, -1}
+            Direction{0, 1}
         }
     }
 };
@@ -81,43 +81,60 @@ const std::unordered_map<PieceColor, std::vector<Direction>> Piece::PAWN_THREAT_
     {
         PieceColor::WHITE,
         {
-            Direction{-1, 1},
-            Direction{1, 1}
+            Direction{-1, -1},
+            Direction{1, -1}
         }
     },
     {
         PieceColor::BLACK,
         {
-            Direction{-1, -1},
-            Direction{1, -1}
+            Direction{-1, 1},
+            Direction{1, 1}
         }
     }
 };
 
-Piece::Piece(PieceType type, bool isWhiteColor) : type(type), isWhiteColor(isWhiteColor) {};
+Piece::Piece() {};
+
+Piece::Piece(PieceType type, bool isWhiteColor) : _type(type){
+    _color = isWhiteColor ? PieceColor::WHITE : PieceColor::BLACK;
+};
+
+void Piece::operator=(Piece other) {
+    _type = other._type;
+    _color = other._color;
+};
+
+const PieceType Piece::getType() const {
+    return _type;
+};
+
+const bool Piece::isWhiteColor() const {
+    return _color == PieceColor::WHITE;
+};
 
 const std::vector<Direction>& Piece::getPlaceDirections() const {
-    if (type == PieceType::PAWN) {
-        return PAWN_PLACE_DIRECTIONS.at(isWhiteColor ? PieceColor::WHITE : PieceColor::BLACK);
+    if (_type == PieceType::PAWN) {
+        return PAWN_PLACE_DIRECTIONS.at(_color);
     }
-    return DIRECTIONS.at(type);
+    return DIRECTIONS.at(_type);
 };
 
 const std::vector<Direction>& Piece::getThreatDirections() const {
-    if (type == PieceType::PAWN) {
-        return PAWN_THREAT_DIRECTIONS.at(isWhiteColor ? PieceColor::WHITE : PieceColor::BLACK);
+    if (_type == PieceType::PAWN) {
+        return PAWN_THREAT_DIRECTIONS.at(_color);
     }
-    return DIRECTIONS.at(type);
+    return DIRECTIONS.at(_type);
 };
 
 const std::string& Piece::getColorName() const {
-    return COLOR_NAMES[isWhiteColor ? 0 : 1];
+    return COLOR_NAMES[isWhiteColor() ? 0 : 1];
 };
 
 const bool Piece::hasSameColor(const Piece* other) const {
-    return other != nullptr && isWhiteColor == other->isWhiteColor;
+    return other != nullptr && _color == other->_color;
 };
 
 const bool Piece::isKing() const {
-    return type == PieceType::KING;
+    return _type == PieceType::KING;
 };

@@ -1,15 +1,21 @@
 #pragma once
 
+#include <array>
+#include <unordered_map>
+
 #include "piece.h"
 
-class PiecePack {
-public:
-    Piece king;
-    std::vector<Piece> queens;
-    std::vector<Piece> rooks;
-    std::vector<Piece> bishops;
-    std::vector<Piece> knights;
-    std::vector<Piece> pawns;
+using PiecePackPieces = std::unordered_map<PieceType, std::array<Piece, 8>>;
 
+class PiecePack {
+private:
+    bool _isWhiteColor;
+    PiecePackPieces _pieces;
+    std::unordered_map<PieceType, int> _nextIndexes;
+
+public:
     PiecePack(bool isWhiteColor);
+
+    Piece* getPiece(PieceType pieceType);
+    const PiecePackPieces getPieces() const;
 };

@@ -30,7 +30,7 @@ void testSquare() {
     Square square{"b8", &king};
     assert((square.point == Point{1, 0}));
     assert(square.getPiece()->isKing());
-    assert(square.getPiece()->isWhiteColor);
+    assert(square.getPiece()->isWhiteColor());
     assert(Square::hasPiece(square));
 
     std::cout << "testSquare OK" << std::endl;

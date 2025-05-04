@@ -8,17 +8,19 @@
 #include "direction.h"
 
 enum class PieceColor {
-    WHITE = 0,
-    BLACK = 1
+    UNSET = 0,
+    WHITE = 1,
+    BLACK = 2
 };
 
 enum class PieceType {
-    KING = 0,
-    QUEEN = 1,
-    ROOK = 2,
-    BISHOP = 3,
-    KNIGHT = 4,
-    PAWN = 5
+    UNSET = 0,
+    KING = 1,
+    QUEEN = 2,
+    ROOK = 3,
+    BISHOP = 4,
+    KNIGHT = 5,
+    PAWN = 6
 };
 
 struct PieceInfo {
@@ -33,12 +35,17 @@ private:
     static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_PLACE_DIRECTIONS;
     static const std::unordered_map<PieceColor, std::vector<Direction>> PAWN_THREAT_DIRECTIONS;
 
-public:
-    const PieceType type;
-    const bool isWhiteColor;
+    PieceType _type = PieceType::UNSET;
+    PieceColor _color = PieceColor::UNSET;
 
+public:
+    Piece();
     Piece(PieceType type, bool isWhiteColor);
 
+    void operator=(Piece piece);
+
+    const PieceType getType() const;
+    const bool isWhiteColor() const;
     const std::vector<Direction>& getPlaceDirections() const;
     const std::vector<Direction>& getThreatDirections() const;
     const std::string& getColorName() const;
