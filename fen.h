@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -31,6 +33,8 @@ private:
     void _stringifyEnPassant();
 
 public:
+    static const std::string INITIAL_POSITION;
+
     FEN(std::string rawString);
     FEN(State state);
 

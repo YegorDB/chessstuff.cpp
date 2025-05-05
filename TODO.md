@@ -1,6 +1,7 @@
 # To do list
 
-- [ ] Improve piece pack to get pieces by type
+- [ ] Move piece objects to square
+- [ ] Add handler state
 
 - [ ] Add king restrictions
 - [ ] Add en passant actions

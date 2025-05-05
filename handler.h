@@ -1,4 +1,5 @@
 #include "board.h"
+#include "fen.h"
 #include "piece_pack.h"
 
 class Handler {
@@ -8,7 +9,6 @@ private:
 
     void initBoard();
     void initPiecePacks();
-    void initOneSidePieces(bool isWhiteColor);
     void initPieces();
 
     void clearActions();

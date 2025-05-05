@@ -2,6 +2,8 @@
 
 #include "fen.h"
 
+const std::string FEN::INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
+
 const std::unordered_map<char, PieceInfo> FEN::PIECE_TYPE_SYMBOLS_TO_PIECE_INFO{
     {'K', PieceInfo{PieceColor::WHITE, PieceType::KING}},
     {'Q', PieceInfo{PieceColor::WHITE, PieceType::QUEEN}},

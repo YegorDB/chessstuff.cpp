@@ -19,27 +19,13 @@ void Handler::initPiecePacks() {
     piecePacks.push_back(PiecePack(false));
 };
 
-void Handler::initOneSidePieces(bool isWhiteColor) {
-    int pack = isWhiteColor ? 0 : 1;
-    int firstLine = isWhiteColor ? 7 : 0;
-    int secondLine = isWhiteColor ? 6 : 1;
-
-    board.placePiece(piecePacks[pack].getPiece(PieceType::ROOK), Point{0, firstLine});
-    board.placePiece(piecePacks[pack].getPiece(PieceType::KNIGHT), Point{1, firstLine});
-    board.placePiece(piecePacks[pack].getPiece(PieceType::BISHOP), Point{2, firstLine});
-    board.placePiece(piecePacks[pack].getPiece(PieceType::QUEEN), Point{3, firstLine});
-    board.placePiece(piecePacks[pack].getPiece(PieceType::KING), Point{4, firstLine});
-    board.placePiece(piecePacks[pack].getPiece(PieceType::BISHOP), Point{5, firstLine});
-    board.placePiece(piecePacks[pack].getPiece(PieceType::KNIGHT), Point{6, firstLine});
-    board.placePiece(piecePacks[pack].getPiece(PieceType::ROOK), Point{7, firstLine});
-    for (int i = 0; i < 8; ++i) {
-        board.placePiece(piecePacks[pack].getPiece(PieceType::PAWN), Point{i, secondLine});
-    }
-};
-
 void Handler::initPieces() {
-    initOneSidePieces(true);
-    initOneSidePieces(false);
+    FEN fen{FEN::INITIAL_POSITION};
+    State state = fen.getState();
+    for (const auto& [point, pieceInfo] : state.piecePlaces) {
+        int pack = pieceInfo.color == PieceColor::WHITE ? 0 : 1;
+        board.placePiece(piecePacks[pack].getPiece(pieceInfo.type), point);
+    }
 };
 
 Board& Handler::getBoard() {
