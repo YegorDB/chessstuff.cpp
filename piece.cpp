@@ -100,7 +100,7 @@ Piece::Piece(PieceType type, bool isWhiteColor) : _type(type){
     _color = isWhiteColor ? PieceColor::WHITE : PieceColor::BLACK;
 };
 
-void Piece::operator=(Piece other) {
+void Piece::operator=(const Piece& other) {
     _type = other._type;
     _color = other._color;
 };
@@ -109,8 +109,8 @@ const PieceType Piece::getType() const {
     return _type;
 };
 
-const bool Piece::isWhiteColor() const {
-    return _color == PieceColor::WHITE;
+const PieceColor Piece::getColor() const {
+    return _color;
 };
 
 const std::vector<Direction>& Piece::getPlaceDirections() const {
@@ -131,8 +131,12 @@ const std::string& Piece::getColorName() const {
     return COLOR_NAMES[isWhiteColor() ? 0 : 1];
 };
 
-const bool Piece::hasSameColor(const Piece* other) const {
-    return other != nullptr && _color == other->_color;
+const bool Piece::isWhiteColor() const {
+    return _color == PieceColor::WHITE;
+};
+
+const bool Piece::hasSameColor(const Piece& other) const {
+    return _color == other._color;
 };
 
 const bool Piece::isKing() const {

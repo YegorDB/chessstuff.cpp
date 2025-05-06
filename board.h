@@ -66,5 +66,5 @@ public:
     SquaresByDirection squaresByDirection(const Point& point, const Direction& direction, bool withStartPoint = false);
 
     const Square& getSquare(const Point& point) const;
-    void placePiece(Piece* piece, const Point& point);
+    void placePiece(const Piece& piece, const Point& point);
 };

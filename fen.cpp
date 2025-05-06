@@ -4,19 +4,19 @@
 
 const std::string FEN::INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
 
-const std::unordered_map<char, PieceInfo> FEN::PIECE_TYPE_SYMBOLS_TO_PIECE_INFO{
-    {'K', PieceInfo{PieceColor::WHITE, PieceType::KING}},
-    {'Q', PieceInfo{PieceColor::WHITE, PieceType::QUEEN}},
-    {'R', PieceInfo{PieceColor::WHITE, PieceType::ROOK}},
-    {'B', PieceInfo{PieceColor::WHITE, PieceType::BISHOP}},
-    {'N', PieceInfo{PieceColor::WHITE, PieceType::KNIGHT}},
-    {'P', PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-    {'k', PieceInfo{PieceColor::BLACK, PieceType::KING}},
-    {'q', PieceInfo{PieceColor::BLACK, PieceType::QUEEN}},
-    {'r', PieceInfo{PieceColor::BLACK, PieceType::ROOK}},
-    {'b', PieceInfo{PieceColor::BLACK, PieceType::BISHOP}},
-    {'n', PieceInfo{PieceColor::BLACK, PieceType::KNIGHT}},
-    {'p', PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
+const std::unordered_map<char, Piece> FEN::PIECE_TYPE_SYMBOLS_TO_PIECE{
+    {'K', Piece{PieceType::KING, true}},
+    {'Q', Piece{PieceType::QUEEN, true}},
+    {'R', Piece{PieceType::ROOK, true}},
+    {'B', Piece{PieceType::BISHOP, true}},
+    {'N', Piece{PieceType::KNIGHT, true}},
+    {'P', Piece{PieceType::PAWN, true}},
+    {'k', Piece{PieceType::KING, false}},
+    {'q', Piece{PieceType::QUEEN, false}},
+    {'r', Piece{PieceType::ROOK, false}},
+    {'b', Piece{PieceType::BISHOP, false}},
+    {'n', Piece{PieceType::KNIGHT, false}},
+    {'p', Piece{PieceType::PAWN, false}},
 };
 
 const std::unordered_map<char, PieceColor> FEN::PIECE_COLOR_SYMBOLS_TO_PIECE_COLOR{
@@ -54,7 +54,7 @@ const std::unordered_map<PieceColor, char> FEN::PIECE_COLOR_TO_PIECE_COLOR_SYMBO
     {PieceColor::BLACK, 'b'},
 };
 
-FEN::FEN(std::string rawString) : _rawString(rawString) {
+FEN::FEN(const std::string& rawString) : _rawString(rawString) {
     _splitRawString();
     _parseRawSringPiecesPlacesPart();
     _parseRawSringActiveColorPart();
@@ -64,7 +64,7 @@ FEN::FEN(std::string rawString) : _rawString(rawString) {
     _parseRawSringMovesCountPart();
 };
 
-FEN::FEN(State state) : _state(state) {
+FEN::FEN(const State& state) : _state(state) {
     _rawStringParts = {"", "", "", "", "", ""};
 
     _stringifyPiecePlaces();
@@ -113,10 +113,10 @@ void FEN::_parseRawSringPiecesPlacesPart() {
         } else if (c > 48 && c <= 57) {
             x += c - 48;
         } else {
-            if (!PIECE_TYPE_SYMBOLS_TO_PIECE_INFO.contains(c)) {
+            if (!PIECE_TYPE_SYMBOLS_TO_PIECE.contains(c)) {
                 throw std::runtime_error{"Wrong piece type symbol."};
             }
-            _state.piecePlaces[Point(x, y)] = PIECE_TYPE_SYMBOLS_TO_PIECE_INFO.at(c);
+            _state.piecePlaces[Point(x, y)] = PIECE_TYPE_SYMBOLS_TO_PIECE.at(c);
             x++;
         }
     }
@@ -160,7 +160,7 @@ void FEN::_parseRawSringMovesCountPart() {
     _state.movesCount = _parseRawSringNumber(_rawStringParts[5]);
 };
 
-int FEN::_parseRawSringNumber(std::string number) {
+int FEN::_parseRawSringNumber(const std::string& number) {
     try {
         return std::stoi(number);
     } catch(std::invalid_argument) {
@@ -184,8 +184,8 @@ void FEN::_stringifyPiecePlaces() {
                     _rawStringParts[0] += std::to_string(emptyCount);
                     emptyCount = 0;
                 }
-                PieceInfo pi = _state.piecePlaces.at(point);
-                char symbol = PIECE_INFO_TO_PIECE_TYPE_SYMBOLS.at(pi.color).at(pi.type);
+                Piece piece = _state.piecePlaces.at(point);
+                char symbol = PIECE_INFO_TO_PIECE_TYPE_SYMBOLS.at(piece.getColor()).at(piece.getType());
                 _rawStringParts[0].push_back(symbol);
             }
         }

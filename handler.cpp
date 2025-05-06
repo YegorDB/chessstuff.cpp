@@ -2,7 +2,6 @@
 
 Handler::Handler() {
     initBoard();
-    initPiecePacks();
     initPieces();
 
     clearActions();
@@ -13,18 +12,11 @@ void Handler::initBoard() {
     board = Board{};
 };
 
-void Handler::initPiecePacks() {
-    piecePacks.clear();
-    piecePacks.push_back(PiecePack(true));
-    piecePacks.push_back(PiecePack(false));
-};
-
 void Handler::initPieces() {
     FEN fen{FEN::INITIAL_POSITION};
     State state = fen.getState();
-    for (const auto& [point, pieceInfo] : state.piecePlaces) {
-        int pack = pieceInfo.color == PieceColor::WHITE ? 0 : 1;
-        board.placePiece(piecePacks[pack].getPiece(pieceInfo.type), point);
+    for (const auto& [point, piece] : state.piecePlaces) {
+        board.placePiece(piece, point);
     }
 };
 
@@ -40,7 +32,7 @@ void Handler::clearActions() {
 
 void Handler::setActions() {
     for (Square* square : board.squaresWithPieces()) {
-        for (Direction direction : square->getPiece()->getPlaceDirections()) {
+        for (Direction direction : square->getPiece().getPlaceDirections()) {
             for (Square* nextSquare : board.squaresByDirection(square->point, direction)) {
                 if (Square::hasPiece(*nextSquare)) {
                     break;
@@ -48,7 +40,7 @@ void Handler::setActions() {
                 setAction(ActionType::PLACE, square, nextSquare);
             }
         }
-        for (Direction direction : square->getPiece()->getThreatDirections()) {
+        for (Direction direction : square->getPiece().getThreatDirections()) {
             Square* prevSquare = nullptr;
             for (Square* nextSquare : board.squaresByDirection(square->point, direction)) {
                 if (!Square::hasPiece(*nextSquare)) {
@@ -56,7 +48,7 @@ void Handler::setActions() {
                 }
                 if (prevSquare != nullptr) {
                     setAction(ActionType::XRAY, square, nextSquare);
-                    if (nextSquare->getPiece()->isKing() && nextSquare->hasSameColorPieces(prevSquare)) {
+                    if (nextSquare->getPiece().isKing() && nextSquare->hasSameColorPieces(prevSquare)) {
                         setAction(ActionType::BIND, square, prevSquare);
                     }
                     break;

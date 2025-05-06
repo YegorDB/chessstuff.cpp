@@ -27,11 +27,12 @@ void testSquare() {
     assert(!Square::hasPiece(emptySquare));
 
     Piece king{PieceType::KING, true};
-    Square square{"b8", &king};
+    Square square{"b8"};
     assert((square.point == Point{1, 0}));
-    assert(square.getPiece()->isKing());
-    assert(square.getPiece()->isWhiteColor());
+    square.placePiece(king);
     assert(Square::hasPiece(square));
+    assert(square.getPiece().isKing());
+    assert(square.getPiece().isWhiteColor());
 
     std::cout << "testSquare OK" << std::endl;
 };

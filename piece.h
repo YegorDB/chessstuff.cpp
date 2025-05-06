@@ -23,11 +23,6 @@ enum class PieceType {
     PAWN = 6
 };
 
-struct PieceInfo {
-    PieceColor color;
-    PieceType type;
-};
-
 class Piece {
 private:
     static const std::vector<std::string> COLOR_NAMES;
@@ -42,13 +37,14 @@ public:
     Piece();
     Piece(PieceType type, bool isWhiteColor);
 
-    void operator=(Piece piece);
+    void operator=(const Piece& piece);
 
     const PieceType getType() const;
-    const bool isWhiteColor() const;
+    const PieceColor getColor() const;
     const std::vector<Direction>& getPlaceDirections() const;
     const std::vector<Direction>& getThreatDirections() const;
     const std::string& getColorName() const;
-    const bool hasSameColor(const Piece* other) const;
+    const bool isWhiteColor() const;
+    const bool hasSameColor(const Piece& other) const;
     const bool isKing() const;
 };

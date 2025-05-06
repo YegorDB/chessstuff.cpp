@@ -7,9 +7,7 @@ Board::Board() {
     for (int i = 0; i < 8; ++i) {
         _matrix.push_back({});
         for (int j = 0; j < 8; ++j) {
-            Square s{j, i};
-            Square bi{s};
-            _matrix[i].push_back(bi);
+            _matrix[i].push_back(Square{j, i});
         }
     }
 };
@@ -39,7 +37,7 @@ const Square& Board::getSquare(const Point& point) const {
     return _matrix[point.y()][point.x()];
 };
 
-void Board::placePiece(Piece* piece, const Point& to) {
+void Board::placePiece(const Piece& piece, const Point& to) {
     if (!to.isValid()) {
         throw std::runtime_error{"Invalid point to place a piece."};
     }

@@ -3,4 +3,4 @@
 #include "piece.h"
 #include "point.h"
 
-using PiecePlaces = std::unordered_map<Point, PieceInfo, PointHasher>;
+using PiecePlaces = std::unordered_map<Point, Piece, PointHasher>;

@@ -1,14 +1,11 @@
 #include "board.h"
 #include "fen.h"
-#include "piece_pack.h"
 
 class Handler {
 private:
     Board board;
-    std::vector<PiecePack> piecePacks;
 
     void initBoard();
-    void initPiecePacks();
     void initPieces();
 
     void clearActions();

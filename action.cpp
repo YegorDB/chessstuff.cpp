@@ -2,7 +2,7 @@
 
 Action::Action() {};
 
-void Action::insert(ActionRelation relation, Point point) {
+void Action::insert(ActionRelation relation, const Point& point) {
     _relations[relation].insert(point);
 };
 
@@ -17,7 +17,7 @@ const PointSet& Action::get(ActionRelation relation) const {
 
 Actions::Actions() {};
 
-void Actions::insert(ActionType type, ActionRelation relation, Point point) {
+void Actions::insert(ActionType type, ActionRelation relation, const Point& point) {
     _inners[type].insert(relation, point);
 };
 

@@ -8,22 +8,21 @@ void testFenStringToState() {
     for (bool isWhiteColor : {true, false}) {
         int firstRowY = isWhiteColor ? 7 : 0;
         int secondRowY = isWhiteColor ? 6 : 1;
-        PieceColor pieceColor = isWhiteColor ? PieceColor::WHITE : PieceColor::BLACK;
 
         for (int x = 0; x < 8; ++x) {
-            assert(s.piecePlaces.at(Point{x, firstRowY}).color == pieceColor);
-            assert(s.piecePlaces.at(Point{x, secondRowY}).color == pieceColor);
-            assert(s.piecePlaces.at(Point{x, secondRowY}).type == PieceType::PAWN);
+            assert(s.piecePlaces.at(Point{x, firstRowY}).isWhiteColor() == isWhiteColor);
+            assert(s.piecePlaces.at(Point{x, secondRowY}).isWhiteColor() == isWhiteColor);
+            assert(s.piecePlaces.at(Point{x, secondRowY}).getType() == PieceType::PAWN);
         }
 
-        assert(s.piecePlaces.at(Point{0, firstRowY}).type == PieceType::ROOK);
-        assert(s.piecePlaces.at(Point{1, firstRowY}).type == PieceType::KNIGHT);
-        assert(s.piecePlaces.at(Point{2, firstRowY}).type == PieceType::BISHOP);
-        assert(s.piecePlaces.at(Point{3, firstRowY}).type == PieceType::QUEEN);
-        assert(s.piecePlaces.at(Point{4, firstRowY}).type == PieceType::KING);
-        assert(s.piecePlaces.at(Point{5, firstRowY}).type == PieceType::BISHOP);
-        assert(s.piecePlaces.at(Point{6, firstRowY}).type == PieceType::KNIGHT);
-        assert(s.piecePlaces.at(Point{7, firstRowY}).type == PieceType::ROOK);
+        assert(s.piecePlaces.at(Point{0, firstRowY}).getType() == PieceType::ROOK);
+        assert(s.piecePlaces.at(Point{1, firstRowY}).getType() == PieceType::KNIGHT);
+        assert(s.piecePlaces.at(Point{2, firstRowY}).getType() == PieceType::BISHOP);
+        assert(s.piecePlaces.at(Point{3, firstRowY}).getType() == PieceType::QUEEN);
+        assert(s.piecePlaces.at(Point{4, firstRowY}).getType() == PieceType::KING);
+        assert(s.piecePlaces.at(Point{5, firstRowY}).getType() == PieceType::BISHOP);
+        assert(s.piecePlaces.at(Point{6, firstRowY}).getType() == PieceType::KNIGHT);
+        assert(s.piecePlaces.at(Point{7, firstRowY}).getType() == PieceType::ROOK);
     }
 
     for (int y = 2; y < 6; ++y) {
@@ -55,11 +54,11 @@ void testFenStringToStateTwoKings() {
         for (int x = 0; x < 8; ++x) {
             Point point{x, y};
             if (point == Point{4, 0}) {
-                assert(s.piecePlaces.at(point).color == PieceColor::BLACK);
-                assert(s.piecePlaces.at(point).type == PieceType::KING);
+                assert(!s.piecePlaces.at(point).isWhiteColor());
+                assert(s.piecePlaces.at(point).getType() == PieceType::KING);
             } else if (point == Point{4, 7}) {
-                assert(s.piecePlaces.at(point).color == PieceColor::WHITE);
-                assert(s.piecePlaces.at(point).type == PieceType::KING);
+                assert(s.piecePlaces.at(point).isWhiteColor());
+                assert(s.piecePlaces.at(point).getType() == PieceType::KING);
             } else {
                 assert(!s.piecePlaces.contains(point));
             }
@@ -83,38 +82,38 @@ void testFenStringToStateTwoKings() {
 void testStateToFenString() {
     State s{
         PiecePlaces{
-            {Point{0, 0}, PieceInfo{PieceColor::BLACK, PieceType::ROOK}},
-            {Point{1, 0}, PieceInfo{PieceColor::BLACK, PieceType::KNIGHT}},
-            {Point{2, 0}, PieceInfo{PieceColor::BLACK, PieceType::BISHOP}},
-            {Point{3, 0}, PieceInfo{PieceColor::BLACK, PieceType::QUEEN}},
-            {Point{4, 0}, PieceInfo{PieceColor::BLACK, PieceType::KING}},
-            {Point{5, 0}, PieceInfo{PieceColor::BLACK, PieceType::BISHOP}},
-            {Point{6, 0}, PieceInfo{PieceColor::BLACK, PieceType::KNIGHT}},
-            {Point{7, 0}, PieceInfo{PieceColor::BLACK, PieceType::ROOK}},
-            {Point{0, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{1, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{2, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{3, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{4, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{5, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{6, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{7, 1}, PieceInfo{PieceColor::BLACK, PieceType::PAWN}},
-            {Point{0, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{1, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{2, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{3, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{4, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{5, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{6, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{7, 6}, PieceInfo{PieceColor::WHITE, PieceType::PAWN}},
-            {Point{0, 7}, PieceInfo{PieceColor::WHITE, PieceType::ROOK}},
-            {Point{1, 7}, PieceInfo{PieceColor::WHITE, PieceType::KNIGHT}},
-            {Point{2, 7}, PieceInfo{PieceColor::WHITE, PieceType::BISHOP}},
-            {Point{3, 7}, PieceInfo{PieceColor::WHITE, PieceType::QUEEN}},
-            {Point{4, 7}, PieceInfo{PieceColor::WHITE, PieceType::KING}},
-            {Point{5, 7}, PieceInfo{PieceColor::WHITE, PieceType::BISHOP}},
-            {Point{6, 7}, PieceInfo{PieceColor::WHITE, PieceType::KNIGHT}},
-            {Point{7, 7}, PieceInfo{PieceColor::WHITE, PieceType::ROOK}},
+            {Point{0, 0}, Piece{PieceType::ROOK, false}},
+            {Point{1, 0}, Piece{PieceType::KNIGHT, false}},
+            {Point{2, 0}, Piece{PieceType::BISHOP, false}},
+            {Point{3, 0}, Piece{PieceType::QUEEN, false}},
+            {Point{4, 0}, Piece{PieceType::KING, false}},
+            {Point{5, 0}, Piece{PieceType::BISHOP, false}},
+            {Point{6, 0}, Piece{PieceType::KNIGHT, false}},
+            {Point{7, 0}, Piece{PieceType::ROOK, false}},
+            {Point{0, 1}, Piece{PieceType::PAWN, false}},
+            {Point{1, 1}, Piece{PieceType::PAWN, false}},
+            {Point{2, 1}, Piece{PieceType::PAWN, false}},
+            {Point{3, 1}, Piece{PieceType::PAWN, false}},
+            {Point{4, 1}, Piece{PieceType::PAWN, false}},
+            {Point{5, 1}, Piece{PieceType::PAWN, false}},
+            {Point{6, 1}, Piece{PieceType::PAWN, false}},
+            {Point{7, 1}, Piece{PieceType::PAWN, false}},
+            {Point{0, 6}, Piece{PieceType::PAWN, true}},
+            {Point{1, 6}, Piece{PieceType::PAWN, true}},
+            {Point{2, 6}, Piece{PieceType::PAWN, true}},
+            {Point{3, 6}, Piece{PieceType::PAWN, true}},
+            {Point{4, 6}, Piece{PieceType::PAWN, true}},
+            {Point{5, 6}, Piece{PieceType::PAWN, true}},
+            {Point{6, 6}, Piece{PieceType::PAWN, true}},
+            {Point{7, 6}, Piece{PieceType::PAWN, true}},
+            {Point{0, 7}, Piece{PieceType::ROOK, true}},
+            {Point{1, 7}, Piece{PieceType::KNIGHT, true}},
+            {Point{2, 7}, Piece{PieceType::BISHOP, true}},
+            {Point{3, 7}, Piece{PieceType::QUEEN, true}},
+            {Point{4, 7}, Piece{PieceType::KING, true}},
+            {Point{5, 7}, Piece{PieceType::BISHOP, true}},
+            {Point{6, 7}, Piece{PieceType::KNIGHT, true}},
+            {Point{7, 7}, Piece{PieceType::ROOK, true}},
         },
         PieceColor::WHITE,
         State::Castles{true, true, true, true},
@@ -131,8 +130,8 @@ void testStateToFenString() {
 void testStateToFenStringTwoKings() {
     State s{
         PiecePlaces{
-            {Point{4, 0}, PieceInfo{PieceColor::BLACK, PieceType::KING}},
-            {Point{4, 7}, PieceInfo{PieceColor::WHITE, PieceType::KING}},
+            {Point{4, 0}, Piece{PieceType::KING, false}},
+            {Point{4, 7}, Piece{PieceType::KING, true}},
         },
         PieceColor::BLACK,
         State::Castles{false, false, false, false},

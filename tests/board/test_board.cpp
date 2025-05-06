@@ -5,7 +5,7 @@ void testBoard() {
 
     int i = 0;
     for (Square* square : board.squares()) {
-        assert(square->getPiece() == nullptr);
+        assert(!Square::hasPiece(*square));
         assert((square->point == Point{i % 8, i / 8}));
         ++i;
     }
@@ -33,25 +33,25 @@ void testBoard() {
 
     Point piecePoint{5, 3};
     Piece king{PieceType::KING, true};
-    board.placePiece(&king, piecePoint);
+    board.placePiece(king, piecePoint);
 
     i = 0;
     for (Square* square : board.squaresWithPieces()) {
-        assert(square->getPiece() != nullptr);
-        assert(square->getPiece()->isKing());
-        assert(square->getPiece()->isWhiteColor());
+        assert(Square::hasPiece(*square));
+        assert(square->getPiece().isKing());
+        assert(square->getPiece().isWhiteColor());
         assert(square->point == piecePoint);
         ++i;
     }
     assert(i == 1);
 
     Square squareWithPiece = board.getSquare(piecePoint);
-    assert(squareWithPiece.getPiece() != nullptr);
-    assert(squareWithPiece.getPiece()->isKing());
-    assert(squareWithPiece.getPiece()->isWhiteColor());
+    assert(Square::hasPiece(squareWithPiece));
+    assert(squareWithPiece.getPiece().isKing());
+    assert(squareWithPiece.getPiece().isWhiteColor());
 
     Square squareWithoutPiece = board.getSquare(Point{1, 2});
-    assert(squareWithoutPiece.getPiece() == nullptr);
+    assert(!Square::hasPiece(squareWithoutPiece));
 
     std::cout << "testBoard OK" << std::endl;
 };

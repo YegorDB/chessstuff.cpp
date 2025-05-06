@@ -6,7 +6,6 @@
 #include "fen/test_fen.h"
 #include "handler/test_handler.h"
 #include "piece/test_piece.h"
-#include "piece_pack/test_piece_pack.h"
 #include "piece_places/test_piece_places.h"
 #include "point/test_point.h"
 #include "square/test_square.h"
@@ -18,7 +17,6 @@ int main() {
     testFen();
     testHandler();
     testPiece();
-    testPiecePack();
     testPiecePlaces();
     testPoint();
     testSquare();

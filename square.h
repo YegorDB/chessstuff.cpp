@@ -15,28 +15,28 @@ private:
     static const std::vector<std::string> COLOR_NAMES;
 
     std::string _name;
-    Piece* _piece = nullptr;
+    Piece _piece;
     Actions _actions;
 
 public:
     static bool hasPiece(const Square& square);
-    static Point nameToPoint(std::string name);
+    static Point nameToPoint(const std::string& name);
 
     const Point point;
     const bool isLightColor;
 
-    Square(Point point, Piece* piece = nullptr);
-    Square(int x, int y, Piece* piece = nullptr);
-    Square(std::string name, Piece* piece = nullptr);
+    Square(const Point& point);
+    Square(int x, int y);
+    Square(const std::string& name);
 
     const std::string& getName() const;
     const std::string& getColorName() const;
-    const Piece* getPiece() const;
+    const Piece& getPiece() const;
     const Actions& getActions() const;
     const std::string toString() const;
-    bool hasSameColorPieces(Square* other) const;
+    bool hasSameColorPieces(const Square* other) const;
 
-    void setAction(ActionType type, ActionRelation relation, Square* other);
+    void setAction(ActionType type, ActionRelation relation, const Square* other);
     void clearActions();
-    void placePiece(Piece* piece);
+    void placePiece(const Piece& piece);
 };

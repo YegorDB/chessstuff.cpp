@@ -2,7 +2,7 @@
 
 Point::Point(int x, int y) : _x(x), _y(y), _hash(y * 10 + x) {};
 
-void Point::operator=(Point other) {
+void Point::operator=(const Point& other) {
     _x = other._x;
     _y = other._y;
     _hash = other._hash;
@@ -24,7 +24,7 @@ int Point::hash() const {
     return _hash;
 };
 
-Point Point::next(Direction direction) {
+Point Point::next(const Direction& direction) {
     return Point{_x + direction.dx, _y + direction.dy};
 };
 

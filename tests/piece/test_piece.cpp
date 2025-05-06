@@ -84,7 +84,7 @@ void testPawn() {
     assert((pawn2.getThreatDirections()[0] == Direction{-1, 1}));
     assert((pawn2.getThreatDirections()[1] == Direction{1, 1}));
 
-    assert(!pawn1.hasSameColor(&pawn2));
+    assert(!pawn1.hasSameColor(pawn2));
 };
 
 void testPiece() {

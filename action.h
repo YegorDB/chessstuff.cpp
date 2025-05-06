@@ -27,7 +27,7 @@ private:
 public:
     Action();
 
-    void insert(ActionRelation relation, Point point);
+    void insert(ActionRelation relation, const Point& point);
     void clear();
     const PointSet& get(ActionRelation relation) const;
 };
@@ -45,7 +45,7 @@ private:
 public:
     Actions();
 
-    void insert(ActionType type, ActionRelation relation, Point point);
+    void insert(ActionType type, ActionRelation relation, const Point& point);
     void clear();
     const Action& get(ActionType type) const;
 };

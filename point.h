@@ -12,14 +12,14 @@ private:
 public:
     Point(int x, int y);
 
-    void operator=(Point point);
+    void operator=(const Point& point);
     bool operator==(const Point& other) const;
 
     int x() const;
     int y() const;
     int hash() const;
 
-    Point next(Direction direction);
+    Point next(const Direction& direction);
     bool isValid() const;
     const std::string toString() const;
 };
