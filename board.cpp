@@ -37,6 +37,14 @@ const Square& Board::getSquare(const Point& point) const {
     return _matrix[point.y()][point.x()];
 };
 
+PiecePlaces Board::getPiecePlaces() {
+    PiecePlaces piecePlaces;
+    for (Square* square : squaresWithPieces()) {
+        piecePlaces[square->point] = square->getPiece();
+    }
+    return piecePlaces;
+};
+
 void Board::placePiece(const Piece& piece, const Point& to) {
     if (!to.isValid()) {
         throw std::runtime_error{"Invalid point to place a piece."};

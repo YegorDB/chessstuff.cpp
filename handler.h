@@ -3,17 +3,17 @@
 
 class Handler {
 private:
-    Board board;
+    Board _board;
+    State _state;
 
-    void initBoard();
-    void initPieces();
-
-    void clearActions();
-    void setActions();
-    void setAction(ActionType type, Square* bySquare, Square* toSquare);
+    void _initPieces();
+    void _clearActions();
+    void _setActions();
+    void _setAction(ActionType type, Square* bySquare, Square* toSquare);
 
 public:
     Handler();
 
     Board& getBoard();
+    const State& getState();
 };
