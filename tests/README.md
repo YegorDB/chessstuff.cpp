@@ -1,6 +1,7 @@
 # CPP chess utils tests
 
+## Build and launch tests
+
 ```bash
-$ g++ --std c++20 *.cpp **/*.cpp ../*.cpp
-$ ./a.out
+$ make tests
 ```
