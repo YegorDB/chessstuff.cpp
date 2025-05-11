@@ -44,7 +44,8 @@ public:
     const std::vector<Direction>& getPlaceDirections() const;
     const std::vector<Direction>& getThreatDirections() const;
     const std::string& getColorName() const;
-    const bool isWhiteColor() const;
-    const bool hasSameColor(const Piece& other) const;
-    const bool isKing() const;
+    bool isWhiteColor() const;
+    bool hasColor(PieceColor color) const;
+    bool hasSameColor(const Piece& other) const;
+    bool isKing() const;
 };

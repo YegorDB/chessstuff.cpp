@@ -30,24 +30,45 @@ void Handler::_clearActions() {
 };
 
 void Handler::_setActions() {
+    /*
+    Active color piece has
+    - squares without pieces to place to
+    - squares with opposite color pieces to threat to
+    - squares with same color pieces to support to
+    - squares with pieces to xray to
+    - squares with opposite color pieces to bind to
+
+    Inactive color piece has
+    - squares without pieces to threat to
+    - squares with opposite color pieces to threat to
+    - squares with same color pieces to support to
+    - squares with pieces to xray to
+    - squares with opposite color pieces to bind to
+    */
+
     for (Square* square : _board.squaresWithPieces()) {
-        for (Direction direction : square->getPiece().getPlaceDirections()) {
-            for (Square* nextSquare : _board.squaresByDirection(square->point, direction)) {
-                if (Square::hasPiece(*nextSquare)) {
-                    break;
+        if (square->getPiece().hasColor(_state.activeColor)) {
+            for (Direction direction : square->getPiece().getPlaceDirections()) {
+                for (Square* nextSquare : _board.squaresByDirection(square->point, direction)) {
+                    if (Square::hasPiece(*nextSquare)) {
+                        break;
+                    }
+                    _setAction(ActionType::PLACE, square, nextSquare);
                 }
-                _setAction(ActionType::PLACE, square, nextSquare);
             }
         }
         for (Direction direction : square->getPiece().getThreatDirections()) {
             Square* prevSquare = nullptr;
             for (Square* nextSquare : _board.squaresByDirection(square->point, direction)) {
                 if (!Square::hasPiece(*nextSquare)) {
+                    if (!square->getPiece().hasColor(_state.activeColor) && prevSquare == nullptr) {
+                        _setAction(ActionType::THREAT, square, nextSquare);
+                    }
                     continue;
                 }
                 if (prevSquare != nullptr) {
                     _setAction(ActionType::XRAY, square, nextSquare);
-                    if (nextSquare->getPiece().isKing() && nextSquare->hasSameColorPieces(prevSquare)) {
+                    if (nextSquare->getPiece().isKing() && nextSquare->hasSameColorPieces(prevSquare) && !nextSquare->hasSameColorPieces(square)) {
                         _setAction(ActionType::BIND, square, prevSquare);
                     }
                     break;
