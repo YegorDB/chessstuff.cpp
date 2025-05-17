@@ -3,6 +3,7 @@
 void testHandler() {
     testInitialActions();
     testInitialPieces();
+    testKingRestrictions();
 
     std::cout << "testHandler OK" << std::endl;
 };

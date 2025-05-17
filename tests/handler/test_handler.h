@@ -6,3 +6,4 @@
 void testHandler();
 void testInitialActions();
 void testInitialPieces();
+void testKingRestrictions();

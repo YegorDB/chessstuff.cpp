@@ -1,13 +1,14 @@
 #include "handler.h"
 
-Handler::Handler() {
-    _initPieces();
+Handler::Handler(const FEN& fen) {
+    _initPieces(fen);
     _clearActions();
     _setActions();
 };
 
-void Handler::_initPieces() {
-    FEN fen{FEN::INITIAL_POSITION};
+Handler::Handler() : Handler(FEN{FEN::INITIAL_POSITION}) {};
+
+void Handler::_initPieces(const FEN& fen) {
     State state = fen.getState();
     for (const auto& [point, piece] : state.piecePlaces) {
         _board.placePiece(piece, point);
@@ -46,14 +47,13 @@ void Handler::_setActions() {
     - squares with opposite color pieces to bind to
     */
 
-    std::vector<Square*> kingSquares;
     std::vector<Square*> bindedSquares;
+    _setBaseActions(bindedSquares);
+    _restrictKingActions();
+};
 
+void Handler::_setBaseActions(std::vector<Square*>& bindedSquares) {
     for (Square* square : _board.squaresWithPieces()) {
-        if (square->getPiece().isKing()) {
-            kingSquares.push_back(square);
-        }
-
         if (square->getPiece().hasColor(_state.activeColor)) {
             for (Direction direction : square->getPiece().getPlaceDirections()) {
                 for (Square* nextSquare : _board.squaresByDirection(square->point, direction)) {
@@ -94,20 +94,38 @@ void Handler::_setActions() {
             }
         }
     }
+};
 
-    for (Square* square : kingSquares) {
-        for (Point point : square->getActions().get(ActionType::PLACE).get(ActionRelation::TO)) {
-            const Square nextSquare = _board.getSquare(point);
-            if (!nextSquare.getActions().get(ActionType::THREAT).get(ActionRelation::BY).empty()) {
-                square->dropAction(ActionType::PLACE, ActionRelation::TO, &nextSquare);
-            }
+void Handler::_restrictKingActions() {
+    Square* activeKingSquare;
+    for (Square* square : _board.squaresWithPieces()) {
+        if (square->getPiece().isKing() && square->getPiece().hasColor(_state.activeColor)) {
+            activeKingSquare = square;
+            break;
         }
+    }
 
-        for (Point point : square->getActions().get(ActionType::THREAT).get(ActionRelation::TO)) {
-            const Square nextSquare = _board.getSquare(point);
-            if (!nextSquare.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty()) {
-                square->dropAction(ActionType::THREAT, ActionRelation::TO, &nextSquare);
-            }
+    PointSet placeToPointsCopy;
+    for (Point point : activeKingSquare->getActions().get(ActionType::PLACE).get(ActionRelation::TO)) {
+        placeToPointsCopy.insert(point);
+    }
+
+    for (Point point : placeToPointsCopy) {
+        const Square nextSquare = _board.getSquare(point);
+        if (!nextSquare.getActions().get(ActionType::THREAT).get(ActionRelation::BY).empty()) {
+            activeKingSquare->dropAction(ActionType::PLACE, ActionRelation::TO, &nextSquare);
+        }
+    }
+
+    PointSet threatToPointsCopy;
+    for (Point point : activeKingSquare->getActions().get(ActionType::THREAT).get(ActionRelation::TO)) {
+        threatToPointsCopy.insert(point);
+    }
+
+    for (Point point : threatToPointsCopy) {
+        const Square nextSquare = _board.getSquare(point);
+        if (!nextSquare.getActions().get(ActionType::SUPPORT).get(ActionRelation::BY).empty()) {
+            activeKingSquare->dropAction(ActionType::THREAT, ActionRelation::TO, &nextSquare);
         }
     }
 };
@@ -135,7 +153,7 @@ void Handler::_bindPieceIfNeeded(Square* square, Square* prevSquareWithPiece, Sq
 
     bindedSquares.push_back(prevSquareWithPiece);
     _setAction(ActionType::BIND, square, prevSquareWithPiece);
-}
+};
 
 /**
  * Example:
@@ -155,7 +173,7 @@ void Handler::_threatSquareAfterKingIfNeeded(Square* square, Square* prevSquare,
     if (!isNextSquareHasToBeThreated) return;
 
     _setAction(ActionType::THREAT, square, nextSquare);
-}
+};
 
 /**
  * Example:
@@ -175,4 +193,4 @@ void Handler::_supportPieceAfterKingIfNeeded(Square* square, Square* prevSquareW
     if (!isNextSquareHasToBeSupported) return;
 
     _setAction(ActionType::SUPPORT, square, nextSquare);
-}
+};
