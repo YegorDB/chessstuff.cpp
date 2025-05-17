@@ -53,6 +53,10 @@ void Square::setAction(ActionType type, ActionRelation relation, const Square* o
     _actions.insert(type, relation, other->point);
 };
 
+void Square::dropAction(ActionType type, ActionRelation relation, const Square* other) {
+    _actions.erase(type, relation, other->point);
+};
+
 void Square::clearActions() {
     _actions.clear();
 };

@@ -6,6 +6,10 @@ void Action::insert(ActionRelation relation, const Point& point) {
     _relations[relation].insert(point);
 };
 
+void Action::erase(ActionRelation relation, const Point& point) {
+    _relations[relation].erase(point);
+};
+
 void Action::clear() {
     _relations[ActionRelation::TO].clear();
     _relations[ActionRelation::BY].clear();
@@ -19,6 +23,10 @@ Actions::Actions() {};
 
 void Actions::insert(ActionType type, ActionRelation relation, const Point& point) {
     _inners[type].insert(relation, point);
+};
+
+void Actions::erase(ActionType type, ActionRelation relation, const Point& point) {
+    _inners[type].erase(relation, point);
 };
 
 void Actions::clear() {

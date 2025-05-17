@@ -28,6 +28,7 @@ public:
     Action();
 
     void insert(ActionRelation relation, const Point& point);
+    void erase(ActionRelation relation, const Point& point);
     void clear();
     const PointSet& get(ActionRelation relation) const;
 };
@@ -46,6 +47,7 @@ public:
     Actions();
 
     void insert(ActionType type, ActionRelation relation, const Point& point);
+    void erase(ActionType type, ActionRelation relation, const Point& point);
     void clear();
     const Action& get(ActionType type) const;
 };

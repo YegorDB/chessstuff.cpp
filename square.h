@@ -37,6 +37,7 @@ public:
     bool hasSameColorPieces(const Square* other) const;
 
     void setAction(ActionType type, ActionRelation relation, const Square* other);
+    void dropAction(ActionType type, ActionRelation relation, const Square* other);
     void clearActions();
     void placePiece(const Piece& piece);
 };
