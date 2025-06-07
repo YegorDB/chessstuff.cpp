@@ -37,28 +37,12 @@ const Piece& Square::getPiece() const {
     return _piece;
 };
 
-const Actions& Square::getActions() const {
-    return _actions;
-};
-
 const std::string Square::toString() const {
     return _name + " " + point.toString() + " " + getColorName();
 };
 
 bool Square::hasSameColorPieces(const Square* other) const {
     return Square::hasPiece(*this) && Square::hasPiece(*other) && _piece.hasSameColor(other->getPiece());
-};
-
-void Square::setAction(ActionType type, ActionRelation relation, const Square* other) {
-    _actions.insert(type, relation, other->point);
-};
-
-void Square::dropAction(ActionType type, ActionRelation relation, const Square* other) {
-    _actions.erase(type, relation, other->point);
-};
-
-void Square::clearActions() {
-    _actions.clear();
 };
 
 void Square::placePiece(const Piece& piece) {

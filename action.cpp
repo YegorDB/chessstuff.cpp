@@ -21,6 +21,10 @@ const PointSet& Action::get(ActionRelation relation) const {
 
 Actions::Actions() {};
 
+void Actions::operator=(const Actions& other) {
+    _inners = other._inners;
+};
+
 void Actions::insert(ActionType type, ActionRelation relation, const Point& point) {
     _inners[type].insert(relation, point);
 };
@@ -34,6 +38,7 @@ void Actions::clear() {
     _inners[ActionType::SUPPORT].clear();
     _inners[ActionType::PLACE].clear();
     _inners[ActionType::XRAY].clear();
+    _inners[ActionType::BIND].clear();
 };
 
 const Action& Actions::get(ActionType type) const {

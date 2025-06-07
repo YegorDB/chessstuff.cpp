@@ -5,6 +5,6 @@
 - [ ] Add castle actions
 - [ ] Add pawn promotion
 - [ ] Add move pieces logic
-- [ ] Refactor board to hold piece places and action places in board?
+- [ ] Refactor board to hold piece places in board?
 - [ ] Add position validator
 - [ ] Add moves history

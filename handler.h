@@ -1,8 +1,10 @@
+#include "action.h"
 #include "board.h"
 #include "fen.h"
 
 class Handler {
 private:
+    ActionsPlaces _actionsPlaces;
     Board _board;
     State _state;
 
@@ -20,6 +22,7 @@ public:
     Handler(const FEN& fen);
     Handler();
 
+    const ActionsPlaces& getActionsPlaces();
     Board& getBoard();
     const State& getState();
 };

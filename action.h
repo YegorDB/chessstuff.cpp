@@ -46,8 +46,12 @@ private:
 public:
     Actions();
 
+    void operator=(const Actions& other);
+
     void insert(ActionType type, ActionRelation relation, const Point& point);
     void erase(ActionType type, ActionRelation relation, const Point& point);
     void clear();
     const Action& get(ActionType type) const;
 };
+
+using ActionsPlaces = std::unordered_map<Point, Actions, PointHasher>;
