@@ -8,8 +8,10 @@
 class Point {
 private:
     int _x, _y, _hash;
+    bool _undefined = false;
 
 public:
+    Point();
     Point(int x, int y);
 
     void operator=(const Point& point);
@@ -21,6 +23,7 @@ public:
 
     Point next(const Direction& direction);
     bool isValid() const;
+    bool isUndefined() const;
     const std::string toString() const;
 };
 

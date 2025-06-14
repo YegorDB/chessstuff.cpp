@@ -22,7 +22,7 @@ Board::Squares Board::squares() {
 Board::SquaresByDirection Board::squaresByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
     return SquaresByDirection{
         IteratorWithDitrection{_matrix, point, direction, withStartPoint},
-        IteratorWithDitrection{_matrix, Point{8, 8}, direction, true},
+        IteratorWithDitrection{_matrix, Point{}, direction, true},
     };
 };
 
@@ -97,7 +97,7 @@ Board::IteratorWithDitrection::IteratorWithDitrection(
     const Point& point,
     const Direction& direction,
     bool withStartPoint
-) : _matrix{matrix}, _point{Point{point.x(), point.y()}}, _direction{direction} {
+) : _matrix{matrix}, _point{point}, _direction{direction} {
     if (!withStartPoint) {
         nextStep();
     }
@@ -124,6 +124,6 @@ void Board::IteratorWithDitrection::nextStep() {
     _point = _point.next(_direction);
     ++_distance;
     if (!_point.isValid() || _distance > _direction.maxDistance) {
-        _point = Point{8, 8};
+        _point = Point{};
     }
 };

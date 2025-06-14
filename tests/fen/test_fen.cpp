@@ -72,7 +72,7 @@ void testFenStringToStateTwoKings() {
     assert(s.castles.blackKingSide== false);
     assert(s.castles.blackQueenSide == false);
 
-    assert(s.enPassant == (Point{8, 8}));
+    assert(s.enPassant == (Point{}));
 
     assert(s.halfmoveClock == 0);
 
@@ -135,7 +135,7 @@ void testStateToFenStringTwoKings() {
         },
         PieceColor::BLACK,
         State::Castles{false, false, false, false},
-        Point{8, 8},
+        Point{},
         0,
         0
     };

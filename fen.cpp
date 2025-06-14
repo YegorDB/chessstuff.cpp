@@ -230,7 +230,7 @@ void FEN::_stringifyCastles() {
 void FEN::_stringifyEnPassant() {
     _rawStringParts[3] = "";
 
-    if (!_state.enPassant.isValid()) {
+    if (_state.enPassant.isUndefined() || !_state.enPassant.isValid()) {
         _rawStringParts[3].push_back('-');
     } else {
         Square square{_state.enPassant};

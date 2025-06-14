@@ -108,7 +108,7 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
 };
 
 void Handler::_restrictKingActions() {
-    Point activeKingPoint = Point{8, 8};
+    Point activeKingPoint = Point{};
     for (const auto& [point, piece] : _state.piecePlaces) {
         if (piece.isKing() && piece.hasColor(_state.activeColor)) {
             activeKingPoint = point;
@@ -116,8 +116,8 @@ void Handler::_restrictKingActions() {
         }
     }
 
-    if (!activeKingPoint.isValid()) {
-        throw std::runtime_error{"Miss active king."};
+    if (activeKingPoint.isUndefined()) {
+        throw std::runtime_error{"Missed active king."};
     }
 
     Actions& activeKingActions = _actionsPlaces[activeKingPoint];

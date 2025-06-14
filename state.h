@@ -13,7 +13,7 @@ struct State {
     PiecePlaces piecePlaces;
     PieceColor activeColor = PieceColor::WHITE;
     Castles castles;
-    Point enPassant = Point{8, 8};
+    Point enPassant = Point{};
     int halfmoveClock = 0;
     int movesCount = 0;
 };
