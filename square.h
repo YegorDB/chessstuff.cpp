@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "piece.h"
 #include "point.h"
 
 class Square {
@@ -14,10 +13,8 @@ private:
     static const std::vector<std::string> COLOR_NAMES;
 
     std::string _name;
-    Piece _piece;
 
 public:
-    static bool hasPiece(const Square& square);
     static Point nameToPoint(const std::string& name);
 
     const Point point;
@@ -29,9 +26,5 @@ public:
 
     const std::string& getName() const;
     const std::string& getColorName() const;
-    const Piece& getPiece() const;
     const std::string toString() const;
-    bool hasSameColorPieces(const Square* other) const;
-
-    void placePiece(const Piece& piece);
 };

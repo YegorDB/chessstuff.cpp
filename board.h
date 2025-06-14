@@ -1,6 +1,5 @@
 #pragma once
 
-#include "piece_places.h"
 #include "square.h"
 
 class Board {
@@ -63,10 +62,7 @@ public:
 
     Board();
     Squares squares();
-    Squares squaresWithPieces();
     SquaresByDirection squaresByDirection(const Point& point, const Direction& direction, bool withStartPoint = false);
 
     const Square& getSquare(const Point& point) const;
-    PiecePlaces getPiecePlaces();
-    void placePiece(const Piece& piece, const Point& point);
 };

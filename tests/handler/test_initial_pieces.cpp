@@ -6,27 +6,29 @@ void testInitialPieces() {
     int i = 0;
     for (Square* square : handler.getBoard().squares()) {
         if (square->point.y() > 1 && square->point.y() < 6) {
-            assert(!Square::hasPiece(*square));
+            assert(!handler.getState().piecePlaces.contains(square->point));
         } else {
-            assert(Square::hasPiece(*square));
+            assert(handler.getState().piecePlaces.contains(square->point));
         }
 
         if (square->point.y() == 0 || square->point.y() == 7) {
-            assert(square->getPiece().isWhiteColor() == (square->point.y() == 7));
+            const Piece& piece = handler.getState().piecePlaces.at(square->point);
+            assert(piece.isWhiteColor() == (square->point.y() == 7));
             if (square->point.x() == 0 || square->point.x() == 7) {
-                assert(square->getPiece().getType() == PieceType::ROOK);
+                assert(piece.getType() == PieceType::ROOK);
             } else if (square->point.x() == 1 || square->point.x() == 6) {
-                assert(square->getPiece().getType() == PieceType::KNIGHT);
+                assert(piece.getType() == PieceType::KNIGHT);
             } else if (square->point.x() == 2 || square->point.x() == 5) {
-                assert(square->getPiece().getType() == PieceType::BISHOP);
+                assert(piece.getType() == PieceType::BISHOP);
             } else if (square->point.x() == 3) {
-                assert(square->getPiece().getType() == PieceType::QUEEN);
+                assert(piece.getType() == PieceType::QUEEN);
             } else {
-                assert(square->getPiece().getType() == PieceType::KING);
+                assert(piece.getType() == PieceType::KING);
             }
         } else if (square->point.y() == 1 || square->point.y() == 6) {
-            assert(square->getPiece().isWhiteColor() == (square->point.y() == 6));
-            assert(square->getPiece().getType() == PieceType::PAWN);
+            const Piece& piece = handler.getState().piecePlaces.at(square->point);
+            assert(piece.isWhiteColor() == (square->point.y() == 6));
+            assert(piece.getType() == PieceType::PAWN);
         }
         ++i;
     }

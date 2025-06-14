@@ -22,17 +22,5 @@ void testSquare() {
     assert(s3.getColorName() == "light");
     assert(s3.toString() == "d1 (3, 7) light");
 
-    Square emptySquare{"a1"};
-    assert((emptySquare.point == Point{0, 7}));
-    assert(!Square::hasPiece(emptySquare));
-
-    Piece king{PieceType::KING, true};
-    Square square{"b8"};
-    assert((square.point == Point{1, 0}));
-    square.placePiece(king);
-    assert(Square::hasPiece(square));
-    assert(square.getPiece().isKing());
-    assert(square.getPiece().isWhiteColor());
-
     std::cout << "testSquare OK" << std::endl;
 };

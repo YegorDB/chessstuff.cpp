@@ -8,18 +8,15 @@ Handler::Handler(const FEN& fen) {
             _actionsPlaces[Point{x, y}] = Actions{};
         }
     }
-    _initPieces(fen);
+    _initState(fen);
     _clearActions();
     _setActions();
 };
 
 Handler::Handler() : Handler(FEN{FEN::INITIAL_POSITION}) {};
 
-void Handler::_initPieces(const FEN& fen) {
-    State state = fen.getState();
-    for (const auto& [point, piece] : state.piecePlaces) {
-        _board.placePiece(piece, point);
-    }
+void Handler::_initState(const FEN& fen) {
+    _state = fen.getState();
 };
 
 const ActionsPlaces& Handler::getActionsPlaces() {
@@ -31,12 +28,11 @@ Board& Handler::getBoard() {
 };
 
 const State& Handler::getState() {
-    _state.piecePlaces = _board.getPiecePlaces();
     return _state;
 };
 
 void Handler::_clearActions() {
-    for (auto [point, actions] : _actionsPlaces) {
+    for (auto& [point, actions] : _actionsPlaces) {
         actions.clear();
     }
 };
@@ -58,47 +54,51 @@ void Handler::_setActions() {
     - squares with opposite color pieces to bind to
     */
 
-    std::vector<Square*> bindedSquares;
-    _setBaseActions(bindedSquares);
+    std::vector<Point> bindedPoints;
+    _setBaseActions(bindedPoints);
     _restrictKingActions();
 };
 
-void Handler::_setBaseActions(std::vector<Square*>& bindedSquares) {
-    for (Square* square : _board.squaresWithPieces()) {
-        if (square->getPiece().hasColor(_state.activeColor)) {
-            for (Direction direction : square->getPiece().getPlaceDirections()) {
-                for (Square* nextSquare : _board.squaresByDirection(square->point, direction)) {
-                    if (Square::hasPiece(*nextSquare)) {
+void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
+    for (const auto& [point, piece] : _state.piecePlaces) {
+        if (piece.hasColor(_state.activeColor)) {
+            for (Direction direction : piece.getPlaceDirections()) {
+                for (Square* nextSquare : _board.squaresByDirection(point, direction)) {
+                    const Point& nextPoint = nextSquare->point;
+                    if (_state.piecePlaces.contains(nextPoint)) {
                         break;
                     }
-                    _setAction(ActionType::PLACE, square, nextSquare);
+                    _setAction(ActionType::PLACE, point, nextPoint);
                 }
             }
         }
-        for (Direction direction : square->getPiece().getThreatDirections()) {
+
+        for (Direction direction : piece.getThreatDirections()) {
             Square* prevSquare = nullptr;
             Square* prevSquareWithPiece = nullptr;
-            for (Square* nextSquare : _board.squaresByDirection(square->point, direction)) {
-                if (!Square::hasPiece(*nextSquare)) {
-                    if (!square->getPiece().hasColor(_state.activeColor) && prevSquareWithPiece == nullptr) {
-                        _setAction(ActionType::THREAT, square, nextSquare);
-                    } else {
-                        _threatSquareAfterKingIfNeeded(square, prevSquare, nextSquare);
+            for (Square* nextSquare : _board.squaresByDirection(point, direction)) {
+                const Point& nextPoint = nextSquare->point;
+                if (!_state.piecePlaces.contains(nextPoint)) {
+                    if (!piece.hasColor(_state.activeColor) && prevSquareWithPiece == nullptr) {
+                        _setAction(ActionType::THREAT, point, nextPoint);
+                    } else if (prevSquare != nullptr) {
+                        _threatSquareAfterKingIfNeeded(point, prevSquare->point, nextPoint);
                     }
 
                     prevSquare = nextSquare;
                     continue;
                 }
                 if (prevSquareWithPiece != nullptr) {
-                    _setAction(ActionType::XRAY, square, nextSquare);
-                    _bindPieceIfNeeded(square, prevSquareWithPiece, nextSquare, bindedSquares);
-                    _supportPieceAfterKingIfNeeded(square, prevSquareWithPiece, nextSquare);
+                    _setAction(ActionType::XRAY, point, nextPoint);
+                    _bindPieceIfNeeded(point, prevSquareWithPiece->point, nextPoint, bindedPoints);
+                    _supportPieceAfterKingIfNeeded(point, prevSquareWithPiece->point, nextPoint);
                     break;
                 }
-                if (square->hasSameColorPieces(nextSquare)) {
-                    _setAction(ActionType::SUPPORT, square, nextSquare);
+                const Piece& nextPiece = _state.piecePlaces.at(nextPoint);
+                if (piece.hasSameColor(nextPiece)) {
+                    _setAction(ActionType::SUPPORT, point, nextPoint);
                 } else {
-                    _setAction(ActionType::THREAT, square, nextSquare);
+                    _setAction(ActionType::THREAT, point, nextPoint);
                 }
                 prevSquare = nextSquare;
                 prevSquareWithPiece = nextSquare;
@@ -108,15 +108,19 @@ void Handler::_setBaseActions(std::vector<Square*>& bindedSquares) {
 };
 
 void Handler::_restrictKingActions() {
-    Square* activeKingSquare;
-    for (Square* square : _board.squaresWithPieces()) {
-        const Piece& piece = square->getPiece();
+    Point activeKingPoint = Point{8, 8};
+    for (const auto& [point, piece] : _state.piecePlaces) {
         if (piece.isKing() && piece.hasColor(_state.activeColor)) {
-            activeKingSquare = square;
+            activeKingPoint = point;
             break;
         }
     }
-    Actions& activeKingActions = _actionsPlaces[activeKingSquare->point];
+
+    if (!activeKingPoint.isValid()) {
+        throw std::runtime_error{"Miss active king."};
+    }
+
+    Actions& activeKingActions = _actionsPlaces[activeKingPoint];
 
     PointSet placeToPointsCopy;
     for (const Point& point : activeKingActions.get(ActionType::PLACE).get(ActionRelation::TO)) {
@@ -143,14 +147,12 @@ void Handler::_restrictKingActions() {
     }
 };
 
-void Handler::_setAction(ActionType type, Square* bySquare, Square* toSquare) {
-    const Point& bySquarePoint = bySquare->point;
-    const Point& toSquarePoint = toSquare->point;
-    if (!bySquarePoint.isValid() || !toSquarePoint.isValid()) {
+void Handler::_setAction(ActionType type, const Point& byPoint, const Point& toPoint) {
+    if (!byPoint.isValid() || !toPoint.isValid()) {
         throw std::runtime_error{"Wrong point."};
     }
-    _actionsPlaces[bySquarePoint].insert(type, ActionRelation::TO, toSquarePoint);
-    _actionsPlaces[toSquarePoint].insert(type, ActionRelation::BY, bySquarePoint);
+    _actionsPlaces[byPoint].insert(type, ActionRelation::TO, toPoint);
+    _actionsPlaces[toPoint].insert(type, ActionRelation::BY, byPoint);
 };
 
 /**
@@ -161,16 +163,19 @@ void Handler::_setAction(ActionType type, Square* bySquare, Square* toSquare) {
  * |  Q  |     |  B  |  K  |
  * |_____|_____|_____|_____|
  */
-void Handler::_bindPieceIfNeeded(Square* square, Square* prevSquareWithPiece, Square* nextSquare, std::vector<Square*>& bindedSquares) {
-    bool isPrevSquarePieceHasToBeBinded = (
-        nextSquare->getPiece().isKing()
-        && nextSquare->hasSameColorPieces(prevSquareWithPiece)
-        && !nextSquare->hasSameColorPieces(square)
-    );
-    if (!isPrevSquarePieceHasToBeBinded) return;
+void Handler::_bindPieceIfNeeded(const Point& point, const Point& prevPointWithPiece, const Point& nextPoint, std::vector<Point>& bindedPoints) {
+    if (!_state.piecePlaces.contains(point) || !_state.piecePlaces.contains(prevPointWithPiece) || !_state.piecePlaces.contains(nextPoint)) {
+        return;
+    }
 
-    bindedSquares.push_back(prevSquareWithPiece);
-    _setAction(ActionType::BIND, square, prevSquareWithPiece);
+    const Piece& piece = _state.piecePlaces.at(point);
+    const Piece& prevPiece = _state.piecePlaces.at(prevPointWithPiece);
+    const Piece& nextPiece = _state.piecePlaces.at(nextPoint);
+
+    if (nextPiece.isKing() && nextPiece.hasSameColor(prevPiece) && !nextPiece.hasSameColor(piece)) {
+        bindedPoints.push_back(prevPointWithPiece);
+        _setAction(ActionType::BIND, point, prevPointWithPiece);
+    }
 };
 
 /**
@@ -181,16 +186,17 @@ void Handler::_bindPieceIfNeeded(Square* square, Square* prevSquareWithPiece, Sq
  * |  r  |     |  K  |     |
  * |_____|_____|_____|_____|
  */
-void Handler::_threatSquareAfterKingIfNeeded(Square* square, Square* prevSquare, Square* nextSquare) {
-    bool isNextSquareHasToBeThreated = (
-        !square->getPiece().hasColor(_state.activeColor)
-        && Square::hasPiece(*prevSquare)
-        && prevSquare->getPiece().isKing()
-        && !square->hasSameColorPieces(prevSquare)
-    );
-    if (!isNextSquareHasToBeThreated) return;
+void Handler::_threatSquareAfterKingIfNeeded(const Point& point, const Point& prevPoint, const Point& nextPoint) {
+    if (!_state.piecePlaces.contains(point) || !_state.piecePlaces.contains(prevPoint) || _state.piecePlaces.contains(nextPoint)) {
+        return;
+    }
 
-    _setAction(ActionType::THREAT, square, nextSquare);
+    const Piece& piece = _state.piecePlaces.at(point);
+    const Piece& prevPiece = _state.piecePlaces.at(prevPoint);
+
+    if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece)) {
+        _setAction(ActionType::THREAT, point, nextPoint);
+    }
 };
 
 /**
@@ -201,14 +207,16 @@ void Handler::_threatSquareAfterKingIfNeeded(Square* square, Square* prevSquare,
  * |  R  |     |  k  |  N  |
  * |_____|_____|_____|_____|
  */
-void Handler::_supportPieceAfterKingIfNeeded(Square* square, Square* prevSquareWithPiece, Square* nextSquare) {
-    bool isNextSquareHasToBeSupported = (
-        !square->getPiece().hasColor(_state.activeColor)
-        && prevSquareWithPiece->getPiece().isKing()
-        && !prevSquareWithPiece->hasSameColorPieces(square)
-        && nextSquare->hasSameColorPieces(square)
-    );
-    if (!isNextSquareHasToBeSupported) return;
+void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& prevPointWithPiece, const Point& nextPoint) {
+    if (!_state.piecePlaces.contains(point) || !_state.piecePlaces.contains(prevPointWithPiece) || !_state.piecePlaces.contains(nextPoint)) {
+        return;
+    }
 
-    _setAction(ActionType::SUPPORT, square, nextSquare);
+    const Piece& piece = _state.piecePlaces.at(point);
+    const Piece& prevPiece = _state.piecePlaces.at(prevPointWithPiece);
+    const Piece& nextPiece = _state.piecePlaces.at(nextPoint);
+
+    if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece) && piece.hasSameColor(nextPiece)) {
+        _setAction(ActionType::SUPPORT, point, nextPoint);
+    }
 };

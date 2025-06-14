@@ -19,13 +19,6 @@ Board::Squares Board::squares() {
     };
 };
 
-Board::Squares Board::squaresWithPieces() {
-    return Squares{
-        Iterator{_matrix, 0, &Square::hasPiece},
-        Iterator{_matrix, 64, &Square::hasPiece},
-    };
-};
-
 Board::SquaresByDirection Board::squaresByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
     return SquaresByDirection{
         IteratorWithDitrection{_matrix, point, direction, withStartPoint},
@@ -35,21 +28,6 @@ Board::SquaresByDirection Board::squaresByDirection(const Point& point, const Di
 
 const Square& Board::getSquare(const Point& point) const {
     return _matrix[point.y()][point.x()];
-};
-
-PiecePlaces Board::getPiecePlaces() {
-    PiecePlaces piecePlaces;
-    for (Square* square : squaresWithPieces()) {
-        piecePlaces[square->point] = square->getPiece();
-    }
-    return piecePlaces;
-};
-
-void Board::placePiece(const Piece& piece, const Point& to) {
-    if (!to.isValid()) {
-        throw std::runtime_error{"Invalid point to place a piece."};
-    }
-    _matrix[to.y()][to.x()].placePiece(piece);
 };
 
 Board::Squares::Squares(Board::Iterator begin, Board::Iterator end) : _begin{begin}, _end{end} {
