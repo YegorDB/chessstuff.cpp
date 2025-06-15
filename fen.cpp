@@ -4,56 +4,6 @@
 
 const std::string FEN::INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
 
-const std::unordered_map<char, Piece> FEN::PIECE_TYPE_SYMBOLS_TO_PIECE{
-    {'K', Piece{PieceType::KING, true}},
-    {'Q', Piece{PieceType::QUEEN, true}},
-    {'R', Piece{PieceType::ROOK, true}},
-    {'B', Piece{PieceType::BISHOP, true}},
-    {'N', Piece{PieceType::KNIGHT, true}},
-    {'P', Piece{PieceType::PAWN, true}},
-    {'k', Piece{PieceType::KING, false}},
-    {'q', Piece{PieceType::QUEEN, false}},
-    {'r', Piece{PieceType::ROOK, false}},
-    {'b', Piece{PieceType::BISHOP, false}},
-    {'n', Piece{PieceType::KNIGHT, false}},
-    {'p', Piece{PieceType::PAWN, false}},
-};
-
-const std::unordered_map<char, PieceColor> FEN::PIECE_COLOR_SYMBOLS_TO_PIECE_COLOR{
-    {'w', PieceColor::WHITE},
-    {'b', PieceColor::BLACK},
-};
-
-const std::unordered_map<PieceColor, std::unordered_map<PieceType, char>> FEN::PIECE_INFO_TO_PIECE_TYPE_SYMBOLS{
-    {
-        PieceColor::WHITE,
-        {
-            {PieceType::KING, 'K'},
-            {PieceType::QUEEN, 'Q'},
-            {PieceType::ROOK, 'R'},
-            {PieceType::BISHOP, 'B'},
-            {PieceType::KNIGHT, 'N'},
-            {PieceType::PAWN, 'P'},
-        }
-    },
-    {
-        PieceColor::BLACK,
-        {
-            {PieceType::KING, 'k'},
-            {PieceType::QUEEN, 'q'},
-            {PieceType::ROOK, 'r'},
-            {PieceType::BISHOP, 'b'},
-            {PieceType::KNIGHT, 'n'},
-            {PieceType::PAWN, 'p'},
-        }
-    },
-};
-
-const std::unordered_map<PieceColor, char> FEN::PIECE_COLOR_TO_PIECE_COLOR_SYMBOLS{
-    {PieceColor::WHITE, 'w'},
-    {PieceColor::BLACK, 'b'},
-};
-
 FEN::FEN(const std::string& rawString) : _rawString(rawString) {
     _splitRawString();
     _parseRawSringPiecesPlacesPart();
@@ -113,21 +63,23 @@ void FEN::_parseRawSringPiecesPlacesPart() {
         } else if (c > 48 && c <= 57) {
             x += c - 48;
         } else {
-            if (!PIECE_TYPE_SYMBOLS_TO_PIECE.contains(c)) {
+            if (!Piece::SYMBOLS_TO_INFO.contains(c)) {
                 throw std::runtime_error{"Wrong piece type symbol."};
             }
-            _state.piecePlaces[Point(x, y)] = PIECE_TYPE_SYMBOLS_TO_PIECE.at(c);
+            auto [pieceType, pieceColor] = Piece::SYMBOLS_TO_INFO.at(c);
+            bool isWhiteColor = pieceColor == PieceColor::WHITE;
+            _state.piecePlaces[Point(x, y)] = Piece{pieceType, isWhiteColor};
             x++;
         }
     }
 };
 
 void FEN::_parseRawSringActiveColorPart() {
-    if (_rawStringParts[1].size() != 1 || !PIECE_COLOR_SYMBOLS_TO_PIECE_COLOR.contains(_rawStringParts[1][0])) {
+    if (_rawStringParts[1].size() != 1 || !Piece::SYMBOLS_TO_COLOR.contains(_rawStringParts[1][0])) {
         throw std::runtime_error{"Wrong active color part."};
     }
 
-    _state.activeColor = PIECE_COLOR_SYMBOLS_TO_PIECE_COLOR.at(_rawStringParts[1][0]);
+    _state.activeColor = Piece::SYMBOLS_TO_COLOR.at(_rawStringParts[1][0]);
 };
 
 void FEN::_parseRawSringCastlesPart() {
@@ -185,7 +137,7 @@ void FEN::_stringifyPiecePlaces() {
                     emptyCount = 0;
                 }
                 Piece piece = _state.piecePlaces.at(point);
-                char symbol = PIECE_INFO_TO_PIECE_TYPE_SYMBOLS.at(piece.getColor()).at(piece.getType());
+                char symbol = Piece::INFO_TO_SYMBOLS.at(piece.getColor()).at(piece.getType());
                 _rawStringParts[0].push_back(symbol);
             }
         }
@@ -203,7 +155,7 @@ void FEN::_stringifyPiecePlaces() {
 void FEN::_stringifyAcivePieceColor() {
     _rawStringParts[1] = "";
 
-    char pieceColorSymbol = PIECE_COLOR_TO_PIECE_COLOR_SYMBOLS.at(_state.activeColor);
+    char pieceColorSymbol = Piece::COLOR_TO_SYMBOLS.at(_state.activeColor);
     _rawStringParts[1].push_back(pieceColorSymbol);
 };
 
