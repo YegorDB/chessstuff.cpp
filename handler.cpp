@@ -3,11 +3,8 @@
 #include "handler.h"
 
 Handler::Handler(const FEN& fen) {
-    for (Point* point : Board::points()) {
-        _actionsPlaces[*point] = Actions{};
-    }
     _initState(fen);
-    _clearActions();
+    _actionsPlaces.clearActions();
     _setActions();
 };
 
@@ -23,12 +20,6 @@ const ActionsPlaces& Handler::getActionsPlaces() {
 
 const State& Handler::getState() {
     return _state;
-};
-
-void Handler::_clearActions() {
-    for (auto& [point, actions] : _actionsPlaces) {
-        actions.clear();
-    }
 };
 
 void Handler::_setActions() {
@@ -61,7 +52,7 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
                     if (_state.piecePlaces.contains(*nextPoint)) {
                         break;
                     }
-                    _setAction(ActionType::PLACE, point, *nextPoint);
+                    _actionsPlaces.setAction(ActionType::PLACE, point, *nextPoint);
                 }
             }
         }
@@ -72,7 +63,7 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
             for (Point* nextPoint : Board::pointsByDirection(point, direction)) {
                 if (!_state.piecePlaces.contains(*nextPoint)) {
                     if (!piece.hasColor(_state.activeColor) && prevPointWithPiece.isUndefined()) {
-                        _setAction(ActionType::THREAT, point, *nextPoint);
+                        _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
                     } else if (!prevPoint.isUndefined()) {
                         _threatSquareAfterKingIfNeeded(point, prevPoint, *nextPoint);
                     }
@@ -81,16 +72,16 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
                     continue;
                 }
                 if (!prevPointWithPiece.isUndefined()) {
-                    _setAction(ActionType::XRAY, point, *nextPoint);
+                    _actionsPlaces.setAction(ActionType::XRAY, point, *nextPoint);
                     _bindPieceIfNeeded(point, prevPointWithPiece, *nextPoint, bindedPoints);
                     _supportPieceAfterKingIfNeeded(point, prevPointWithPiece, *nextPoint);
                     break;
                 }
                 const Piece& nextPiece = _state.piecePlaces.at(*nextPoint);
                 if (piece.hasSameColor(nextPiece)) {
-                    _setAction(ActionType::SUPPORT, point, *nextPoint);
+                    _actionsPlaces.setAction(ActionType::SUPPORT, point, *nextPoint);
                 } else {
-                    _setAction(ActionType::THREAT, point, *nextPoint);
+                    _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
                 }
                 prevPoint = *nextPoint;
                 prevPointWithPiece = *nextPoint;
@@ -112,39 +103,25 @@ void Handler::_restrictKingActions() {
         throw std::runtime_error{"Missed active king."};
     }
 
-    Actions& activeKingActions = _actionsPlaces[activeKingPoint];
+    const Actions& activeKingActions = _actionsPlaces.getActions(activeKingPoint);
 
-    PointSet placeToPointsCopy;
+    PointSet placeToPointsToErase;
     for (const Point& point : activeKingActions.get(ActionType::PLACE).get(ActionRelation::TO)) {
-        placeToPointsCopy.insert(point);
-    }
-
-    for (const Point& point : placeToPointsCopy) {
-        const Actions& nextSquareActions = _actionsPlaces.at(point);
+        const Actions& nextSquareActions = _actionsPlaces.getActions(point);
         if (!nextSquareActions.get(ActionType::THREAT).get(ActionRelation::BY).empty()) {
-            activeKingActions.erase(ActionType::PLACE, ActionRelation::TO, point);
+            placeToPointsToErase.insert(point);
         }
     }
+    _actionsPlaces.erasePoints(activeKingPoint, ActionType::PLACE, ActionRelation::TO, placeToPointsToErase);
 
-    PointSet threatToPointsCopy;
+    PointSet threatToPointsToErase;
     for (const Point& point : activeKingActions.get(ActionType::THREAT).get(ActionRelation::TO)) {
-        threatToPointsCopy.insert(point);
-    }
-
-    for (const Point& point : threatToPointsCopy) {
-        const Actions& nextSquareActions = _actionsPlaces.at(point);
+        const Actions& nextSquareActions = _actionsPlaces.getActions(point);
         if (!nextSquareActions.get(ActionType::SUPPORT).get(ActionRelation::BY).empty()) {
-            activeKingActions.erase(ActionType::THREAT, ActionRelation::TO, point);
+            threatToPointsToErase.insert(point);
         }
     }
-};
-
-void Handler::_setAction(ActionType type, const Point& byPoint, const Point& toPoint) {
-    if (!byPoint.isValid() || !toPoint.isValid()) {
-        throw std::runtime_error{"Wrong point."};
-    }
-    _actionsPlaces[byPoint].insert(type, ActionRelation::TO, toPoint);
-    _actionsPlaces[toPoint].insert(type, ActionRelation::BY, byPoint);
+    _actionsPlaces.erasePoints(activeKingPoint, ActionType::THREAT, ActionRelation::TO, threatToPointsToErase);
 };
 
 /**
@@ -166,7 +143,7 @@ void Handler::_bindPieceIfNeeded(const Point& point, const Point& prevPointWithP
 
     if (nextPiece.isKing() && nextPiece.hasSameColor(prevPiece) && !nextPiece.hasSameColor(piece)) {
         bindedPoints.push_back(prevPointWithPiece);
-        _setAction(ActionType::BIND, point, prevPointWithPiece);
+        _actionsPlaces.setAction(ActionType::BIND, point, prevPointWithPiece);
     }
 };
 
@@ -187,7 +164,7 @@ void Handler::_threatSquareAfterKingIfNeeded(const Point& point, const Point& pr
     const Piece& prevPiece = _state.piecePlaces.at(prevPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece)) {
-        _setAction(ActionType::THREAT, point, nextPoint);
+        _actionsPlaces.setAction(ActionType::THREAT, point, nextPoint);
     }
 };
 
@@ -209,6 +186,6 @@ void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& pr
     const Piece& nextPiece = _state.piecePlaces.at(nextPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece) && piece.hasSameColor(nextPiece)) {
-        _setAction(ActionType::SUPPORT, point, nextPoint);
+        _actionsPlaces.setAction(ActionType::SUPPORT, point, nextPoint);
     }
 };

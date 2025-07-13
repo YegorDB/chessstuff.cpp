@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+#include "board.h"
 #include "point.h"
 
 enum class ActionRelation {
@@ -54,4 +55,22 @@ public:
     const Action& get(ActionType type) const;
 };
 
-using ActionsPlaces = std::unordered_map<Point, Actions, PointHasher>;
+class ActionsPlaces {
+public:
+    using Items = std::unordered_map<Point, Actions, PointHasher>;
+
+    ActionsPlaces();
+
+    const Items& getItems() const;
+    const Actions& getActions(const Point& point) const;
+    void setAction(ActionType type, const Point& byPoint, const Point& toPoint);
+    void clearActions();
+    void erasePoints(
+        const Point& point,
+        ActionType type,
+        ActionRelation relation,
+        const PointSet& pointsToErase
+    );
+private:
+    Items _items;
+};
