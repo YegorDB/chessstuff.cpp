@@ -1,26 +1,24 @@
 #include "test_board.h"
 
 void testBoard() {
-    Board board{};
-
     int i = 0;
-    for (Square* square : board.squares()) {
-        assert((square->point == Point{i % 8, i / 8}));
+    for (Point* point : Board::points()) {
+        assert((*point == Point{i % 8, i / 8}));
         ++i;
     }
     assert(i == 64);
 
     i = 0;
-    for (Square* square : board.squaresByDirection(Point{1, 2}, Direction{1, 1, 7}, true)) {
-        assert((square->point == Point{1 + i, 2 + i}));
+    for (Point* point : Board::pointsByDirection(Point{1, 2}, Direction{1, 1, 7}, true)) {
+        assert((*point == Point{1 + i, 2 + i}));
         ++i;
     }
     assert(i == 6);
 
     i = 0;
-    for (Square* square : board.squaresByDirection(Point{1, 2}, Direction{1, 1, 7})) {
+    for (Point* point : Board::pointsByDirection(Point{1, 2}, Direction{1, 1, 7})) {
         ++i;
-        assert((square->point == Point{1 + i, 2 + i}));
+        assert((*point == Point{1 + i, 2 + i}));
     }
     assert(i == 5);
 

@@ -5,7 +5,6 @@
 class Handler {
 private:
     ActionsPlaces _actionsPlaces;
-    Board _board;
     State _state;
 
     void _initState(const FEN& fen);
@@ -23,6 +22,5 @@ public:
     Handler();
 
     const ActionsPlaces& getActionsPlaces();
-    Board& getBoard();
     const State& getState();
 };

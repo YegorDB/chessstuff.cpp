@@ -35,7 +35,7 @@ void FEN::_splitRawString() {
     _rawStringParts.clear();
 
     if (_rawString.empty()) {
-        throw std::runtime_error{"Can't split empty string."}; 
+        throw std::runtime_error{"Can't split empty string."};
     }
 
     std::string s;

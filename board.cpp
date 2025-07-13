@@ -2,125 +2,99 @@
 
 #include "board.h"
 
-Board::Board() {
-    _matrix.clear();
-    for (int i = 0; i < 8; ++i) {
-        _matrix.push_back({});
-        for (int j = 0; j < 8; ++j) {
-            _matrix[i].push_back(Square{j, i});
-        }
-    }
-};
-
-Board::Squares Board::squares() {
-    return Squares{
-        Iterator{_matrix, 0},
-        Iterator{_matrix, 64},
+Board::Points Board::points() {
+    return Points{
+        Points::Iterator{0},
+        Points::Iterator{64},
     };
 };
 
-Board::SquaresByDirection Board::squaresByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
-    return SquaresByDirection{
-        IteratorWithDitrection{_matrix, point, direction, withStartPoint},
-        IteratorWithDitrection{_matrix, Point{}, direction, true},
-    };
-};
-
-const Square& Board::getSquare(const Point& point) const {
-    return _matrix[point.y()][point.x()];
-};
-
-Board::Squares::Squares(Board::Iterator begin, Board::Iterator end) : _begin{begin}, _end{end} {
-};
-
-Board::Iterator Board::Squares::begin() const {
-    return _begin;
-};
-
-Board::Iterator Board::Squares::end() const {
-    return _end;
-};
-
-Board::SquaresByDirection::SquaresByDirection(
-    Board::IteratorWithDitrection begin,
-    Board::IteratorWithDitrection end
+Board::Points::Points(
+    Board::Points::Iterator begin,
+    Board::Points::Iterator end
 ) : _begin{begin}, _end{end} {};
 
-Board::IteratorWithDitrection Board::SquaresByDirection::begin() const {
+Board::Points::Iterator Board::Points::begin() const {
     return _begin;
 };
 
-Board::IteratorWithDitrection Board::SquaresByDirection::end() const {
+Board::Points::Iterator Board::Points::end() const {
     return _end;
 };
 
-Board::Iterator::Iterator(Matrix& matrix, int index) : _matrix{matrix}, _index{index}, _point{Point{index % 8, index / 8}} {};
+Board::Points::Iterator::Iterator(int index) : _index{index}, _point{Point{index % 8, index / 8}} {};
 
-Board::Iterator::Iterator(Matrix& matrix, int index, Filter* filter) : Board::Iterator(matrix, index) {
-    _filter = filter;
-    filterSquares();
-};
-
-Board::Iterator& Board::Iterator::operator++() {
+Board::Points::Iterator& Board::Points::Iterator::operator++() {
     nextStep();
-    filterSquares();
     return *this;
 };
 
-Square* Board::Iterator::operator*() {
-    return &_matrix[_point.y()][_point.x()];
+Point* Board::Points::Iterator::operator*() {
+    return &_point;
 };
 
-bool Board::Iterator::operator==(const Board::Iterator& other) const {
+bool Board::Points::Iterator::operator==(const Board::Points::Iterator& other) const {
     return this->_index == other._index;
 };
 
-bool Board::Iterator::operator!=(const Board::Iterator& other) const {
+bool Board::Points::Iterator::operator!=(const Board::Points::Iterator& other) const {
     return this->_index != other._index;
 };
 
-void Board::Iterator::nextStep() {
+void Board::Points::Iterator::nextStep() {
     ++_index;
     _point = Point{_index % 8, _index / 8};
 };
 
-void Board::Iterator::filterSquares() {
-    if (_filter == nullptr) return;
 
-    while (_point.isValid() && !(*_filter)(_matrix[_point.y()][_point.x()])) {
-        nextStep();
-    }
+Board::PointsByDirection Board::pointsByDirection(const Point& point, const Direction& direction, bool withStartPoint) {
+    return PointsByDirection{
+        Board::PointsByDirection::Iterator{point, direction, withStartPoint},
+        Board::PointsByDirection::Iterator{Point{}, direction, true},
+    };
 };
 
-Board::IteratorWithDitrection::IteratorWithDitrection(
-    Matrix& matrix,
+Board::PointsByDirection::PointsByDirection(
+    Board::PointsByDirection::Iterator begin,
+    Board::PointsByDirection::Iterator end
+) : _begin{begin}, _end{end} {};
+
+Board::PointsByDirection::Iterator Board::PointsByDirection::begin() const {
+    return _begin;
+};
+
+Board::PointsByDirection::Iterator Board::PointsByDirection::end() const {
+    return _end;
+};
+
+Board::PointsByDirection::Iterator::Iterator(
     const Point& point,
     const Direction& direction,
     bool withStartPoint
-) : _matrix{matrix}, _point{point}, _direction{direction} {
+) : _point{point}, _direction{direction} {
     if (!withStartPoint) {
         nextStep();
     }
 };
 
-Board::IteratorWithDitrection& Board::IteratorWithDitrection::operator++() {
+Board::PointsByDirection::Iterator& Board::PointsByDirection::Iterator::operator++() {
     nextStep();
     return *this;
 };
 
-Square* Board::IteratorWithDitrection::operator*() {
-    return &_matrix[_point.y()][_point.x()];
+Point* Board::PointsByDirection::Iterator::operator*() {
+    return &_point;
 };
 
-bool Board::IteratorWithDitrection::operator==(const Board::IteratorWithDitrection& other) const {
+bool Board::PointsByDirection::Iterator::operator==(const Board::PointsByDirection::Iterator& other) const {
     return this->_point == other._point;
 };
 
-bool Board::IteratorWithDitrection::operator!=(const Board::IteratorWithDitrection& other) const {
+bool Board::PointsByDirection::Iterator::operator!=(const Board::PointsByDirection::Iterator& other) const {
     return !(this->_point == other._point);
 };
 
-void Board::IteratorWithDitrection::nextStep() {
+void Board::PointsByDirection::Iterator::nextStep() {
     _point = _point.next(_direction);
     ++_distance;
     if (!_point.isValid() || _distance > _direction.maxDistance) {

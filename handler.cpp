@@ -3,10 +3,8 @@
 #include "handler.h"
 
 Handler::Handler(const FEN& fen) {
-    for (int y = 0; y < 8; y++) {
-        for (int x = 0; x < 8; x++) {
-            _actionsPlaces[Point{x, y}] = Actions{};
-        }
+    for (Point* point : Board::points()) {
+        _actionsPlaces[*point] = Actions{};
     }
     _initState(fen);
     _clearActions();
@@ -21,10 +19,6 @@ void Handler::_initState(const FEN& fen) {
 
 const ActionsPlaces& Handler::getActionsPlaces() {
     return _actionsPlaces;
-};
-
-Board& Handler::getBoard() {
-    return _board;
 };
 
 const State& Handler::getState() {
@@ -63,45 +57,43 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
     for (const auto& [point, piece] : _state.piecePlaces) {
         if (piece.hasColor(_state.activeColor)) {
             for (Direction direction : piece.getPlaceDirections()) {
-                for (Square* nextSquare : _board.squaresByDirection(point, direction)) {
-                    const Point& nextPoint = nextSquare->point;
-                    if (_state.piecePlaces.contains(nextPoint)) {
+                for (Point* nextPoint : Board::pointsByDirection(point, direction)) {
+                    if (_state.piecePlaces.contains(*nextPoint)) {
                         break;
                     }
-                    _setAction(ActionType::PLACE, point, nextPoint);
+                    _setAction(ActionType::PLACE, point, *nextPoint);
                 }
             }
         }
 
         for (Direction direction : piece.getThreatDirections()) {
-            Square* prevSquare = nullptr;
-            Square* prevSquareWithPiece = nullptr;
-            for (Square* nextSquare : _board.squaresByDirection(point, direction)) {
-                const Point& nextPoint = nextSquare->point;
-                if (!_state.piecePlaces.contains(nextPoint)) {
-                    if (!piece.hasColor(_state.activeColor) && prevSquareWithPiece == nullptr) {
-                        _setAction(ActionType::THREAT, point, nextPoint);
-                    } else if (prevSquare != nullptr) {
-                        _threatSquareAfterKingIfNeeded(point, prevSquare->point, nextPoint);
+            Point prevPoint;
+            Point prevPointWithPiece;
+            for (Point* nextPoint : Board::pointsByDirection(point, direction)) {
+                if (!_state.piecePlaces.contains(*nextPoint)) {
+                    if (!piece.hasColor(_state.activeColor) && prevPointWithPiece.isUndefined()) {
+                        _setAction(ActionType::THREAT, point, *nextPoint);
+                    } else if (!prevPoint.isUndefined()) {
+                        _threatSquareAfterKingIfNeeded(point, prevPoint, *nextPoint);
                     }
 
-                    prevSquare = nextSquare;
+                    prevPoint = *nextPoint;
                     continue;
                 }
-                if (prevSquareWithPiece != nullptr) {
-                    _setAction(ActionType::XRAY, point, nextPoint);
-                    _bindPieceIfNeeded(point, prevSquareWithPiece->point, nextPoint, bindedPoints);
-                    _supportPieceAfterKingIfNeeded(point, prevSquareWithPiece->point, nextPoint);
+                if (!prevPointWithPiece.isUndefined()) {
+                    _setAction(ActionType::XRAY, point, *nextPoint);
+                    _bindPieceIfNeeded(point, prevPointWithPiece, *nextPoint, bindedPoints);
+                    _supportPieceAfterKingIfNeeded(point, prevPointWithPiece, *nextPoint);
                     break;
                 }
-                const Piece& nextPiece = _state.piecePlaces.at(nextPoint);
+                const Piece& nextPiece = _state.piecePlaces.at(*nextPoint);
                 if (piece.hasSameColor(nextPiece)) {
-                    _setAction(ActionType::SUPPORT, point, nextPoint);
+                    _setAction(ActionType::SUPPORT, point, *nextPoint);
                 } else {
-                    _setAction(ActionType::THREAT, point, nextPoint);
+                    _setAction(ActionType::THREAT, point, *nextPoint);
                 }
-                prevSquare = nextSquare;
-                prevSquareWithPiece = nextSquare;
+                prevPoint = *nextPoint;
+                prevPointWithPiece = *nextPoint;
             }
         }
     }
