@@ -180,6 +180,10 @@ void Piece::operator=(const Piece& other) {
     _color = other._color;
 };
 
+bool Piece::operator==(const Piece& other) const {
+    return (_type == other._type && _color == other._color);
+};
+
 const PieceType Piece::getType() const {
     return _type;
 };

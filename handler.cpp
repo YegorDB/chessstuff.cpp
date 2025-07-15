@@ -45,7 +45,7 @@ void Handler::_setActions() {
 };
 
 void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
-    for (const auto& [point, piece] : _state.piecePlaces) {
+    for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
         if (piece.hasColor(_state.activeColor)) {
             for (Direction direction : piece.getPlaceDirections()) {
                 for (Point* nextPoint : Board::pointsByDirection(point, direction)) {
@@ -77,7 +77,7 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
                     _supportPieceAfterKingIfNeeded(point, prevPointWithPiece, *nextPoint);
                     break;
                 }
-                const Piece& nextPiece = _state.piecePlaces.at(*nextPoint);
+                const Piece& nextPiece = _state.piecePlaces.getPiece(*nextPoint);
                 if (piece.hasSameColor(nextPiece)) {
                     _actionsPlaces.setAction(ActionType::SUPPORT, point, *nextPoint);
                 } else {
@@ -92,7 +92,7 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
 
 void Handler::_restrictKingActions() {
     Point activeKingPoint = Point{};
-    for (const auto& [point, piece] : _state.piecePlaces) {
+    for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
         if (piece.isKing() && piece.hasColor(_state.activeColor)) {
             activeKingPoint = point;
             break;
@@ -137,9 +137,9 @@ void Handler::_bindPieceIfNeeded(const Point& point, const Point& prevPointWithP
         return;
     }
 
-    const Piece& piece = _state.piecePlaces.at(point);
-    const Piece& prevPiece = _state.piecePlaces.at(prevPointWithPiece);
-    const Piece& nextPiece = _state.piecePlaces.at(nextPoint);
+    const Piece& piece = _state.piecePlaces.getPiece(point);
+    const Piece& prevPiece = _state.piecePlaces.getPiece(prevPointWithPiece);
+    const Piece& nextPiece = _state.piecePlaces.getPiece(nextPoint);
 
     if (nextPiece.isKing() && nextPiece.hasSameColor(prevPiece) && !nextPiece.hasSameColor(piece)) {
         bindedPoints.push_back(prevPointWithPiece);
@@ -160,8 +160,8 @@ void Handler::_threatSquareAfterKingIfNeeded(const Point& point, const Point& pr
         return;
     }
 
-    const Piece& piece = _state.piecePlaces.at(point);
-    const Piece& prevPiece = _state.piecePlaces.at(prevPoint);
+    const Piece& piece = _state.piecePlaces.getPiece(point);
+    const Piece& prevPiece = _state.piecePlaces.getPiece(prevPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece)) {
         _actionsPlaces.setAction(ActionType::THREAT, point, nextPoint);
@@ -181,9 +181,9 @@ void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& pr
         return;
     }
 
-    const Piece& piece = _state.piecePlaces.at(point);
-    const Piece& prevPiece = _state.piecePlaces.at(prevPointWithPiece);
-    const Piece& nextPiece = _state.piecePlaces.at(nextPoint);
+    const Piece& piece = _state.piecePlaces.getPiece(point);
+    const Piece& prevPiece = _state.piecePlaces.getPiece(prevPointWithPiece);
+    const Piece& nextPiece = _state.piecePlaces.getPiece(nextPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece) && piece.hasSameColor(nextPiece)) {
         _actionsPlaces.setAction(ActionType::SUPPORT, point, nextPoint);

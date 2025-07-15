@@ -68,7 +68,7 @@ void FEN::_parseRawSringPiecesPlacesPart() {
             }
             auto [pieceType, pieceColor] = Piece::SYMBOLS_TO_INFO.at(c);
             bool isWhiteColor = pieceColor == PieceColor::WHITE;
-            _state.piecePlaces[Point(x, y)] = Piece{pieceType, isWhiteColor};
+            _state.piecePlaces.place(Point(x, y), Piece{pieceType, isWhiteColor});
             x++;
         }
     }
@@ -136,7 +136,7 @@ void FEN::_stringifyPiecePlaces() {
                     _rawStringParts[0] += std::to_string(emptyCount);
                     emptyCount = 0;
                 }
-                Piece piece = _state.piecePlaces.at(point);
+                Piece piece = _state.piecePlaces.getPiece(point);
                 char symbol = Piece::INFO_TO_SYMBOLS.at(piece.getColor()).at(piece.getType());
                 _rawStringParts[0].push_back(symbol);
             }

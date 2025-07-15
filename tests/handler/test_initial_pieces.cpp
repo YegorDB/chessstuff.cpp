@@ -13,7 +13,7 @@ void testInitialPieces() {
         }
 
         if (point.y() == 0 || point.y() == 7) {
-            const Piece& piece = handler.getState().piecePlaces.at(point);
+            const Piece& piece = handler.getState().piecePlaces.getPiece(point);
             assert(piece.isWhiteColor() == (point.y() == 7));
             if (point.x() == 0 || point.x() == 7) {
                 assert(piece.getType() == PieceType::ROOK);
@@ -27,7 +27,7 @@ void testInitialPieces() {
                 assert(piece.getType() == PieceType::KING);
             }
         } else if (point.y() == 1 || point.y() == 6) {
-            const Piece& piece = handler.getState().piecePlaces.at(point);
+            const Piece& piece = handler.getState().piecePlaces.getPiece(point);
             assert(piece.isWhiteColor() == (point.y() == 6));
             assert(piece.getType() == PieceType::PAWN);
         }

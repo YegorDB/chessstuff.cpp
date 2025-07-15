@@ -44,6 +44,7 @@ public:
     Piece(PieceType type, bool isWhiteColor);
 
     void operator=(const Piece& piece);
+    bool operator==(const Piece& piece) const;
 
     const PieceType getType() const;
     const PieceColor getColor() const;
