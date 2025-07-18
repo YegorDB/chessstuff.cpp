@@ -1,6 +1,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../piece_places.h"
+#include "../../src/piece/piece.h"
 
 void testPiecePlaces();

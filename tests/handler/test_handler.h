@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../handler.h"
+#include "../../src/handler/handler.h"
 
 void testHandler();
 void testInitialActions();

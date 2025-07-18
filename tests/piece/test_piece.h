@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../piece.h"
+#include "../../src/piece/piece.h"
 
 void testKing();
 void testQueen();

@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include "board.h"
-#include "point.h"
+#include "../board/board.h"
+#include "../point/point.h"
 
 enum class ActionRelation {
     BY = 0,

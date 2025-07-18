@@ -1,6 +1,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../board.h"
+#include "../../src/board/board.h"
 
 void testBoard();

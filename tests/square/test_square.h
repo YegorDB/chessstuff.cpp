@@ -1,6 +1,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../square.h"
+#include "../../src/square/square.h"
 
 void testSquare();

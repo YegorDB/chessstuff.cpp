@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../fen.h"
+#include "../../src/fen/fen.h"
 
 void testFenStringToState();
 void testFenStringToStateTwoKings();

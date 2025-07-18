@@ -1,6 +1,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../point.h"
+#include "../../src/point/point.h"
 
 void testPoint();

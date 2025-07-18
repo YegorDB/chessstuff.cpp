@@ -1,6 +1,6 @@
 #pragma once
 
-#include "point.h"
+#include "../point/point.h"
 
 class Board {
 public:

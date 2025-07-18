@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_set>
 
-#include "direction.h"
+#include "../direction/direction.h"
 
 class Point {
 private:

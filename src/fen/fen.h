@@ -4,8 +4,8 @@
 #include <vector>
 #include <unordered_map>
 
-#include "square.h"
-#include "state.h"
+#include "../square/square.h"
+#include "../state/state.h"
 
 class FEN {
 private:

@@ -1,4 +1,4 @@
-#include "piece_places.h"
+#include "piece.h"
 
 PiecePlaces::PiecePlaces() {};
 

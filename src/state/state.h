@@ -1,6 +1,6 @@
 #pragma once
 
-#include "piece_places.h"
+#include "../piece/piece.h"
 
 struct State {
     struct Castles {

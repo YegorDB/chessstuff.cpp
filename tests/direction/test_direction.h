@@ -1,6 +1,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../direction.h"
+#include "../../src/direction/direction.h"
 
 void testDirection();

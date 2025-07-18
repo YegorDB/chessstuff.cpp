@@ -1,8 +1,8 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../action.h"
-#include "../../square.h"
+#include "../../src/action/action.h"
+#include "../../src/square/square.h"
 
 void testSingleAction();
 void testActions();

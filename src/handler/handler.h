@@ -1,6 +1,6 @@
-#include "action.h"
-#include "board.h"
-#include "fen.h"
+#include "../action/action.h"
+#include "../board/board.h"
+#include "../fen/fen.h"
 
 class Handler {
 private:
