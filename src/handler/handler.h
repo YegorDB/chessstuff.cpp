@@ -11,7 +11,6 @@ private:
     void _setActions();
     void _setBaseActions(std::vector<Point>& bindedPoints);
     void _restrictKingActions();
-    void _setAction(ActionType type, const Point& byPoint, const Point& toPoint);
     void _threatSquareAfterKingIfNeeded(
         const Point& point,
         const Point& prevPoint,
@@ -30,9 +29,27 @@ private:
     );
 
 public:
+    class Response {
+    public:
+        enum class Status {
+            OK = 0,
+            INVALID_POINT = 1,
+            PIECE_DOES_NOT_EXIST = 2,
+            WRONG_PIECE_COLOR = 3,
+            WRONG_DESTINATION = 4,
+        };
+
+        const Status status;
+
+        Response(Status status);
+
+        bool isOk();
+    };
+
     Handler(const FEN& fen);
     Handler();
 
     const ActionsPlaces& getActionsPlaces();
     const State& getState();
+    Response move(const Point& from, const Point& to);
 };

@@ -4,7 +4,6 @@
 
 Handler::Handler(const FEN& fen) {
     _initState(fen);
-    _actionsPlaces.clearActions();
     _setActions();
 };
 
@@ -20,6 +19,36 @@ const ActionsPlaces& Handler::getActionsPlaces() {
 
 const State& Handler::getState() {
     return _state;
+};
+
+Handler::Response Handler::move(const Point& from, const Point& to) {
+    if (!from.isValid() || !to.isValid()) {
+        return Response{Response::Status::INVALID_POINT};
+    } else if (!_state.piecePlaces.contains(from)) {
+        return Response{Response::Status::PIECE_DOES_NOT_EXIST};
+    } else if (!_state.piecePlaces.getPiece(from).hasColor(_state.activeColor)) {
+        return Response{Response::Status::WRONG_PIECE_COLOR};
+    } else if (!_state.piecePlaces.contains(to) && !_actionsPlaces.getActions(from).get(ActionType::PLACE).get(ActionRelation::TO).contains(to)) {
+        return Response{Response::Status::WRONG_DESTINATION};
+    } else if (_state.piecePlaces.contains(to) && !_actionsPlaces.getActions(from).get(ActionType::THREAT).get(ActionRelation::TO).contains(to)) {
+        return Response{Response::Status::WRONG_DESTINATION};
+    }
+
+    _state.piecePlaces.move(from, to);
+    if (_state.activeColor == PieceColor::WHITE) {
+        _state.activeColor = PieceColor::BLACK;
+    } else if (_state.activeColor == PieceColor::BLACK) {
+        _state.activeColor = PieceColor::WHITE;
+        _state.movesCount++;
+    }
+    _setActions();
+    return Response{Response::Status::OK};
+};
+
+Handler::Response::Response(Status status) : status(status) {};
+
+bool Handler::Response::isOk() {
+    return status == Status::OK;
 };
 
 void Handler::_setActions() {
@@ -39,6 +68,7 @@ void Handler::_setActions() {
     - squares with opposite color pieces to bind to
     */
 
+    _actionsPlaces.clearActions();
     std::vector<Point> bindedPoints;
     _setBaseActions(bindedPoints);
     _restrictKingActions();
