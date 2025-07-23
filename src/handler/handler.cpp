@@ -4,6 +4,7 @@
 
 Handler::Handler(const FEN& fen) {
     _initState(fen);
+    _actionsPlaces.clearActions();
     _setActions();
 };
 
@@ -24,6 +25,8 @@ const State& Handler::getState() {
 Handler::Response Handler::move(const Point& from, const Point& to) {
     if (!from.isValid() || !to.isValid()) {
         return Response{Response::Status::INVALID_POINT};
+    } else if (!_state.pawnPromotion.isUndefined()) {
+        return Response{Response::Status::WRONG_PAWN_PROMOTION};
     } else if (!_state.piecePlaces.contains(from)) {
         return Response{Response::Status::PIECE_DOES_NOT_EXIST};
     } else if (!_state.piecePlaces.getPiece(from).hasColor(_state.activeColor)) {
@@ -35,13 +38,30 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
     }
 
     _state.piecePlaces.move(from, to);
-    if (_state.activeColor == PieceColor::WHITE) {
-        _state.activeColor = PieceColor::BLACK;
-    } else if (_state.activeColor == PieceColor::BLACK) {
-        _state.activeColor = PieceColor::WHITE;
-        _state.movesCount++;
+    _actionsPlaces.clearActions();
+    if (_checkPawnOnPromotionSquare(to)) {
+        _state.pawnPromotion = to;
+    } else {
+        _endMove();
     }
-    _setActions();
+
+    return Response{Response::Status::OK};
+};
+
+Handler::Response Handler::promotePawn(PieceType pieceType) {
+    if (_state.pawnPromotion.isUndefined()) {
+        return Response{Response::Status::WRONG_PAWN_PROMOTION};
+    } else if (!Piece::PAWN_PROMOTION_TYPES.contains(pieceType)) {
+        return Response{Response::Status::WRONG_PAWN_PROMOTION_PIECE_TYPE};
+    }
+
+    bool isWhiteColor = _state.activeColor == PieceColor::WHITE;
+    Piece piece{pieceType, isWhiteColor};
+    _state.piecePlaces.place(_state.pawnPromotion, piece);
+
+    _state.pawnPromotion = Point{};
+    _endMove();
+
     return Response{Response::Status::OK};
 };
 
@@ -49,6 +69,16 @@ Handler::Response::Response(Status status) : status(status) {};
 
 bool Handler::Response::isOk() {
     return status == Status::OK;
+};
+
+void Handler::_endMove() {
+    if (_state.activeColor == PieceColor::WHITE) {
+        _state.activeColor = PieceColor::BLACK;
+    } else if (_state.activeColor == PieceColor::BLACK) {
+        _state.activeColor = PieceColor::WHITE;
+        _state.movesCount++;
+    }
+    _setActions();
 };
 
 void Handler::_setActions() {
@@ -68,7 +98,6 @@ void Handler::_setActions() {
     - squares with opposite color pieces to bind to
     */
 
-    _actionsPlaces.clearActions();
     std::vector<Point> bindedPoints;
     _setBaseActions(bindedPoints);
     _restrictKingActions();
@@ -218,4 +247,19 @@ void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& pr
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece) && piece.hasSameColor(nextPiece)) {
         _actionsPlaces.setAction(ActionType::SUPPORT, point, nextPoint);
     }
+};
+
+bool Handler::_checkPawnOnPromotionSquare(const Point& point) {
+    if (!_state.piecePlaces.contains(point)) {
+        return false;
+    }
+
+    const Piece& piece = _state.piecePlaces.getPiece(point);
+    return (
+        piece.getType() == PieceType::PAWN &&
+        (
+            piece.isWhiteColor() && point.y() == 0 ||
+            !piece.isWhiteColor() && point.y() == 7
+        )
+    );
 };

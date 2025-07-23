@@ -77,6 +77,13 @@ const std::unordered_map<PieceColor, char> Piece::COLOR_TO_SYMBOLS{
     {PieceColor::BLACK, 'b'},
 };
 
+const std::unordered_set<PieceType> Piece::PAWN_PROMOTION_TYPES{
+    PieceType::QUEEN,
+    PieceType::ROOK,
+    PieceType::BISHOP,
+    PieceType::KNIGHT
+};
+
 const std::unordered_map<PieceType, std::vector<Direction>> Piece::DIRECTIONS{
     {
         PieceType::KING,

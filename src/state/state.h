@@ -16,4 +16,5 @@ struct State {
     Point enPassant = Point{};
     int halfmoveClock = 0;
     int movesCount = 0;
+    Point pawnPromotion = Point{};
 };

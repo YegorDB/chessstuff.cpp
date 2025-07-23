@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "../direction/direction.h"
 #include "../point/point.h"
@@ -40,6 +41,7 @@ public:
     static const std::unordered_map<char, PieceColor> SYMBOLS_TO_COLOR;
     static const std::unordered_map<PieceColor, std::unordered_map<PieceType, char>> INFO_TO_SYMBOLS;
     static const std::unordered_map<PieceColor, char> COLOR_TO_SYMBOLS;
+    static const std::unordered_set<PieceType> PAWN_PROMOTION_TYPES;
 
     Piece();
     Piece(PieceType type, bool isWhiteColor);

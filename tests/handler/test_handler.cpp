@@ -4,7 +4,7 @@ void testHandler() {
     testInitialActions();
     testInitialPieces();
     testKingRestrictions();
-    testMove();
+    testMoveAndPawnPromotion();
 
     std::cout << "testHandler OK" << std::endl;
 };

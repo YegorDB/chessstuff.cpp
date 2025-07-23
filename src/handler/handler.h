@@ -8,6 +8,7 @@ private:
     State _state;
 
     void _initState(const FEN& fen);
+    void _endMove();
     void _setActions();
     void _setBaseActions(std::vector<Point>& bindedPoints);
     void _restrictKingActions();
@@ -27,6 +28,7 @@ private:
         const Point& nextPoint,
         std::vector<Point>& bindedPoints
     );
+    bool _checkPawnOnPromotionSquare(const Point& point);
 
 public:
     class Response {
@@ -37,6 +39,8 @@ public:
             PIECE_DOES_NOT_EXIST = 2,
             WRONG_PIECE_COLOR = 3,
             WRONG_DESTINATION = 4,
+            WRONG_PAWN_PROMOTION = 5,
+            WRONG_PAWN_PROMOTION_PIECE_TYPE = 6,
         };
 
         const Status status;
@@ -52,4 +56,5 @@ public:
     const ActionsPlaces& getActionsPlaces();
     const State& getState();
     Response move(const Point& from, const Point& to);
+    Response promotePawn(PieceType pieceType);
 };
