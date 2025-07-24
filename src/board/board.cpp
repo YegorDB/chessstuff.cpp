@@ -54,6 +54,29 @@ Board::PointsByDirection Board::pointsByDirection(const Point& point, const Dire
     };
 };
 
+Board::PointsByDirection Board::pointsByTwoPoints(const Point& firstPoint, const Point& secondPoint) {
+    int dx, dy;
+    if (firstPoint.x() == secondPoint.x() && firstPoint.y() != secondPoint.y()) {
+        dx = 0;
+        dy = firstPoint.y() > secondPoint.y() ? -1 : 1;
+    } else if (firstPoint.x() != secondPoint.x() && firstPoint.y() == secondPoint.y()) {
+        dx = firstPoint.x() > secondPoint.x() ? -1 : 1;
+        dy = 0;
+    } else if (firstPoint.x() != secondPoint.x() && firstPoint.y() != secondPoint.y() && std::abs(firstPoint.x() - secondPoint.x()) == std::abs(firstPoint.y() - secondPoint.y())) {
+        dx = firstPoint.x() > secondPoint.x() ? -1 : 1;
+        dy = firstPoint.y() > secondPoint.y() ? -1 : 1;
+    } else {
+        throw std::runtime_error{"Points are not on the same line."};
+    }
+
+    Direction direction{dx, dy, 7};
+
+    return PointsByDirection{
+        Board::PointsByDirection::Iterator{firstPoint, direction, false},
+        Board::PointsByDirection::Iterator{Point{}, direction, true},
+    };
+};
+
 Board::PointsByDirection::PointsByDirection(
     Board::PointsByDirection::Iterator begin,
     Board::PointsByDirection::Iterator end

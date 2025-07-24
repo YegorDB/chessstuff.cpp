@@ -55,4 +55,8 @@ public:
         const Direction& direction,
         bool withStartPoint = false
     );
+    static PointsByDirection pointsByTwoPoints(
+        const Point& firstPoint,
+        const Point& secondPoint
+    );
 };
