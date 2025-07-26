@@ -46,3 +46,12 @@ const std::string Point::toString() const {
 int PointHasher::operator()(const Point& point) const {
     return point.hash();
 };
+
+const std::string pointSetToString(const PointSet& pointSet) {
+    std::string res = "(";
+    for (const Point& point : pointSet) {
+        res += point.toString();
+    }
+    res += ")";
+    return res;
+};

@@ -100,7 +100,9 @@ void Handler::_setActions() {
 
     std::vector<Point> bindedPoints;
     _setBaseActions(bindedPoints);
-    _restrictKingActions();
+    const Point& kingPoint = _getActiveKingPoint();
+    _restrictKingActions(kingPoint);
+    _restrictBindedWithKingPiecesActions(kingPoint, bindedPoints);
 };
 
 void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
@@ -149,38 +151,71 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
     }
 };
 
-void Handler::_restrictKingActions() {
-    Point activeKingPoint = Point{};
+const Point& Handler::_getActiveKingPoint() const {
     for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
         if (piece.isKing() && piece.hasColor(_state.activeColor)) {
-            activeKingPoint = point;
-            break;
+            return point;
         }
     }
+    throw std::runtime_error{"Missed active king."};
+}
 
-    if (activeKingPoint.isUndefined()) {
-        throw std::runtime_error{"Missed active king."};
-    }
+void Handler::_restrictKingActions(const Point& kingPoint) {
+    const Actions& kingActions = _actionsPlaces.getActions(kingPoint);
 
-    const Actions& activeKingActions = _actionsPlaces.getActions(activeKingPoint);
+    _eraseKingActions(ActionType::PLACE, ActionType::THREAT, kingPoint, kingActions);
+    _eraseKingActions(ActionType::THREAT, ActionType::SUPPORT, kingPoint, kingActions);
+};
 
-    PointSet placeToPointsToErase;
-    for (const Point& point : activeKingActions.get(ActionType::PLACE).get(ActionRelation::TO)) {
-        const Actions& nextSquareActions = _actionsPlaces.getActions(point);
-        if (!nextSquareActions.get(ActionType::THREAT).get(ActionRelation::BY).empty()) {
-            placeToPointsToErase.insert(point);
+void Handler::_eraseKingActions(
+    ActionType actionType,
+    ActionType restrictActionType,
+    const Point& kingPoint,
+    const Actions& kingActions
+) {
+    PointSet pointsToErase;
+    for (const Point& p : kingActions.get(actionType).get(ActionRelation::TO)) {
+        const Actions& nextSquareActions = _actionsPlaces.getActions(p);
+        if (!nextSquareActions.get(restrictActionType).get(ActionRelation::BY).empty()) {
+            pointsToErase.insert(p);
         }
     }
-    _actionsPlaces.erasePoints(activeKingPoint, ActionType::PLACE, ActionRelation::TO, placeToPointsToErase);
+    _actionsPlaces.erasePoints(kingPoint, actionType, ActionRelation::TO, pointsToErase);
+}
 
-    PointSet threatToPointsToErase;
-    for (const Point& point : activeKingActions.get(ActionType::THREAT).get(ActionRelation::TO)) {
-        const Actions& nextSquareActions = _actionsPlaces.getActions(point);
-        if (!nextSquareActions.get(ActionType::SUPPORT).get(ActionRelation::BY).empty()) {
-            threatToPointsToErase.insert(point);
+void Handler::_restrictBindedWithKingPiecesActions(const Point& kingPoint, const std::vector<Point>& bindedPoints) {
+    for (const Point& point : bindedPoints) {
+        const Actions& pieceActions = _actionsPlaces.getActions(point);
+
+        const PointSet& bindByPoints = pieceActions.get(ActionType::BIND).get(ActionRelation::BY);
+        if (bindByPoints.size() != 1) {
+            throw std::runtime_error{"Wrong bind by points set size."};
+        }
+        const Point& bindByPoint = *(bindByPoints.begin());
+
+        PointSet awaliablePoints;
+        for (Point* p : Board::pointsByTwoPoints(kingPoint, bindByPoint)) {
+            awaliablePoints.insert(Point{p->x(), p->y()});
+        }
+
+        _eraseBindedWithKingPiecesActions(ActionType::PLACE, point, pieceActions, awaliablePoints);
+        _eraseBindedWithKingPiecesActions(ActionType::THREAT, point, pieceActions, awaliablePoints);
+    }
+};
+
+void Handler::_eraseBindedWithKingPiecesActions(
+    ActionType actionType,
+    const Point& point,
+    const Actions& pieceActions,
+    const PointSet& awaliablePoints
+) {
+    PointSet pointsToErase;
+    for (const Point& p : pieceActions.get(actionType).get(ActionRelation::TO)) {
+        if (!awaliablePoints.contains(p)) {
+            pointsToErase.insert(p);
         }
     }
-    _actionsPlaces.erasePoints(activeKingPoint, ActionType::THREAT, ActionRelation::TO, threatToPointsToErase);
+    _actionsPlaces.erasePoints(point, actionType, ActionRelation::TO, pointsToErase);
 };
 
 /**
@@ -188,7 +223,7 @@ void Handler::_restrictKingActions() {
  * Black queen bind white bishop before white king
  *  _____ _____ _____ _____
  * |    *|     |    *|     |
- * |  Q  |     |  B  |  K  |
+ * |  q  |     |  B  |  K  |
  * |_____|_____|_____|_____|
  */
 void Handler::_bindPieceIfNeeded(const Point& point, const Point& prevPointWithPiece, const Point& nextPoint, std::vector<Point>& bindedPoints) {
@@ -200,7 +235,7 @@ void Handler::_bindPieceIfNeeded(const Point& point, const Point& prevPointWithP
     const Piece& prevPiece = _state.piecePlaces.getPiece(prevPointWithPiece);
     const Piece& nextPiece = _state.piecePlaces.getPiece(nextPoint);
 
-    if (nextPiece.isKing() && nextPiece.hasSameColor(prevPiece) && !nextPiece.hasSameColor(piece)) {
+    if (nextPiece.isKing() && nextPiece.hasSameColor(prevPiece) && prevPiece.hasColor(_state.activeColor) && !nextPiece.hasSameColor(piece)) {
         bindedPoints.push_back(prevPointWithPiece);
         _actionsPlaces.setAction(ActionType::BIND, point, prevPointWithPiece);
     }

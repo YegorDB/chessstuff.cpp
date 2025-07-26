@@ -28,7 +28,9 @@ public:
 };
 
 struct PointHasher {
-  int operator()(const Point& point) const;
+    int operator()(const Point& point) const;
 };
 
 using PointSet = std::unordered_set<Point, PointHasher>;
+
+const std::string pointSetToString(const PointSet& pointSet);
