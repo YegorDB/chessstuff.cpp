@@ -3,5 +3,5 @@
 ## Build and launch tests
 
 ```bash
-$ make tests
+$ make test
 ```
