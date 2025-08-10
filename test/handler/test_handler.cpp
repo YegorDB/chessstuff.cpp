@@ -6,6 +6,7 @@ void testHandler() {
     testKingRestrictions();
     testBindedWithKingPiecesRestrictions();
     testMoveAndPawnPromotion();
+    testPawnJumpMove();
 
     std::cout << "testHandler OK" << std::endl;
 };

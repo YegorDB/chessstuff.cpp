@@ -21,7 +21,11 @@ void testInitialActions() {
         for (int x = 0; x < 8; ++x) {
             const Actions& actions = actionsPlaces.getActions(Point{x, y});
             assert(actions.get(ActionType::PLACE).get(ActionRelation::TO).empty());
-            assert(actions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
+            if (y == 3) {
+                assert(actions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
+            } else {
+                assert_point_sets_are_equal(actions.get(ActionType::PLACE).get(ActionRelation::BY), (PointSet{{x, 6}}));
+            }
             assert(actions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
             assert(actions.get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
             assert(actions.get(ActionType::XRAY).get(ActionRelation::TO).empty());
@@ -294,7 +298,7 @@ void testInitialActions() {
     assert(rookHWActions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
     const Actions& pawnAWActions = actionsPlaces.getActions(Point{0, 6});
-    assert((pawnAWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{0, 5}}));
+    assert_point_sets_are_equal(pawnAWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{0, 4}, {0, 5}}));
     assert(pawnAWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnAWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnAWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{0, 7}}));
@@ -302,7 +306,7 @@ void testInitialActions() {
     assert((pawnAWActions.get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{0, 0}}));
 
     const Actions& pawnBWActions = actionsPlaces.getActions(Point{1, 6});
-    assert((pawnBWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{1, 5}}));
+    assert_point_sets_are_equal(pawnBWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{1, 4}, {1, 5}}));
     assert(pawnBWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnBWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnBWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{2, 7}}));
@@ -310,7 +314,7 @@ void testInitialActions() {
     assert(pawnBWActions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
     const Actions& pawnCWActions = actionsPlaces.getActions(Point{2, 6});
-    assert((pawnCWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{2, 5}}));
+    assert_point_sets_are_equal(pawnCWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{2, 4}, {2, 5}}));
     assert(pawnCWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnCWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnCWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{3, 7}}));
@@ -318,7 +322,7 @@ void testInitialActions() {
     assert(pawnCWActions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
     const Actions& pawnDWActions = actionsPlaces.getActions(Point{3, 6});
-    assert((pawnDWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{3, 5}}));
+    assert_point_sets_are_equal(pawnDWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{3, 4}, {3, 5}}));
     assert(pawnDWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnDWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnDWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{1, 7}, Point{2, 7}, Point{3, 7}, Point{4, 7}}));
@@ -326,7 +330,7 @@ void testInitialActions() {
     assert((pawnDWActions.get(ActionType::XRAY).get(ActionRelation::BY) == PointSet{Point{3, 0}}));
 
     const Actions& pawnEWActions = actionsPlaces.getActions(Point{4, 6});
-    assert((pawnEWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{4, 5}}));
+    assert_point_sets_are_equal(pawnEWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{4, 4}, {4, 5}}));
     assert(pawnEWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnEWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnEWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{3, 7}, Point{4, 7}, Point{5, 7}, Point{6, 7}}));
@@ -334,7 +338,7 @@ void testInitialActions() {
     assert(pawnEWActions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
     const Actions& pawnFWActions = actionsPlaces.getActions(Point{5, 6});
-    assert((pawnFWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{5, 5}}));
+    assert_point_sets_are_equal(pawnFWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{5, 4}, {5, 5}}));
     assert(pawnFWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnFWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnFWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{4, 7}}));
@@ -342,7 +346,7 @@ void testInitialActions() {
     assert(pawnFWActions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
     const Actions& pawnGWActions = actionsPlaces.getActions(Point{6, 6});
-    assert((pawnGWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{6, 5}}));
+    assert_point_sets_are_equal(pawnGWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{6, 4}, {6, 5}}));
     assert(pawnGWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnGWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnGWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{5, 7}}));
@@ -350,7 +354,7 @@ void testInitialActions() {
     assert(pawnGWActions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
 
     const Actions& pawnHWActions = actionsPlaces.getActions(Point{7, 6});
-    assert((pawnHWActions.get(ActionType::PLACE).get(ActionRelation::TO) == PointSet{Point{7, 5}}));
+    assert_point_sets_are_equal(pawnHWActions.get(ActionType::PLACE).get(ActionRelation::TO), (PointSet{{7, 4}, {7, 5}}));
     assert(pawnHWActions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
     assert(pawnHWActions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
     assert((pawnHWActions.get(ActionType::SUPPORT).get(ActionRelation::BY)== PointSet{Point{7, 7}}));

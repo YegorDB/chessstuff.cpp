@@ -59,6 +59,7 @@ public:
     bool hasColor(PieceColor color) const;
     bool hasSameColor(const Piece& other) const;
     bool isKing() const;
+    bool isPawn() const;
 };
 
 class PiecePlaces {
@@ -75,4 +76,5 @@ public:
     void move(const Point& from, const Point& to);
 private:
     Items _items;
+    Piece _undefinedPiece;
 };

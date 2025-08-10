@@ -39,7 +39,8 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
 
     _state.piecePlaces.move(from, to);
     _actionsPlaces.clearActions();
-    if (_checkPawnOnPromotionSquare(to)) {
+    const Piece& toPiece = _state.piecePlaces.getPiece(to);
+    if (toPiece.isPawn() && _isPawnOnPromotionRow(to, toPiece.isWhiteColor())) {
         _state.pawnPromotion = to;
     } else {
         _endMove();
@@ -100,6 +101,7 @@ void Handler::_setActions() {
 
     std::vector<Point> bindedPoints;
     _setBaseActions(bindedPoints);
+    _setPawnJumpMoves();
     const Point& kingPoint = _getActiveKingPoint();
     _restrictKingActions(kingPoint);
     _restrictBindedWithKingPiecesActions(kingPoint, bindedPoints);
@@ -284,17 +286,24 @@ void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& pr
     }
 };
 
-bool Handler::_checkPawnOnPromotionSquare(const Point& point) {
-    if (!_state.piecePlaces.contains(point)) {
-        return false;
+void Handler::_setPawnJumpMoves() {
+    for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
+        if (piece.isPawn() && piece.hasColor(_state.activeColor) && _isPawnOnInitialRow(point, piece.isWhiteColor())) {
+            int dy = piece.isWhiteColor() ? -1 : 1;
+            Point stepPoint{point.x(), point.y() + dy};
+            Point jumpPoint{point.x(), point.y() + dy * 2};
+            if (_state.piecePlaces.contains(stepPoint) || _state.piecePlaces.contains(jumpPoint)) {
+                continue;
+            }
+            _actionsPlaces.setAction(ActionType::PLACE, point, jumpPoint);
+        }
     }
+};
 
-    const Piece& piece = _state.piecePlaces.getPiece(point);
-    return (
-        piece.getType() == PieceType::PAWN &&
-        (
-            piece.isWhiteColor() && point.y() == 0 ||
-            !piece.isWhiteColor() && point.y() == 7
-        )
-    );
+bool Handler::_isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const {
+    return isWhiteColor && point.y() == 0 || !isWhiteColor && point.y() == 7;
+};
+
+bool Handler::_isPawnOnInitialRow(const Point& point, bool isWhiteColor) const {
+    return isWhiteColor && point.y() == 6 || !isWhiteColor && point.y() == 1;
 };

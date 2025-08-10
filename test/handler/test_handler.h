@@ -10,3 +10,4 @@ void testInitialPieces();
 void testKingRestrictions();
 void testBindedWithKingPiecesRestrictions();
 void testMoveAndPawnPromotion();
+void testPawnJumpMove();

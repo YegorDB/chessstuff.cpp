@@ -2,7 +2,7 @@
 
 void testBindedWithKingPiecesRestrictions() {
     Handler handler{FEN{"8/8/3k4/2r5/1B1q1n2/1K6/3R3Q/8 b - - 0 0"}};
-    
+
     Actions blackRookActions = handler.getActionsPlaces().getActions(Point{2, 3});
     PointSet expectedBlackRookPlaceTo;
     assert_point_sets_are_equal(blackRookActions.get(ActionType::PLACE).get(ActionRelation::TO), expectedBlackRookPlaceTo);

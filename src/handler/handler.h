@@ -42,7 +42,10 @@ private:
         const Point& nextPoint,
         std::vector<Point>& bindedPoints
     );
-    bool _checkPawnOnPromotionSquare(const Point& point);
+    void _setPawnJumpMoves();
+
+    bool _isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const;
+    bool _isPawnOnInitialRow(const Point& point, bool isWhiteColor) const;
 
 public:
     class Response {

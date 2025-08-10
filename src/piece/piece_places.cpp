@@ -9,7 +9,10 @@ const PiecePlaces::Items& PiecePlaces::getItems() const {
 };
 
 const Piece& PiecePlaces::getPiece(const Point& point) const {
-    return _items.at(point);
+    if (_items.contains(point)) {
+        return _items.at(point);
+    }
+    return _undefinedPiece;
 };
 
 bool PiecePlaces::contains(const Point& point) const {
