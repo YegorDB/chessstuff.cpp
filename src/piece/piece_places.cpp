@@ -27,3 +27,7 @@ void PiecePlaces::move(const Point& from, const Point& to) {
     _items[to] = _items.at(from);
     _items.erase(from);
 };
+
+void PiecePlaces::remove(const Point& point) {
+    _items.erase(point);
+};

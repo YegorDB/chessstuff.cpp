@@ -23,24 +23,41 @@ const State& Handler::getState() {
 };
 
 Handler::Response Handler::move(const Point& from, const Point& to) {
+    const Piece& piece = _state.piecePlaces.getPiece(from);
+
     if (!from.isValid() || !to.isValid()) {
         return Response{Response::Status::INVALID_POINT};
     } else if (!_state.pawnPromotion.isUndefined()) {
         return Response{Response::Status::WRONG_PAWN_PROMOTION};
-    } else if (!_state.piecePlaces.contains(from)) {
+    } else if (piece.isUndefined()) {
         return Response{Response::Status::PIECE_DOES_NOT_EXIST};
-    } else if (!_state.piecePlaces.getPiece(from).hasColor(_state.activeColor)) {
+    } else if (!piece.hasColor(_state.activeColor)) {
         return Response{Response::Status::WRONG_PIECE_COLOR};
-    } else if (!_state.piecePlaces.contains(to) && !_actionsPlaces.getActions(from).get(ActionType::PLACE).get(ActionRelation::TO).contains(to)) {
+    } else if (
+        !_state.piecePlaces.contains(to) &&
+        !_actionsPlaces.getActions(from).get(ActionType::PLACE).get(ActionRelation::TO).contains(to) &&
+        !(
+            piece.isPawn() &&
+            to == _state.enPassant &&
+            _actionsPlaces.getActions(from).get(ActionType::THREAT).get(ActionRelation::TO).contains(to)
+        )
+    ) {
         return Response{Response::Status::WRONG_DESTINATION};
     } else if (_state.piecePlaces.contains(to) && !_actionsPlaces.getActions(from).get(ActionType::THREAT).get(ActionRelation::TO).contains(to)) {
         return Response{Response::Status::WRONG_DESTINATION};
     }
 
     _state.piecePlaces.move(from, to);
+    if (piece.isPawn() && to == _state.enPassant) {
+        _state.piecePlaces.remove(Point{to.x(), from.y()});
+    }
     _actionsPlaces.clearActions();
-    const Piece& toPiece = _state.piecePlaces.getPiece(to);
-    if (toPiece.isPawn() && _isPawnOnPromotionRow(to, toPiece.isWhiteColor())) {
+    if (piece.isPawn() && _isPawnJumpMove(from, to, piece.isWhiteColor())) {
+        _state.enPassant = from.next(piece.getPlaceDirections()[0]);
+    } else {
+        _state.enPassant = Point{};
+    }
+    if (piece.isPawn() && _isPawnOnPromotionRow(to, piece.isWhiteColor())) {
         _state.pawnPromotion = to;
     } else {
         _endMove();
@@ -129,6 +146,9 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
                         _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
                     } else if (!prevPoint.isUndefined()) {
                         _threatSquareAfterKingIfNeeded(point, prevPoint, *nextPoint);
+                    }
+                    if (piece.isPawn() && piece.hasColor(_state.activeColor) && *nextPoint == _state.enPassant) {
+                        _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
                     }
 
                     prevPoint = *nextPoint;
@@ -306,4 +326,8 @@ bool Handler::_isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const
 
 bool Handler::_isPawnOnInitialRow(const Point& point, bool isWhiteColor) const {
     return isWhiteColor && point.y() == 6 || !isWhiteColor && point.y() == 1;
+};
+
+bool Handler::_isPawnJumpMove(const Point& from, const Point& to, bool isWhiteColor) const {
+    return isWhiteColor && from.y() == 6 && to.y() == 4 || !isWhiteColor && from.y() == 1 && to.y() == 3;
 };

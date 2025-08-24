@@ -60,6 +60,7 @@ public:
     bool hasSameColor(const Piece& other) const;
     bool isKing() const;
     bool isPawn() const;
+    bool isUndefined() const;
 };
 
 class PiecePlaces {
@@ -74,6 +75,7 @@ public:
     bool contains(const Point& point) const;
     void place(const Point& point, const Piece& piece);
     void move(const Point& from, const Point& to);
+    void remove(const Point& point);
 private:
     Items _items;
     Piece _undefinedPiece;

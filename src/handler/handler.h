@@ -46,6 +46,7 @@ private:
 
     bool _isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const;
     bool _isPawnOnInitialRow(const Point& point, bool isWhiteColor) const;
+    bool _isPawnJumpMove(const Point& from, const Point& to, bool isWhiteColor) const;
 
 public:
     class Response {

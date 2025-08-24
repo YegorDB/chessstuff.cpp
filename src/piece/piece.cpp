@@ -243,3 +243,7 @@ bool Piece::isKing() const {
 bool Piece::isPawn() const {
     return _type == PieceType::PAWN;
 };
+
+bool Piece::isUndefined() const {
+    return _type == PieceType::UNSET || _color == PieceColor::UNSET;
+};

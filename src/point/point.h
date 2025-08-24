@@ -21,7 +21,7 @@ public:
     int y() const;
     int hash() const;
 
-    Point next(const Direction& direction);
+    Point next(const Direction& direction) const;
     bool isValid() const;
     bool isUndefined() const;
     const std::string toString() const;

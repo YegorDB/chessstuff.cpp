@@ -27,7 +27,7 @@ int Point::hash() const {
     return _hash;
 };
 
-Point Point::next(const Direction& direction) {
+Point Point::next(const Direction& direction) const {
     return Point{_x + direction.dx, _y + direction.dy};
 };
 
