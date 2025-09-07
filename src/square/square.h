@@ -28,3 +28,6 @@ public:
     const std::string& getColorName() const;
     const std::string toString() const;
 };
+
+// short square point access
+Point sp(const std::string& name);

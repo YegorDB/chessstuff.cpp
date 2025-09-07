@@ -32,3 +32,7 @@ const std::string& Square::getColorName() const {
 const std::string Square::toString() const {
     return _name + " " + point.toString() + " " + getColorName();
 };
+
+Point sp(const std::string& name) {
+    return Square{name}.point;
+};

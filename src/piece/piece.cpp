@@ -1,5 +1,3 @@
-#include <stdexcept>
-
 #include "piece.h"
 
 const std::vector<std::string> Piece::COLOR_NAMES{"white", "black"};
@@ -185,10 +183,15 @@ Piece::Piece(PieceType type, bool isWhiteColor) : _type(type){
 void Piece::operator=(const Piece& other) {
     _type = other._type;
     _color = other._color;
+    _movesCount = other._movesCount;
 };
 
 bool Piece::operator==(const Piece& other) const {
     return (_type == other._type && _color == other._color);
+};
+
+void Piece::increaseMovesCount() {
+    _movesCount++;
 };
 
 const PieceType Piece::getType() const {
@@ -222,6 +225,10 @@ const std::string& Piece::getVisibleSymbol() const {
         throw std::runtime_error{"There is no visible symbol to unset piece."};
     }
     return VISIBLE_SYMBOLS.at(_color).at(_type);
+};
+
+int Piece::getMovesCount() const {
+    return _movesCount;
 };
 
 bool Piece::isWhiteColor() const {

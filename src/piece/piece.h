@@ -1,13 +1,16 @@
 #pragma once
 
 #include <cstdint>
+#include <format>
 #include <string>
 #include <vector>
+#include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
 
 #include "../direction/direction.h"
 #include "../point/point.h"
+#include "../square/square.h"
 
 enum class PieceColor {
     UNSET = 0,
@@ -35,6 +38,7 @@ private:
 
     PieceType _type = PieceType::UNSET;
     PieceColor _color = PieceColor::UNSET;
+    int _movesCount = 0;
 
 public:
     static const std::unordered_map<char, std::pair<PieceType, PieceColor>> SYMBOLS_TO_INFO;
@@ -49,12 +53,14 @@ public:
     void operator=(const Piece& piece);
     bool operator==(const Piece& piece) const;
 
+    void increaseMovesCount();
     const PieceType getType() const;
     const PieceColor getColor() const;
     const std::vector<Direction>& getPlaceDirections() const;
     const std::vector<Direction>& getThreatDirections() const;
     const std::string& getColorName() const;
     const std::string& getVisibleSymbol() const;
+    int getMovesCount() const;
     bool isWhiteColor() const;
     bool hasColor(PieceColor color) const;
     bool hasSameColor(const Piece& other) const;
