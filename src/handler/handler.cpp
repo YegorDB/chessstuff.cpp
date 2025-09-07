@@ -57,6 +57,22 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
     } else {
         _state.enPassant = Point{};
     }
+    if (piece.isKing()) {
+        if (_state.castles[_state.activeColor].kingSide) {
+            _state.castles[_state.activeColor].kingSide = false;
+        }
+        if (_state.castles[_state.activeColor].queenSide) {
+            _state.castles[_state.activeColor].queenSide = false;
+        }
+    }
+    if (piece.isRook()) {
+        if (_isRookOnKingSideCastleSquare(from, piece.isWhiteColor()) && _state.castles[_state.activeColor].kingSide) {
+            _state.castles[_state.activeColor].kingSide = false;
+        }
+        if (_isRookOnQueenSideCastleSquare(from, piece.isWhiteColor()) && _state.castles[_state.activeColor].queenSide) {
+            _state.castles[_state.activeColor].queenSide = false;
+        }
+    }
     if (piece.isPawn() && _isPawnOnPromotionRow(to, piece.isWhiteColor())) {
         _state.pawnPromotion = to;
     } else {
@@ -318,6 +334,20 @@ void Handler::_setPawnJumpMoves() {
             _actionsPlaces.setAction(ActionType::PLACE, point, jumpPoint);
         }
     }
+};
+
+bool Handler::_isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const {
+    return (
+        point.x() == 7 &&
+        (isWhiteColor && point.y() == 7 || !isWhiteColor && point.y() == 0)
+    );
+};
+
+bool Handler::_isRookOnQueenSideCastleSquare(const Point& point, bool isWhiteColor) const {
+    return (
+        point.x() == 0 &&
+        (isWhiteColor && point.y() == 7 || !isWhiteColor && point.y() == 0)
+    );
 };
 
 bool Handler::_isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const {

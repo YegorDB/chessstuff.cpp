@@ -247,6 +247,22 @@ bool Piece::isKing() const {
     return _type == PieceType::KING;
 };
 
+bool Piece::isQueen() const {
+    return _type == PieceType::QUEEN;
+};
+
+bool Piece::isRook() const {
+    return _type == PieceType::ROOK;
+};
+
+bool Piece::isBishop() const {
+    return _type == PieceType::BISHOP;
+};
+
+bool Piece::isKnight() const {
+    return _type == PieceType::KNIGHT;
+};
+
 bool Piece::isPawn() const {
     return _type == PieceType::PAWN;
 };

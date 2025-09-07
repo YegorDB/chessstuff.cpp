@@ -65,6 +65,10 @@ public:
     bool hasColor(PieceColor color) const;
     bool hasSameColor(const Piece& other) const;
     bool isKing() const;
+    bool isQueen() const;
+    bool isRook() const;
+    bool isBishop() const;
+    bool isKnight() const;
     bool isPawn() const;
     bool isUndefined() const;
 };

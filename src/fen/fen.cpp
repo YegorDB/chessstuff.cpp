@@ -87,13 +87,13 @@ void FEN::_parseRawSringCastlesPart() {
 
     for (char c : _rawStringParts[2]) {
         if (c == 'K') {
-            _state.castles.whiteKingSide = true;
+            _state.castles[PieceColor::WHITE].kingSide = true;
         } else if (c == 'Q') {
-            _state.castles.whiteQueenSide = true;
+            _state.castles[PieceColor::WHITE].queenSide = true;
         } else if (c == 'k') {
-            _state.castles.blackKingSide = true;
+            _state.castles[PieceColor::BLACK].kingSide = true;
         } else if (c == 'q') {
-            _state.castles.blackQueenSide = true;
+            _state.castles[PieceColor::BLACK].queenSide = true;
         }
     }
 };
@@ -162,16 +162,16 @@ void FEN::_stringifyAcivePieceColor() {
 void FEN::_stringifyCastles() {
     _rawStringParts[2] = "";
 
-    if (_state.castles.whiteKingSide) {
+    if (_state.castles[PieceColor::WHITE].kingSide) {
         _rawStringParts[2].push_back('K');
     }
-    if (_state.castles.whiteQueenSide) {
+    if (_state.castles[PieceColor::WHITE].queenSide) {
         _rawStringParts[2].push_back('Q');
     }
-    if (_state.castles.blackKingSide) {
+    if (_state.castles[PieceColor::BLACK].kingSide) {
         _rawStringParts[2].push_back('k');
     }
-    if (_state.castles.blackQueenSide) {
+    if (_state.castles[PieceColor::BLACK].queenSide) {
         _rawStringParts[2].push_back('q');
     }
     if (_rawStringParts[2].empty()) {

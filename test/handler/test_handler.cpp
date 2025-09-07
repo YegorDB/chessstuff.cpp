@@ -8,6 +8,7 @@ void testHandler() {
     testMoveAndPawnPromotion();
     testPawnJumpMove();
     testPawnEnPassant();
+    testCastle();
 
     std::cout << "testHandler OK" << std::endl;
 };

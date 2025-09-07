@@ -44,6 +44,8 @@ private:
     );
     void _setPawnJumpMoves();
 
+    bool _isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const;
+    bool _isRookOnQueenSideCastleSquare(const Point& point, bool isWhiteColor) const;
     bool _isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const;
     bool _isPawnOnInitialRow(const Point& point, bool isWhiteColor) const;
     bool _isPawnJumpMove(const Point& from, const Point& to, bool isWhiteColor) const;

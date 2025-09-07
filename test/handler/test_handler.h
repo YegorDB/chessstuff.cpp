@@ -12,3 +12,4 @@ void testBindedWithKingPiecesRestrictions();
 void testMoveAndPawnPromotion();
 void testPawnJumpMove();
 void testPawnEnPassant();
+void testCastle();

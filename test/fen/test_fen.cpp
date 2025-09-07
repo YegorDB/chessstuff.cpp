@@ -33,10 +33,10 @@ void testFenStringToState() {
 
     assert(s.activeColor == PieceColor::WHITE);
 
-    assert(s.castles.whiteKingSide == true);
-    assert(s.castles.whiteQueenSide == true);
-    assert(s.castles.blackKingSide== true);
-    assert(s.castles.blackQueenSide == true);
+    assert(s.castles[PieceColor::WHITE].kingSide == true);
+    assert(s.castles[PieceColor::WHITE].queenSide == true);
+    assert(s.castles[PieceColor::BLACK].kingSide == true);
+    assert(s.castles[PieceColor::BLACK].queenSide == true);
 
     assert(s.enPassant == (Point{4, 5}));
 
@@ -67,10 +67,10 @@ void testFenStringToStateTwoKings() {
 
     assert(s.activeColor == PieceColor::BLACK);
 
-    assert(s.castles.whiteKingSide == false);
-    assert(s.castles.whiteQueenSide == false);
-    assert(s.castles.blackKingSide== false);
-    assert(s.castles.blackQueenSide == false);
+    assert(s.castles[PieceColor::WHITE].kingSide == false);
+    assert(s.castles[PieceColor::WHITE].queenSide == false);
+    assert(s.castles[PieceColor::BLACK].kingSide == false);
+    assert(s.castles[PieceColor::BLACK].queenSide == false);
 
     assert(s.enPassant == (Point{}));
 
@@ -118,7 +118,10 @@ void testStateToFenString() {
             }
         },
         PieceColor::WHITE,
-        State::Castles{true, true, true, true},
+        State::Castles{
+            {PieceColor::WHITE, {true, true}},
+            {PieceColor::BLACK, {true, true}}
+        },
         Point{4, 5},
         10,
         15
@@ -138,7 +141,10 @@ void testStateToFenStringTwoKings() {
             }
         },
         PieceColor::BLACK,
-        State::Castles{false, false, false, false},
+        State::Castles{
+            {PieceColor::WHITE, {false, false}},
+            {PieceColor::BLACK, {false, false}}
+        },
         Point{},
         0,
         0
