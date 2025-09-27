@@ -57,6 +57,8 @@ public:
     );
     static PointsByDirection pointsByTwoPoints(
         const Point& firstPoint,
-        const Point& secondPoint
+        const Point& secondPoint,
+        bool withStartPoint = false,
+        bool withEndPoint = false
     );
 };

@@ -54,7 +54,17 @@ Board::PointsByDirection Board::pointsByDirection(const Point& point, const Dire
     };
 };
 
-Board::PointsByDirection Board::pointsByTwoPoints(const Point& firstPoint, const Point& secondPoint) {
+Board::PointsByDirection Board::pointsByTwoPoints(
+    const Point& firstPoint,
+    const Point& secondPoint,
+    bool withStartPoint,
+    bool withEndPoint
+) {
+    if (firstPoint == secondPoint) {
+        Board::PointsByDirection::Iterator iterator{firstPoint, Direction{0, 0, 1}, true};
+        return PointsByDirection{iterator, iterator};
+    }
+
     int dx, dy;
     if (firstPoint.x() == secondPoint.x() && firstPoint.y() != secondPoint.y()) {
         dx = 0;
@@ -72,8 +82,8 @@ Board::PointsByDirection Board::pointsByTwoPoints(const Point& firstPoint, const
     Direction direction{dx, dy, 7};
 
     return PointsByDirection{
-        Board::PointsByDirection::Iterator{firstPoint, direction, false},
-        Board::PointsByDirection::Iterator{Point{}, direction, true},
+        Board::PointsByDirection::Iterator{firstPoint, direction, withStartPoint},
+        Board::PointsByDirection::Iterator{secondPoint, direction, !withEndPoint},
     };
 };
 

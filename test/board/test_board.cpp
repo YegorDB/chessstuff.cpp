@@ -31,23 +31,59 @@ void testBoard() {
         Point expectedPoint{2 + i, 3};
         assert_points_are_equal(*point, expectedPoint);
     }
-    assert(i == 5);
+    assert(i == 3);
 
     i = 0;
-    for (Point* point : Board::pointsByTwoPoints(Point{2, 7}, Point{2, 5})) {
-        ++i;
+    for (Point* point : Board::pointsByTwoPoints(Point{2, 7}, Point{2, 5}, true, true)) {
         Point expectedPoint{2, 7 - i};
+        ++i;
         assert_points_are_equal(*point, expectedPoint);
     }
-    assert(i == 7);
+    assert(i == 3);
 
     i = 0;
-    for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{4, 5})) {
-        ++i;
+    for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{4, 5}, true, true)) {
         Point expectedPoint{2 + i, 3 + i};
+        ++i;
         assert_points_are_equal(*point, expectedPoint);
     }
-    assert(i == 4);
+    assert(i == 3);
+
+    i = 0;
+    for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{2, 3})) {
+        ++i;
+    }
+    assert(i == 0);
+
+    i = 0;
+    for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{2, 4}, true, true)) {
+        Point expectedPoint{2, 3 + i};
+        ++i;
+        assert_points_are_equal(*point, expectedPoint);
+    }
+    assert(i == 2);
+
+    i = 0;
+    for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{2, 4}, false, true)) {
+        ++i;
+        Point expectedPoint{2, 3 + i};
+        assert_points_are_equal(*point, expectedPoint);
+    }
+    assert(i == 1);
+
+    i = 0;
+    for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{2, 4}, true, false)) {
+        Point expectedPoint{2, 3 + i};
+        ++i;
+        assert_points_are_equal(*point, expectedPoint);
+    }
+    assert(i == 1);
+
+    i = 0;
+    for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{2, 4}, false, false)) {
+        ++i;
+    }
+    assert(i == 0);
 
     std::cout << "testBoard OK" << std::endl;
 };

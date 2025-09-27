@@ -232,7 +232,7 @@ void Handler::_restrictBindedWithKingPiecesActions(const Point& kingPoint, const
         const Point& bindByPoint = *(bindByPoints.begin());
 
         PointSet awaliablePoints;
-        for (Point* p : Board::pointsByTwoPoints(kingPoint, bindByPoint)) {
+        for (Point* p : Board::pointsByTwoPoints(kingPoint, bindByPoint, false, true)) {
             awaliablePoints.insert(Point{p->x(), p->y()});
         }
 
