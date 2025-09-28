@@ -1,6 +1,6 @@
 # To do list
 
-- [ ] Add castle actions
+- [ ] Refactor pawn additional logic
 - [ ] Add pieces restrictions on king check
 - [ ] Change halfmove clock
 - [ ] Add position validator
