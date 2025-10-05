@@ -25,28 +25,6 @@ public:
         bool isOk();
     };
 
-    class CastlePart {
-    private:
-        ActionsPlaces& _actionsPlaces;
-        State& _state;
-
-        void _setAction(bool isKingSide);
-        void _afterKingMove(const Point& from, const Point& to);
-        void _afterRookMove(const Point& from, const Point& to);
-        void _afterKingMoveAdditionals(const Point& from, const Point& to, bool isKingSide);
-        void _moveRook(bool isKingSide);
-
-        int _getFirstRankY() const;
-        bool _isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const;
-        bool _isRookOnQueenSideCastleSquare(const Point& point, bool isWhiteColor) const;
-
-    public:
-        CastlePart(State& state, ActionsPlaces& actionsPlaces);
-
-        void setActions();
-        void afterMove(const Point& from, const Point& to);
-    };
-
     Handler(const FEN& fen);
     Handler();
 
@@ -58,7 +36,6 @@ public:
 private:
     ActionsPlaces _actionsPlaces;
     State _state;
-    CastlePart _castlePart;
 
     void _initState(const FEN& fen);
     void _endMove();
@@ -95,9 +72,24 @@ private:
         const Point& nextPoint,
         std::vector<Point>& bindedPoints
     );
-    void _setPawnJumpMoves();
 
+    bool _setPromotionPawnIfNeeded(const Point& to);
     bool _isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const;
+
+    void _removeEnPassantPieceIfNeeded(const Point& from, const Point& to);
+    void _refreshEnPassantPoint(const Point& from, const Point& to);
+    void _setPawnJumpMoves();
     bool _isPawnOnInitialRow(const Point& point, bool isWhiteColor) const;
     bool _isPawnJumpMove(const Point& from, const Point& to, bool isWhiteColor) const;
+
+    void _setCastleActions();
+    void _setCastleAction(bool isKingSide);
+    void _handleCastleAfterMove(const Point& from, const Point& to);
+    void _handleCastleAfterKingMove(const Point& from, const Point& to);
+    void _handleCastleAfterRookMove(const Point& from, const Point& to);
+    void _handleCastleAfterKingMoveAdditionals(const Point& from, const Point& to, bool isKingSide);
+    void _castleRook(bool isKingSide);
+    int _getFirstRankY() const;
+    bool _isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const;
+    bool _isRookOnQueenSideCastleSquare(const Point& point, bool isWhiteColor) const;
 };

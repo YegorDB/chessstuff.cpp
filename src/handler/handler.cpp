@@ -1,6 +1,6 @@
 #include "handler.h"
 
-Handler::Handler(const FEN& fen) : _castlePart(CastlePart{_state, _actionsPlaces}) {
+Handler::Handler(const FEN& fen) {
     _initState(fen);
     _actionsPlaces.clearActions();
     _setActions();
@@ -46,46 +46,15 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
     }
 
     _state.piecePlaces.move(from, to);
-    if (piece.isPawn() && to == _state.enPassant) {
-        _state.piecePlaces.remove(Point{to.x(), from.y()});
-    }
+    _removeEnPassantPieceIfNeeded(from, to);
     _actionsPlaces.clearActions();
-    if (piece.isPawn() && _isPawnJumpMove(from, to, piece.isWhiteColor())) {
-        _state.enPassant = from.next(piece.getPlaceDirections()[0]);
-    } else {
-        _state.enPassant = Point{};
-    }
-    _castlePart.afterMove(from, to);
-    if (piece.isPawn() && _isPawnOnPromotionRow(to, piece.isWhiteColor())) {
-        _state.pawnPromotion = to;
-    } else {
+    _refreshEnPassantPoint(from, to);
+    _handleCastleAfterMove(from, to);
+    if (!_setPromotionPawnIfNeeded(to)) {
         _endMove();
     }
 
     return Response{Response::Status::OK};
-};
-
-Handler::Response Handler::promotePawn(PieceType pieceType) {
-    if (_state.pawnPromotion.isUndefined()) {
-        return Response{Response::Status::WRONG_PAWN_PROMOTION};
-    } else if (!Piece::PAWN_PROMOTION_TYPES.contains(pieceType)) {
-        return Response{Response::Status::WRONG_PAWN_PROMOTION_PIECE_TYPE};
-    }
-
-    bool isWhiteColor = _state.activeColor == PieceColor::WHITE;
-    Piece piece{pieceType, isWhiteColor};
-    _state.piecePlaces.place(_state.pawnPromotion, piece);
-
-    _state.pawnPromotion = Point{};
-    _endMove();
-
-    return Response{Response::Status::OK};
-};
-
-Handler::Response::Response(Status status) : status(status) {};
-
-bool Handler::Response::isOk() {
-    return status == Status::OK;
 };
 
 void Handler::_endMove() {
@@ -118,7 +87,7 @@ void Handler::_setActions() {
     std::vector<Point> bindedPoints;
     _setBaseActions(bindedPoints);
     _setPawnJumpMoves();
-    _castlePart.setActions();
+    _setCastleActions();
     const Point& kingPoint = _getActiveKingPoint();
     _restrictKingActions(kingPoint);
     _restrictBindedWithKingPiecesActions(kingPoint, bindedPoints);
@@ -304,30 +273,4 @@ void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& pr
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece) && piece.hasSameColor(nextPiece)) {
         _actionsPlaces.setAction(ActionType::SUPPORT, point, nextPoint);
     }
-};
-
-void Handler::_setPawnJumpMoves() {
-    for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
-        if (piece.isPawn() && piece.hasColor(_state.activeColor) && _isPawnOnInitialRow(point, piece.isWhiteColor())) {
-            int dy = piece.isWhiteColor() ? -1 : 1;
-            Point stepPoint{point.x(), point.y() + dy};
-            Point jumpPoint{point.x(), point.y() + dy * 2};
-            if (_state.piecePlaces.contains(stepPoint) || _state.piecePlaces.contains(jumpPoint)) {
-                continue;
-            }
-            _actionsPlaces.setAction(ActionType::PLACE, point, jumpPoint);
-        }
-    }
-};
-
-bool Handler::_isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const {
-    return isWhiteColor && point.y() == 0 || !isWhiteColor && point.y() == 7;
-};
-
-bool Handler::_isPawnOnInitialRow(const Point& point, bool isWhiteColor) const {
-    return isWhiteColor && point.y() == 6 || !isWhiteColor && point.y() == 1;
-};
-
-bool Handler::_isPawnJumpMove(const Point& from, const Point& to, bool isWhiteColor) const {
-    return isWhiteColor && from.y() == 6 && to.y() == 4 || !isWhiteColor && from.y() == 1 && to.y() == 3;
 };

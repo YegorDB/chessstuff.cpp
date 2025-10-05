@@ -1,8 +1,6 @@
 #include "handler.h"
 
-Handler::CastlePart::CastlePart(State& state, ActionsPlaces& actionsPlaces) : _state(state), _actionsPlaces(actionsPlaces) {};
-
-void Handler::CastlePart::setActions() {
+void Handler::_setCastleActions() {
     if (!_state.castles[_state.activeColor].kingSide || !_state.castles[_state.activeColor].queenSide) {
         return;
     }
@@ -20,15 +18,15 @@ void Handler::CastlePart::setActions() {
     }
 
     if (_state.castles[_state.activeColor].kingSide) {
-        _setAction(true);
+        _setCastleAction(true);
     }
 
     if (_state.castles[_state.activeColor].queenSide) {
-        _setAction(false);
+        _setCastleAction(false);
     }
 };
 
-void Handler::CastlePart::_setAction(bool isKingSide) {
+void Handler::_setCastleAction(bool isKingSide) {
     int firstRankY = _getFirstRankY();
     int rookInitialX = isKingSide ? 7 : 0;
     Point rookPoint{rookInitialX, firstRankY};
@@ -67,30 +65,30 @@ void Handler::CastlePart::_setAction(bool isKingSide) {
     }
 };
 
-void Handler::CastlePart::afterMove(const Point& from, const Point& to) {
+void Handler::_handleCastleAfterMove(const Point& from, const Point& to) {
     const Piece& piece = _state.piecePlaces.getPiece(to);
 
     if (piece.isKing()) {
-        _afterKingMove(from, to);
+        _handleCastleAfterKingMove(from, to);
     }
 
     if (piece.isRook()) {
-        _afterRookMove(from, to);
+        _handleCastleAfterRookMove(from, to);
     }
 };
 
-void Handler::CastlePart::_afterKingMove(const Point& from, const Point& to) {
+void Handler::_handleCastleAfterKingMove(const Point& from, const Point& to) {
     if (_state.castles[_state.activeColor].kingSide) {
-        _afterKingMoveAdditionals(from, to, true);
+        _handleCastleAfterKingMoveAdditionals(from, to, true);
         _state.castles[_state.activeColor].kingSide = false;
     }
     if (_state.castles[_state.activeColor].queenSide) {
-        _afterKingMoveAdditionals(from, to, false);
+        _handleCastleAfterKingMoveAdditionals(from, to, false);
         _state.castles[_state.activeColor].queenSide = false;
     }
 };
 
-void Handler::CastlePart::_afterRookMove(const Point& from, const Point& to) {
+void Handler::_handleCastleAfterRookMove(const Point& from, const Point& to) {
     bool isWhiteColor = _state.activeColor == PieceColor::WHITE;
     if (_isRookOnKingSideCastleSquare(from, isWhiteColor) && _state.castles[_state.activeColor].kingSide) {
         _state.castles[_state.activeColor].kingSide = false;
@@ -100,18 +98,18 @@ void Handler::CastlePart::_afterRookMove(const Point& from, const Point& to) {
     }
 };
 
-void Handler::CastlePart::_afterKingMoveAdditionals(const Point& from, const Point& to, bool isKingSide) {
+void Handler::_handleCastleAfterKingMoveAdditionals(const Point& from, const Point& to, bool isKingSide) {
     int firstRankY = _getFirstRankY();
     Point kingInitialPoint{4, firstRankY};
     int kingCastleX = isKingSide ? 6 : 2;
     Point kingCastlePoint{kingCastleX, firstRankY};
 
     if (from == kingInitialPoint && to == kingCastlePoint) {
-        _moveRook(isKingSide);
+        _castleRook(isKingSide);
     }
 };
 
-void Handler::CastlePart::_moveRook(bool isKingSide) {
+void Handler::_castleRook(bool isKingSide) {
     int firstRankY = _getFirstRankY();
 
     int rookInitialX = isKingSide ? 7 : 0;
@@ -126,18 +124,18 @@ void Handler::CastlePart::_moveRook(bool isKingSide) {
     _state.piecePlaces.move(rookInitialPoint, rookCastlePoint);
 };
 
-int Handler::CastlePart::_getFirstRankY() const {
+int Handler::_getFirstRankY() const {
     return _state.activeColor == PieceColor::WHITE ? 7 : 0;
 };
 
-bool Handler::CastlePart::_isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const {
+bool Handler::_isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const {
     return (
         point.x() == 7 &&
         (isWhiteColor && point.y() == 7 || !isWhiteColor && point.y() == 0)
     );
 };
 
-bool Handler::CastlePart::_isRookOnQueenSideCastleSquare(const Point& point, bool isWhiteColor) const {
+bool Handler::_isRookOnQueenSideCastleSquare(const Point& point, bool isWhiteColor) const {
     return (
         point.x() == 0 &&
         (isWhiteColor && point.y() == 7 || !isWhiteColor && point.y() == 0)
