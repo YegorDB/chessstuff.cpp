@@ -40,22 +40,9 @@ private:
     void _initState(const FEN& fen);
     void _endMove();
     void _setActions();
-    void _setBaseActions(std::vector<Point>& bindedPoints);
     const Point& _getActiveKingPoint() const;
-    void _restrictKingActions(const Point& kingPoint);
-    void _eraseKingActions(
-        ActionType actionType,
-        ActionType restrictActionType,
-        const Point& kingPoint,
-        const Actions& kingActions
-    );
-    void _restrictBindedWithKingPiecesActions(const Point& kingPoint, const std::vector<Point>& bindedPoints);
-    void _eraseBindedWithKingPiecesActions(
-        ActionType actionType,
-        const Point& point,
-        const Actions& pieceActions,
-        const PointSet& awaliablePoints
-    );
+
+    void _setBaseActions(std::vector<Point>& bindedPoints);
     void _threatSquareAfterKingIfNeeded(
         const Point& point,
         const Point& prevPoint,
@@ -71,6 +58,21 @@ private:
         const Point& prevPointWithPiece,
         const Point& nextPoint,
         std::vector<Point>& bindedPoints
+    );
+
+    void _restrictKingActions(const Point& kingPoint);
+    void _eraseKingActions(
+        ActionType actionType,
+        ActionType restrictActionType,
+        const Point& kingPoint,
+        const Actions& kingActions
+    );
+    void _restrictBindedWithKingPiecesActions(const Point& kingPoint, const std::vector<Point>& bindedPoints);
+    void _eraseBindedWithKingPiecesActions(
+        ActionType actionType,
+        const Point& point,
+        const Actions& pieceActions,
+        const PointSet& awaliablePoints
     );
 
     bool _setPromotionPawnIfNeeded(const Point& to);
