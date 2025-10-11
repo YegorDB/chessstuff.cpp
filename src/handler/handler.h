@@ -40,7 +40,6 @@ private:
     void _initState(const FEN& fen);
     void _endMove();
     void _setActions();
-    const Point& _getActiveKingPoint() const;
 
     void _setBaseActions(std::vector<Point>& bindedPoints);
     void _threatSquareAfterKingIfNeeded(
@@ -60,14 +59,14 @@ private:
         std::vector<Point>& bindedPoints
     );
 
-    void _restrictKingActions(const Point& kingPoint);
+    void _restrictKingActions();
     void _eraseKingActions(
         ActionType actionType,
         ActionType restrictActionType,
         const Point& kingPoint,
         const Actions& kingActions
     );
-    void _restrictBindedWithKingPiecesActions(const Point& kingPoint, const std::vector<Point>& bindedPoints);
+    void _restrictBindedWithKingPiecesActions(const std::vector<Point>& bindedPoints);
     void _eraseBindedWithKingPiecesActions(
         ActionType actionType,
         const Point& point,

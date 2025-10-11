@@ -1,6 +1,6 @@
 #include "test_piece_places.h"
 
-void testPiecePlaces() {
+void testPiecePlacesConstructor() {
     PiecePlaces pp{
         PiecePlaces::Items{
             {sp("e1"), Piece{PieceType::KING, true}},
@@ -12,26 +12,59 @@ void testPiecePlaces() {
     assert((pp.getPiece(sp("e1")).getType() == PieceType::KING));
     assert((!pp.getPiece(sp("e8")).isWhiteColor()));
     assert((pp.getPiece(sp("e8")).getType() == PieceType::KING));
+}
 
-    PiecePlaces pp2;
+void testPiecePlacesPlaceMoveRemove() {
+    PiecePlaces pp;
 
-    pp2.place(sp("d1"), Piece{PieceType::QUEEN, true});
-    pp2.place(sp("d8"), Piece{PieceType::QUEEN, false});
+    pp.place(sp("d1"), Piece{PieceType::QUEEN, true});
+    pp.place(sp("d8"), Piece{PieceType::QUEEN, false});
 
-    assert((pp2.getItems() == PiecePlaces::Items{
+    assert((pp.getItems() == PiecePlaces::Items{
         {sp("d1"), Piece{PieceType::QUEEN, true}},
         {sp("d8"), Piece{PieceType::QUEEN, false}},
     }));
 
-    pp2.move(sp("d1"), sp("d8"));
+    pp.move(sp("d1"), sp("d8"));
 
-    assert(pp2.contains(sp("d8")));
-    assert((pp2.getPiece(sp("d8")).isWhiteColor()));
-    assert(!pp2.contains(sp("d1")));
-    assert(pp2.getPiece(sp("d8")).getMovesCount() == 1);
+    assert(pp.contains(sp("d8")));
+    assert((pp.getPiece(sp("d8")).isWhiteColor()));
+    assert(!pp.contains(sp("d1")));
+    assert(pp.getPiece(sp("d8")).getMovesCount() == 1);
 
-    pp2.remove(sp("d8"));
-    assert(!pp2.contains(sp("d8")));
+    pp.remove(sp("d8"));
+    assert(!pp.contains(sp("d8")));
+}
+
+void testPiecePlacesGetKingPoint() {
+    PiecePlaces pp;
+
+    assert(pp.getKingPoint(PieceColor::WHITE).isUndefined());
+    assert(pp.getKingPoint(PieceColor::BLACK).isUndefined());
+
+    pp.place(sp("e1"), Piece{PieceType::KING, true});
+    pp.place(sp("e8"), Piece{PieceType::KING, false});
+
+    assert_points_are_equal(pp.getKingPoint(PieceColor::WHITE), sp("e1"));
+    assert_points_are_equal(pp.getKingPoint(PieceColor::BLACK), sp("e8"));
+
+    pp.move(sp("e1"), sp("e2"));
+    pp.move(sp("e8"), sp("e7"));
+
+    assert_points_are_equal(pp.getKingPoint(PieceColor::WHITE), sp("e2"));
+    assert_points_are_equal(pp.getKingPoint(PieceColor::BLACK), sp("e7"));
+
+    pp.remove(sp("e2"));
+    pp.remove(sp("e7"));
+
+    assert(pp.getKingPoint(PieceColor::WHITE).isUndefined());
+    assert(pp.getKingPoint(PieceColor::BLACK).isUndefined());
+}
+
+void testPiecePlaces() {
+    testPiecePlacesConstructor();
+    testPiecePlacesPlaceMoveRemove();
+    testPiecePlacesGetKingPoint();
 
     std::cout << "testPiecePlaces OK" << std::endl;
 };

@@ -1,6 +1,7 @@
 #include "handler.h"
 
-void Handler::_restrictKingActions(const Point& kingPoint) {
+void Handler::_restrictKingActions() {
+    const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
     const Actions& kingActions = _actionsPlaces.getActions(kingPoint);
 
     _eraseKingActions(ActionType::PLACE, ActionType::THREAT, kingPoint, kingActions);
@@ -23,7 +24,8 @@ void Handler::_eraseKingActions(
     _actionsPlaces.erasePoints(kingPoint, actionType, ActionRelation::TO, pointsToErase);
 }
 
-void Handler::_restrictBindedWithKingPiecesActions(const Point& kingPoint, const std::vector<Point>& bindedPoints) {
+void Handler::_restrictBindedWithKingPiecesActions(const std::vector<Point>& bindedPoints) {
+    const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
     for (const Point& point : bindedPoints) {
         const Actions& pieceActions = _actionsPlaces.getActions(point);
 

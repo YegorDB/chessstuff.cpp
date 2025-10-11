@@ -88,16 +88,6 @@ void Handler::_setActions() {
     _setBaseActions(bindedPoints);
     _setPawnJumpMoves();
     _setCastleActions();
-    const Point& kingPoint = _getActiveKingPoint();
-    _restrictKingActions(kingPoint);
-    _restrictBindedWithKingPiecesActions(kingPoint, bindedPoints);
+    _restrictKingActions();
+    _restrictBindedWithKingPiecesActions(bindedPoints);
 };
-
-const Point& Handler::_getActiveKingPoint() const {
-    for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
-        if (piece.isKing() && piece.hasColor(_state.activeColor)) {
-            return point;
-        }
-    }
-    throw std::runtime_error{"Missed active king."};
-}

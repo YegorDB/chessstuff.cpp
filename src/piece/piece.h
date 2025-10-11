@@ -76,17 +76,21 @@ public:
 class PiecePlaces {
 public:
     using Items = std::unordered_map<Point, Piece, PointHasher>;
+    using KingPoints = std::unordered_map<PieceColor, Point>;
 
     PiecePlaces();
     PiecePlaces(const Items& items);
 
     const Items& getItems() const;
     const Piece& getPiece(const Point& point) const;
+    const Point& getKingPoint(PieceColor color) const;
     bool contains(const Point& point) const;
     void place(const Point& point, const Piece& piece);
     void move(const Point& from, const Point& to);
     void remove(const Point& point);
 private:
     Items _items;
+    KingPoints _kingPoints;
     Piece _undefinedPiece;
+    Point _undefinedPoint;
 };
