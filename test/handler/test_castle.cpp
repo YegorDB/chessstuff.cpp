@@ -9,14 +9,14 @@ void testCastleMove() {
     Handler::Response response1 = handler1.move(sp("e1"), sp("g1"));
     assert(response1.isOk());
 
-    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 0 1");
+    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1");
 
     Handler handler2{FEN{"r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"}};
 
     Handler::Response response2 = handler2.move(sp("e1"), sp("c1"));
     assert(response2.isOk());
 
-    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3k2r/8/8/8/8/8/8/2KR3R b kq - 0 1");
+    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3k2r/8/8/8/8/8/8/2KR3R b kq - 1 1");
 
     Handler handler3{FEN{"r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1"}};
 
@@ -26,14 +26,14 @@ void testCastleMove() {
     Handler::Response response3 = handler3.move(sp("e8"), sp("g8"));
     assert(response3.isOk());
 
-    assert_strings_are_equal(FEN{handler3.getState()}.getRawString(), "r4rk1/8/8/8/8/8/8/R3K2R w KQ - 0 2");
+    assert_strings_are_equal(FEN{handler3.getState()}.getRawString(), "r4rk1/8/8/8/8/8/8/R3K2R w KQ - 1 2");
 
     Handler handler4{FEN{"r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1"}};
 
     Handler::Response response4 = handler4.move(sp("e8"), sp("c8"));
     assert(response4.isOk());
 
-    assert_strings_are_equal(FEN{handler4.getState()}.getRawString(), "2kr3r/8/8/8/8/8/8/R3K2R w KQ - 0 2");
+    assert_strings_are_equal(FEN{handler4.getState()}.getRawString(), "2kr3r/8/8/8/8/8/8/R3K2R w KQ - 1 2");
 }
 
 void testRestrictCastleMove() {
@@ -76,34 +76,34 @@ void testCastleDrop() {
     Handler::Response response1 = handler1.move(sp("e1"), sp("e2"));
     assert(response1.isOk());
 
-    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "r3k2r/8/8/8/8/8/4K3/R6R b kq - 0 1");
+    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "r3k2r/8/8/8/8/8/4K3/R6R b kq - 1 1");
 
     Handler::Response response2 = handler1.move(sp("e8"), sp("e7"));
     assert(response2.isOk());
 
-    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "r6r/4k3/8/8/8/8/4K3/R6R w - - 0 2");
+    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "r6r/4k3/8/8/8/8/4K3/R6R w - - 2 2");
 
     Handler handler2{FEN{"r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1"}};
 
     Handler::Response response3 = handler2.move(sp("h1"), sp("g1"));
     assert(response3.isOk());
 
-    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3k2r/8/8/8/8/8/8/R3K1R1 b Qkq - 0 1");
+    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3k2r/8/8/8/8/8/8/R3K1R1 b Qkq - 1 1");
 
     Handler::Response response4 = handler2.move(sp("h8"), sp("f8"));
     assert(response4.isOk());
 
-    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3kr2/8/8/8/8/8/8/R3K1R1 w Qq - 0 2");
+    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3kr2/8/8/8/8/8/8/R3K1R1 w Qq - 2 2");
 
     Handler::Response response5 = handler2.move(sp("a1"), sp("b1"));
     assert(response5.isOk());
 
-    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3kr2/8/8/8/8/8/8/1R2K1R1 b q - 0 2");
+    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "r3kr2/8/8/8/8/8/8/1R2K1R1 b q - 3 2");
 
     Handler::Response response6 = handler2.move(sp("a8"), sp("c8"));
     assert(response6.isOk());
 
-    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "2r1kr2/8/8/8/8/8/8/1R2K1R1 w - - 0 3");
+    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "2r1kr2/8/8/8/8/8/8/1R2K1R1 w - - 4 3");
 }
 
 void testCastle() {

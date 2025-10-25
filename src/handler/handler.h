@@ -38,7 +38,7 @@ private:
     State _state;
 
     void _initState(const FEN& fen);
-    void _endMove();
+    void _endMove(bool resetHalfMoveClock);
     void _setActions();
 
     void _setBaseActions(std::vector<Point>& bindedPoints);

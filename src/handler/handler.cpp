@@ -45,24 +45,31 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
         return Response{Response::Status::WRONG_DESTINATION};
     }
 
+    bool resetHalfMoveClock = piece.isPawn() || _state.piecePlaces.contains(to);
+
     _state.piecePlaces.move(from, to);
     _removeEnPassantPieceIfNeeded(from, to);
     _actionsPlaces.clearActions();
     _refreshEnPassantPoint(from, to);
     _handleCastleAfterMove(from, to);
     if (!_setPromotionPawnIfNeeded(to)) {
-        _endMove();
+        _endMove(resetHalfMoveClock);
     }
 
     return Response{Response::Status::OK};
 };
 
-void Handler::_endMove() {
+void Handler::_endMove(bool resetHalfMoveClock) {
     if (_state.activeColor == PieceColor::WHITE) {
         _state.activeColor = PieceColor::BLACK;
     } else if (_state.activeColor == PieceColor::BLACK) {
         _state.activeColor = PieceColor::WHITE;
         _state.movesCount++;
+    }
+    if (resetHalfMoveClock) {
+        _state.halfmoveClock = 0;
+    } else {
+        ++_state.halfmoveClock;
     }
     _setActions();
 };

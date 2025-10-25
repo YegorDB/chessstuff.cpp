@@ -12,7 +12,8 @@ Handler::Response Handler::promotePawn(PieceType pieceType) {
     _state.piecePlaces.place(_state.pawnPromotion, piece);
 
     _state.pawnPromotion = Point{};
-    _endMove();
+    bool resetHalfMoveClock = true;
+    _endMove(resetHalfMoveClock);
 
     return Response{Response::Status::OK};
 };
