@@ -2,34 +2,14 @@
 
 void Handler::_restrictKingActions() {
     const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
-    const Actions& kingActions = _actionsPlaces.getActions(kingPoint);
-
-    _eraseKingActions(ActionType::PLACE, ActionType::THREAT, kingPoint, kingActions);
-    _eraseKingActions(ActionType::THREAT, ActionType::SUPPORT, kingPoint, kingActions);
+    _eraseKingActions(ActionType::PLACE, ActionType::THREAT, kingPoint);
+    _eraseKingActions(ActionType::THREAT, ActionType::SUPPORT, kingPoint);
 };
-
-void Handler::_eraseKingActions(
-    ActionType actionType,
-    ActionType restrictActionType,
-    const Point& kingPoint,
-    const Actions& kingActions
-) {
-    PointSet pointsToErase;
-    for (const Point& p : kingActions.get(actionType).get(ActionRelation::TO)) {
-        const Actions& nextSquareActions = _actionsPlaces.getActions(p);
-        if (!nextSquareActions.get(restrictActionType).get(ActionRelation::BY).empty()) {
-            pointsToErase.insert(p);
-        }
-    }
-    _actionsPlaces.erasePoints(kingPoint, actionType, ActionRelation::TO, pointsToErase);
-}
 
 void Handler::_restrictBindedWithKingPiecesActions(const std::vector<Point>& bindedPoints) {
     const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
     for (const Point& point : bindedPoints) {
-        const Actions& pieceActions = _actionsPlaces.getActions(point);
-
-        const PointSet& bindByPoints = pieceActions.get(ActionType::BIND).get(ActionRelation::BY);
+        const PointSet& bindByPoints = _actionsPlaces.getActions(point).get(ActionType::BIND).get(ActionRelation::BY);
         if (bindByPoints.size() != 1) {
             throw std::runtime_error{"Wrong bind by points set size."};
         }
@@ -40,22 +20,61 @@ void Handler::_restrictBindedWithKingPiecesActions(const std::vector<Point>& bin
             awaliablePoints.insert(Point{p->x(), p->y()});
         }
 
-        _eraseBindedWithKingPiecesActions(ActionType::PLACE, point, pieceActions, awaliablePoints);
-        _eraseBindedWithKingPiecesActions(ActionType::THREAT, point, pieceActions, awaliablePoints);
+        for (ActionType actionType : {ActionType::PLACE, ActionType::THREAT}) {
+            _erasePieceActions(actionType, point, awaliablePoints);
+        }
     }
 };
 
-void Handler::_eraseBindedWithKingPiecesActions(
-    ActionType actionType,
-    const Point& point,
-    const Actions& pieceActions,
-    const PointSet& awaliablePoints
-) {
+void Handler::_restrictActionsOnKingCheck() {
+    const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
+    const PointSet& kingCheckers = _actionsPlaces.getActions(kingPoint).get(ActionType::THREAT).get(ActionRelation::BY);
+
+    if (kingCheckers.empty()) {
+        return;
+    }
+
+    PointSet awaliablePoints;
+    if (kingCheckers.size() == 1) {
+        const Point& checkerPoint = *(kingCheckers.begin());
+        const Piece& checker = _state.piecePlaces.getPiece(checkerPoint);
+        if (checker.isKnight() || checker.isPawn()) {
+            awaliablePoints.insert(checkerPoint);
+        } else {
+            for (Point* p : Board::pointsByTwoPoints(kingPoint, checkerPoint, false, true)) {
+                awaliablePoints.insert(Point{p->x(), p->y()});
+            }
+        }
+    }
+
+    for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
+        if (!piece.hasColor(_state.activeColor) || piece.isKing()) {
+            continue;
+        }
+
+        for (ActionType actionType : {ActionType::PLACE, ActionType::THREAT}) {
+            _erasePieceActions(actionType, point, awaliablePoints);
+        }
+    }
+};
+
+void Handler::_eraseKingActions(ActionType actionType, ActionType restrictActionType, const Point& kingPoint) {
     PointSet pointsToErase;
-    for (const Point& p : pieceActions.get(actionType).get(ActionRelation::TO)) {
+    for (const Point& p : _actionsPlaces.getActions(kingPoint).get(actionType).get(ActionRelation::TO)) {
+        const Actions& nextSquareActions = _actionsPlaces.getActions(p);
+        if (!nextSquareActions.get(restrictActionType).get(ActionRelation::BY).empty()) {
+            pointsToErase.insert(p);
+        }
+    }
+    _actionsPlaces.erasePoints(kingPoint, actionType, ActionRelation::TO, pointsToErase);
+}
+
+void Handler::_erasePieceActions(ActionType actionType, const Point& piecePoint, const PointSet& awaliablePoints) {
+    PointSet pointsToErase;
+    for (const Point& p : _actionsPlaces.getActions(piecePoint).get(actionType).get(ActionRelation::TO)) {
         if (!awaliablePoints.contains(p)) {
             pointsToErase.insert(p);
         }
     }
-    _actionsPlaces.erasePoints(point, actionType, ActionRelation::TO, pointsToErase);
+    _actionsPlaces.erasePoints(piecePoint, actionType, ActionRelation::TO, pointsToErase);
 };

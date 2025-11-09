@@ -97,4 +97,5 @@ void Handler::_setActions() {
     _setCastleActions();
     _restrictKingActions();
     _restrictBindedWithKingPiecesActions(bindedPoints);
+    _restrictActionsOnKingCheck();
 };

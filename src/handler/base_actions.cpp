@@ -26,24 +26,23 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
                     if (piece.isPawn() && piece.hasColor(_state.activeColor) && *nextPoint == _state.enPassant) {
                         _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
                     }
-
                     prevPoint = *nextPoint;
-                    continue;
-                }
-                if (!prevPointWithPiece.isUndefined()) {
-                    _actionsPlaces.setAction(ActionType::XRAY, point, *nextPoint);
-                    _bindPieceIfNeeded(point, prevPointWithPiece, *nextPoint, bindedPoints);
-                    _supportPieceAfterKingIfNeeded(point, prevPointWithPiece, *nextPoint);
-                    break;
-                }
-                const Piece& nextPiece = _state.piecePlaces.getPiece(*nextPoint);
-                if (piece.hasSameColor(nextPiece)) {
-                    _actionsPlaces.setAction(ActionType::SUPPORT, point, *nextPoint);
                 } else {
-                    _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
+                    if (!prevPointWithPiece.isUndefined()) {
+                        _actionsPlaces.setAction(ActionType::XRAY, point, *nextPoint);
+                        _bindPieceIfNeeded(point, prevPointWithPiece, *nextPoint, bindedPoints);
+                        _supportPieceAfterKingIfNeeded(point, prevPointWithPiece, *nextPoint);
+                        break;
+                    }
+                    const Piece& nextPiece = _state.piecePlaces.getPiece(*nextPoint);
+                    if (piece.hasSameColor(nextPiece)) {
+                        _actionsPlaces.setAction(ActionType::SUPPORT, point, *nextPoint);
+                    } else {
+                        _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
+                    }
+                    prevPoint = *nextPoint;
+                    prevPointWithPiece = *nextPoint;
                 }
-                prevPoint = *nextPoint;
-                prevPointWithPiece = *nextPoint;
             }
         }
     }

@@ -9,6 +9,7 @@ void testInitialActions();
 void testInitialPieces();
 void testKingRestrictions();
 void testBindedWithKingPiecesRestrictions();
+void testRestrictActionsOnKingCheck();
 void testMoveAndPawnPromotion();
 void testPawnJumpMove();
 void testPawnEnPassant();

@@ -5,6 +5,7 @@ void testHandler() {
     testInitialPieces();
     testKingRestrictions();
     testBindedWithKingPiecesRestrictions();
+    testRestrictActionsOnKingCheck();
     testMoveAndPawnPromotion();
     testPawnJumpMove();
     testPawnEnPassant();
