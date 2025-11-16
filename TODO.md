@@ -1,5 +1,5 @@
 # To do list
 
 - [ ] Add position validator
-- [ ] Add game result (checkmate, stalemate, 50 moves rule)
+- [ ] Add game result (checkmate, stalemate, threefold repetition, fifty-move rule, insufficient material)
 - [ ] Add moves history

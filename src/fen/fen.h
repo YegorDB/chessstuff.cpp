@@ -1,5 +1,7 @@
 #pragma once
 
+#include <format>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -21,6 +23,8 @@ private:
     void _parseRawSringHalfmoveClockPart();
     void _parseRawSringMovesCountPart();
     int _parseRawSringNumber(const std::string& number);
+    void _validateRowSquaresCount(int x, int y);
+    void _validateRowsCount(int y);
 
     void _stringifyPiecePlaces();
     void _stringifyAcivePieceColor();

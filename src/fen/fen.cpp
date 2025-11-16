@@ -1,5 +1,3 @@
-#include <stdexcept>
-
 #include "fen.h"
 
 const std::string FEN::INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
@@ -58,6 +56,7 @@ void FEN::_parseRawSringPiecesPlacesPart() {
     int x = 0, y = 0;
     for (char c : _rawStringParts[0]) {
         if (c == '/') {
+            _validateRowSquaresCount(x, y);
             x = 0;
             y++;
         } else if (c > 48 && c <= 57) {
@@ -72,6 +71,8 @@ void FEN::_parseRawSringPiecesPlacesPart() {
             x++;
         }
     }
+    _validateRowSquaresCount(x, y);
+    _validateRowsCount(y);
 };
 
 void FEN::_parseRawSringActiveColorPart() {
@@ -94,6 +95,8 @@ void FEN::_parseRawSringCastlesPart() {
             _state.castles[PieceColor::BLACK].kingSide = true;
         } else if (c == 'q') {
             _state.castles[PieceColor::BLACK].queenSide = true;
+        } else {
+            throw std::runtime_error{std::format("Wrong castle part symbol ({}).", c)};
         }
     }
 };
@@ -119,6 +122,18 @@ int FEN::_parseRawSringNumber(const std::string& number) {
         throw std::runtime_error{"Invalid number argument."};
     } catch(std::out_of_range) {
         throw std::runtime_error{"Number argument out of range."};
+    }
+};
+
+void FEN::_validateRowSquaresCount(int x, int y) {
+    if (x != 8) {
+        throw std::runtime_error{std::format("Wrong squares count ({}) in line {}.", x, y + 1)};
+    }
+};
+
+void FEN::_validateRowsCount(int y) {
+    if (y != 7) {
+        throw std::runtime_error{std::format("Wrong rows count ({}).", y + 1)};
     }
 };
 
