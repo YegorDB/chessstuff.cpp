@@ -14,3 +14,4 @@ void testMoveAndPawnPromotion();
 void testPawnJumpMove();
 void testPawnEnPassant();
 void testCastle();
+void testValidatePosition();

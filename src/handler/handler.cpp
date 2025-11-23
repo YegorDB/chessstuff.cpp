@@ -4,6 +4,7 @@ Handler::Handler(const FEN& fen) {
     _initState(fen);
     _actionsPlaces.clearActions();
     _setActions();
+    _validatePosition();
 };
 
 Handler::Handler() : Handler(FEN{FEN::INITIAL_POSITION}) {};
@@ -98,4 +99,5 @@ void Handler::_setActions() {
     _restrictKingActions();
     _restrictBindedWithKingPiecesActions(bindedPoints);
     _restrictActionsOnKingCheck();
+    // _validatePosition();
 };

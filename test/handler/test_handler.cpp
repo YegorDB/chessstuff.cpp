@@ -10,6 +10,7 @@ void testHandler() {
     testPawnJumpMove();
     testPawnEnPassant();
     testCastle();
+    testValidatePosition();
 
     std::cout << "testHandler OK" << std::endl;
 };

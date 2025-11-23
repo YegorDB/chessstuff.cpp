@@ -1,3 +1,4 @@
+#include <format>
 #include <stdexcept>
 
 #include "../action/action.h"
@@ -84,4 +85,10 @@ private:
     int _getFirstRankY() const;
     bool _isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const;
     bool _isRookOnQueenSideCastleSquare(const Point& point, bool isWhiteColor) const;
+
+    void _validatePosition() const;
+    void _validatePiecesCount() const;
+    void _validatePawnsPositions() const;
+    void _validateKingsThreats() const;
+    bool _isPawnOnFirstRow(const Point& point, bool isWhiteColor) const;
 };
