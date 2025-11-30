@@ -65,12 +65,7 @@ public:
     const Actions& getActions(const Point& point) const;
     void setAction(ActionType type, const Point& byPoint, const Point& toPoint);
     void clearActions();
-    void erasePoints(
-        const Point& point,
-        ActionType type,
-        ActionRelation relation,
-        const PointSet& pointsToErase
-    );
+    void erasePoints(const Point& byPoint, ActionType type, const PointSet& toPoints);
 private:
     Items _items;
 };

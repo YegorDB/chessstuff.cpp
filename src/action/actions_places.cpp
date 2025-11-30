@@ -30,13 +30,9 @@ void ActionsPlaces::clearActions() {
     }
 };
 
-void ActionsPlaces::erasePoints(
-    const Point& point,
-    ActionType type,
-    ActionRelation relation,
-    const PointSet& pointsToErase
-) {
-    for (const Point& pointToErase : pointsToErase) {
-        _items[point].erase(type, relation, pointToErase);
+void ActionsPlaces::erasePoints(const Point& byPoint, ActionType type, const PointSet& toPoints) {
+    for (const Point& toPoint : toPoints) {
+        _items[byPoint].erase(type, ActionRelation::TO, toPoint);
+        _items[toPoint].erase(type, ActionRelation::BY, byPoint);
     }
 };

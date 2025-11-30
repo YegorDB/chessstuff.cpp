@@ -66,7 +66,7 @@ void Handler::_eraseKingActions(ActionType actionType, ActionType restrictAction
             pointsToErase.insert(p);
         }
     }
-    _actionsPlaces.erasePoints(kingPoint, actionType, ActionRelation::TO, pointsToErase);
+    _actionsPlaces.erasePoints(kingPoint, actionType, pointsToErase);
 }
 
 void Handler::_erasePieceActions(ActionType actionType, const Point& piecePoint, const PointSet& awaliablePoints) {
@@ -76,5 +76,5 @@ void Handler::_erasePieceActions(ActionType actionType, const Point& piecePoint,
             pointsToErase.insert(p);
         }
     }
-    _actionsPlaces.erasePoints(piecePoint, actionType, ActionRelation::TO, pointsToErase);
+    _actionsPlaces.erasePoints(piecePoint, actionType, pointsToErase);
 };

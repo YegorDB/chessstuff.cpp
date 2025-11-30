@@ -5,6 +5,7 @@ Handler::Handler(const FEN& fen) {
     _actionsPlaces.clearActions();
     _setActions();
     _validatePosition();
+    _setResult();
 };
 
 Handler::Handler() : Handler(FEN{FEN::INITIAL_POSITION}) {};
@@ -22,6 +23,10 @@ const State& Handler::getState() {
 };
 
 Handler::Response Handler::move(const Point& from, const Point& to) {
+    if (_state.result.type != State::Result::Type::UNSET) {
+        return Response{Response::Status::RESULT_REACHED};
+    }
+
     const Piece& piece = _state.piecePlaces.getPiece(from);
 
     if (!from.isValid() || !to.isValid()) {
@@ -73,6 +78,7 @@ void Handler::_endMove(bool resetHalfMoveClock) {
         ++_state.halfmoveClock;
     }
     _setActions();
+    _setResult();
 };
 
 void Handler::_setActions() {

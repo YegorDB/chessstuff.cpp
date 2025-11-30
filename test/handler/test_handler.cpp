@@ -11,6 +11,7 @@ void testHandler() {
     testPawnEnPassant();
     testCastle();
     testValidatePosition();
+    testSetResult();
 
     std::cout << "testHandler OK" << std::endl;
 };

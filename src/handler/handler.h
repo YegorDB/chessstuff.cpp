@@ -17,6 +17,7 @@ public:
             WRONG_DESTINATION = 4,
             WRONG_PAWN_PROMOTION = 5,
             WRONG_PAWN_PROMOTION_PIECE_TYPE = 6,
+            RESULT_REACHED = 7,
         };
 
         const Status status;
@@ -91,4 +92,7 @@ private:
     void _validatePawnsPositions() const;
     void _validateKingsThreats() const;
     bool _isPawnOnFirstRow(const Point& point, bool isWhiteColor) const;
+
+    void _setResult();
+    bool _checkIsCheckmate() const;
 };
