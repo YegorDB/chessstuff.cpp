@@ -21,21 +21,21 @@ void testMove() {
     assert(!response1_6.isOk());
     assert(response1_6.status == Handler::Response::Status::WRONG_DESTINATION);
 
-    Handler handler2{FEN{"4k3/8/8/8/8/8/8/4K3 w - - 0 0"}};
+    Handler handler2{FEN{"4k3/8/p7/8/8/7P/8/4K3 w - - 0 0"}};
     Handler::Response response2_1 = handler2.move(Point{4, 7}, Point{4, 6});
     assert(response2_1.isOk());
-    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "4k3/8/8/8/8/8/4K3/8 b - - 1 0");
+    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "4k3/8/p7/8/8/7P/4K3/8 b - - 1 0");
     Handler::Response response2_2 = handler2.move(Point{4, 0}, Point{4, 1});
     assert(response2_2.isOk());
-    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "8/4k3/8/8/8/8/4K3/8 w - - 2 1");
+    assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "8/4k3/p7/8/8/7P/4K3/8 w - - 2 1");
 
-    Handler handler3{FEN{"4kN2/8/8/8/8/8/8/4Kn2 w - - 0 0"}};
+    Handler handler3{FEN{"4kN2/8/p7/8/8/7P/8/4Kn2 w - - 0 0"}};
     Handler::Response response3_1 = handler3.move(Point{4, 7}, Point{5, 7});
     assert(response3_1.isOk());
-    assert_strings_are_equal(FEN{handler3.getState()}.getRawString(), "4kN2/8/8/8/8/8/8/5K2 b - - 0 0");
+    assert_strings_are_equal(FEN{handler3.getState()}.getRawString(), "4kN2/8/p7/8/8/7P/8/5K2 b - - 0 0");
     Handler::Response response3_2 = handler3.move(Point{4, 0}, Point{5, 0});
     assert(response3_2.isOk());
-    assert_strings_are_equal(FEN{handler3.getState()}.getRawString(), "5k2/8/8/8/8/8/8/5K2 w - - 0 1");
+    assert_strings_are_equal(FEN{handler3.getState()}.getRawString(), "5k2/8/p7/8/8/7P/8/5K2 w - - 0 1");
 }
 
 void testPawnPromotion() {

@@ -95,4 +95,7 @@ private:
 
     void _setResult();
     bool _checkIsCheckmate() const;
+    bool _checkIsStalemate() const;
+    bool _checkIsFiftyMoveRule() const;
+    bool _checkIsInsufficientMaterial() const;
 };

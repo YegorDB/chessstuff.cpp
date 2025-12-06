@@ -15,8 +15,16 @@ struct State {
             DRAW = 1,
             CHECKMATE = 2
         };
+        enum class DrawType {
+            UNSET = 0,
+            STALEMATE = 1,
+            INSUFFICIENT_MATERIAL = 2,
+            THREEFOLD_REPETITION = 3,
+            FIFTY_MOVE_RULE = 4
+        };
         Type type = Type::UNSET;
         PieceColor winnerColor = PieceColor::UNSET;
+        DrawType drawType = DrawType::UNSET;
     };
     using Castles = std::unordered_map<PieceColor, CastleSides>;
 
