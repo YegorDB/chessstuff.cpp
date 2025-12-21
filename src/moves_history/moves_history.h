@@ -28,9 +28,9 @@ public:
         Point to,
         Type type,
         bool isAmbiguate,
-        int checkersCount = 0,
-        bool isCheckMate = false,
-        PieceType promotionType = PieceType::UNSET
+        int checkersCount,
+        bool isCheckMate,
+        PieceType promotionType
     );
 
     PieceType pieceType;

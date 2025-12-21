@@ -18,15 +18,7 @@ Move::Move(
     int checkersCount,
     bool isCheckMate,
     PieceType promotionType
-) {
-    pieceType = pieceType;
-    from = from;
-    to = to;
-    type = type;
-    isAmbiguate = isAmbiguate;
-    checkersCount = checkersCount;
-    isCheckMate = isCheckMate;
-    promotionType = promotionType;
+) : pieceType(pieceType), from(from), to(to), type(type), isAmbiguate(isAmbiguate), checkersCount(checkersCount), isCheckMate(isCheckMate), promotionType(promotionType) {
     _buidStringValue();
 };
 
@@ -39,14 +31,14 @@ void Move::_buidStringValue() {
         _stringValue = PIECE_TYPES_TO_SYMBOLS.at(pieceType);
 
         if (isAmbiguate) {
-            _stringValue += Square{from}.toString();
+            _stringValue += Square{from}.getName();
         }
 
         if (type == Type::TAKE) {
             _stringValue.push_back('x');
         }
 
-        _stringValue += Square{to}.toString();
+        _stringValue += Square{to}.getName();
 
         if (type == Type::PAWN_PROMOTION) {
             _stringValue.push_back('=');

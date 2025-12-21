@@ -9,6 +9,7 @@
 #include "piece_places/test_piece_places.h"
 #include "point/test_point.h"
 #include "square/test_square.h"
+#include "moves_history/test_moves_history.h"
 
 int main() {
     testAction();
@@ -20,6 +21,7 @@ int main() {
     testPiecePlaces();
     testPoint();
     testSquare();
+    testMovesHistory();
 
     std::cout << "OK" << std::endl;
 }
