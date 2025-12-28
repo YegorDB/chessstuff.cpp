@@ -56,7 +56,7 @@ void Move::_buidStringValue() {
 
         if (type == Type::TAKE) {
             if (pieceType == PieceType::PAWN) {
-                _stringValue.push_back(Square{from}.getName().at(0));
+                _stringValue.push_back(Square{from}.getFile());
             }
             _stringValue.push_back('x');
         }

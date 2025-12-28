@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 #include "../piece/piece.h"
@@ -43,4 +44,18 @@ public:
     PointSet otherCandidates;
 
     const std::string toString() const;
+};
+
+class MovesHistory {
+public:
+    struct Item {
+        const Move move;
+        std::vector<int> nextMoveIndexes;
+    };
+
+    void addMove(Move&& move);
+    std::string toString() const;
+
+private:
+    std::vector<Item> _items;
 };
