@@ -8,8 +8,8 @@
 
 class Square {
 private:
-    static const std::string COLUMN_SIGNS;
-    static const std::string ROW_SIGNS;
+    static const std::string FILE_SIGNS;
+    static const std::string RANK_SIGNS;
     static const std::vector<std::string> COLOR_NAMES;
 
     std::string _name;
@@ -25,6 +25,8 @@ public:
     Square(const std::string& name);
 
     const std::string& getName() const;
+    const char getFile() const;
+    const char getRank() const;
     const std::string& getColorName() const;
     const std::string toString() const;
 };

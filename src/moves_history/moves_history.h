@@ -27,20 +27,20 @@ public:
         Point from,
         Point to,
         Type type,
-        bool isAmbiguate,
         int checkersCount,
         bool isCheckMate,
-        PieceType promotionType
+        PieceType promotionType,
+        PointSet otherCandidates
     );
 
     PieceType pieceType;
     Point from;
     Point to;
     Type type;
-    bool isAmbiguate;
     int checkersCount;
     bool isCheckMate;
     PieceType promotionType;
+    PointSet otherCandidates;
 
     const std::string toString() const;
 };

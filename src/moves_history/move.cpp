@@ -14,11 +14,11 @@ Move::Move(
     Point from,
     Point to,
     Type type,
-    bool isAmbiguate,
     int checkersCount,
     bool isCheckMate,
-    PieceType promotionType
-) : pieceType(pieceType), from(from), to(to), type(type), isAmbiguate(isAmbiguate), checkersCount(checkersCount), isCheckMate(isCheckMate), promotionType(promotionType) {
+    PieceType promotionType,
+    PointSet otherCandidates
+) : pieceType(pieceType), from(from), to(to), type(type), checkersCount(checkersCount), isCheckMate(isCheckMate), promotionType(promotionType), otherCandidates(otherCandidates) {
     _buidStringValue();
 };
 
@@ -30,11 +30,34 @@ void Move::_buidStringValue() {
     } else {
         _stringValue = PIECE_TYPES_TO_SYMBOLS.at(pieceType);
 
-        if (isAmbiguate) {
-            _stringValue += Square{from}.getName();
+        if (!otherCandidates.empty() && pieceType != PieceType::PAWN) {
+            bool hasSameFile = false;
+            bool hasSameRank = false;
+            for (Point p : otherCandidates) {
+                if (from.x() == p.x()) {
+                    hasSameFile = true;
+                }
+                if (from.y() == p.y()) {
+                    hasSameRank = true;
+                }
+            }
+
+            Square s{from};
+            if (!hasSameFile && !hasSameRank) {
+                _stringValue += s.getName();
+            }
+            if (hasSameRank) {
+                _stringValue.push_back(s.getFile());
+            }
+            if (hasSameFile) {
+                _stringValue.push_back(s.getRank());
+            }
         }
 
         if (type == Type::TAKE) {
+            if (pieceType == PieceType::PAWN) {
+                _stringValue.push_back(Square{from}.getName().at(0));
+            }
             _stringValue.push_back('x');
         }
 

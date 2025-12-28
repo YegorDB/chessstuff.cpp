@@ -2,8 +2,8 @@
 
 #include "square.h"
 
-const std::string Square::COLUMN_SIGNS{"abcdefgh"};
-const std::string Square::ROW_SIGNS{"012345678"};
+const std::string Square::FILE_SIGNS{"abcdefgh"};
+const std::string Square::RANK_SIGNS{"012345678"};
 const std::vector<std::string> Square::COLOR_NAMES{"light", "dark"};
 
 Point Square::nameToPoint(const std::string& name) {
@@ -14,7 +14,7 @@ Point Square::nameToPoint(const std::string& name) {
 };
 
 Square::Square(const Point& p) : point(p), isLightColor(p.x() % 2 == p.y() % 2) {
-    _name = {COLUMN_SIGNS[p.x()], ROW_SIGNS[8 - p.y()]};
+    _name = {getFile(), getRank()};
 };
 
 Square::Square(int x, int y) : Square(Point{x, y}) {};
@@ -23,6 +23,14 @@ Square::Square(const std::string& name) : Square(nameToPoint(name)) {};
 
 const std::string& Square::getName() const {
     return _name;
+};
+
+const char Square::getFile() const {
+    return FILE_SIGNS.at(point.x());
+};
+
+const char Square::getRank() const {
+    return RANK_SIGNS.at(8 - point.y());
 };
 
 const std::string& Square::getColorName() const {
