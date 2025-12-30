@@ -1,6 +1,6 @@
-#include "moves_history.h"
+#include "history.h"
 
-const std::unordered_map<PieceType, std::string> Move::PIECE_TYPES_TO_SYMBOLS = {
+const std::unordered_map<PieceType, std::string> HistoryMove::PIECE_TYPES_TO_SYMBOLS = {
     {PieceType::KING, "K"},
     {PieceType::QUEEN, "Q"},
     {PieceType::ROOK, "R"},
@@ -9,7 +9,7 @@ const std::unordered_map<PieceType, std::string> Move::PIECE_TYPES_TO_SYMBOLS = 
     {PieceType::PAWN, ""},
 };
 
-Move::Move(
+HistoryMove::HistoryMove(
     PieceType pieceType,
     Point from,
     Point to,
@@ -22,7 +22,7 @@ Move::Move(
     _buidStringValue();
 };
 
-void Move::_buidStringValue() {
+void HistoryMove::_buidStringValue() {
     if (type == Type::KING_SIDE_CASTLE) {
         _stringValue = "0-0";
     } else if (type == Type::QUEEN_SIDE_CASTLE) {
@@ -78,6 +78,6 @@ void Move::_buidStringValue() {
     }
 }
 
-const std::string Move::toString() const {
+const std::string HistoryMove::toString() const {
     return _stringValue;
 };

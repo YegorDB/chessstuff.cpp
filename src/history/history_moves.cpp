@@ -1,13 +1,13 @@
-#include "moves_history.h"
+#include "history.h"
 
-void MovesHistory::addMove(Move&& move) {
+void HistoryMoves::addMove(HistoryMove&& move) {
     _items.push_back(Item{move});
     if (_items.size() > 1) {
         _items[_items.size() - 2].nextMoveIndexes.push_back(_items.size() - 1);
     }
 }
 
-std::string MovesHistory::toString() const {
+std::string HistoryMoves::toString() const {
     std::string _stringValue;
     if (_items.size() > 0) {
         int index = 0;

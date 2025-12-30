@@ -6,7 +6,7 @@
 
 #include "../piece/piece.h"
 
-class Move {
+class HistoryMove {
 private:
     std::string _stringValue;
 
@@ -23,7 +23,7 @@ public:
         QUEEN_SIDE_CASTLE = 4,
     };
 
-    Move(
+    HistoryMove(
         PieceType pieceType,
         Point from,
         Point to,
@@ -46,14 +46,14 @@ public:
     const std::string toString() const;
 };
 
-class MovesHistory {
+class HistoryMoves {
 public:
     struct Item {
-        const Move move;
+        const HistoryMove move;
         std::vector<int> nextMoveIndexes;
     };
 
-    void addMove(Move&& move);
+    void addMove(HistoryMove&& move);
     std::string toString() const;
 
 private:

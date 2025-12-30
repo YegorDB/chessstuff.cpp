@@ -1,8 +1,9 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../src/moves_history/moves_history.h"
+#include "../../src/history/history.h"
 #include "../utils.h"
 
-void testMovesHistory();
+void testHistory();
 void testHistoryMove();
+void testHistoryMoves();
