@@ -1,6 +1,9 @@
 #pragma once
 
+#include <queue>
+#include <stdexcept>
 #include <string>
+#include <tuple>
 #include <vector>
 #include <unordered_map>
 
@@ -49,13 +52,23 @@ public:
 class HistoryMoves {
 public:
     struct Item {
-        const HistoryMove move;
-        std::vector<int> nextMoveIndexes;
+        const HistoryMove historyMove;
+        // First next index of main line item is the next main line item index.
+        std::vector<int> nextIndexes;
     };
 
-    void addMove(HistoryMove&& move);
-    std::string toString() const;
+    struct StringBuilderItem {
+        int currentIndex;
+        int counter;
+        std::string stringValue;
+    };
+
+    void addMainLineMove(HistoryMove&& historyMove);
+    void addSideLineMove(HistoryMove&& historyMove, int prevItemIndex);
+    std::string toString(bool withSideLines = false) const;
+    const std::vector<Item>& getItems() const;
 
 private:
     std::vector<Item> _items;
+    int _latestMainLineIndex = -1;
 };
