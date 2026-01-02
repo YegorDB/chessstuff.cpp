@@ -4,6 +4,7 @@
 #include "../action/action.h"
 #include "../board/board.h"
 #include "../fen/fen.h"
+#include "../history/history.h"
 
 class Handler {
 public:
@@ -32,12 +33,15 @@ public:
 
     const ActionsPlaces& getActionsPlaces();
     const State& getState();
+    const HistoryMoves& getHistoryMoves();
     Response move(const Point& from, const Point& to);
     Response promotePawn(PieceType pieceType);
 
 private:
     ActionsPlaces _actionsPlaces;
     State _state;
+    HistoryMoves _historyMoves;
+    HistoryMove _currentHistoryMove;
 
     void _initState(const FEN& fen);
     void _endMove(bool resetHalfMoveClock);
@@ -98,4 +102,6 @@ private:
     bool _checkIsStalemate() const;
     bool _checkIsFiftyMoveRule() const;
     bool _checkIsInsufficientMaterial() const;
+
+    void _setCurrentHistoryMove(const Piece& piece, const Point& from, const Point& to);
 };

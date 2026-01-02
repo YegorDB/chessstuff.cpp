@@ -64,6 +64,7 @@ public:
     bool isWhiteColor() const;
     bool hasColor(PieceColor color) const;
     bool hasSameColor(const Piece& other) const;
+    bool hasSameType(const Piece& other) const;
     bool isKing() const;
     bool isQueen() const;
     bool isRook() const;

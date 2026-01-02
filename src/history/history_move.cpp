@@ -9,6 +9,8 @@ const std::unordered_map<PieceType, std::string> HistoryMove::PIECE_TYPES_TO_SYM
     {PieceType::PAWN, ""},
 };
 
+HistoryMove::HistoryMove() {};
+
 HistoryMove::HistoryMove(
     PieceType pieceType,
     Point from,
@@ -20,6 +22,17 @@ HistoryMove::HistoryMove(
     PointSet otherCandidates
 ) : pieceType(pieceType), from(from), to(to), type(type), checkersCount(checkersCount), isCheckMate(isCheckMate), promotionType(promotionType), otherCandidates(otherCandidates) {
     _buidStringValue();
+};
+
+void HistoryMove::operator=(const HistoryMove& other) {
+    pieceType = other.pieceType;
+    from = other.from;
+    to = other.to;
+    type = other.type;
+    checkersCount = other.checkersCount;
+    isCheckMate = other.isCheckMate;
+    promotionType = other.promotionType;
+    otherCandidates = other.otherCandidates;
 };
 
 void HistoryMove::_buidStringValue() {

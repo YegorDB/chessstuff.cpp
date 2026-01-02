@@ -30,6 +30,8 @@ void Handler::_restrictActionsOnKingCheck() {
     const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
     const PointSet& kingCheckers = _actionsPlaces.getActions(kingPoint).get(ActionType::THREAT).get(ActionRelation::BY);
 
+    _currentHistoryMove.checkersCount = kingCheckers.size();
+
     if (kingCheckers.empty()) {
         return;
     }

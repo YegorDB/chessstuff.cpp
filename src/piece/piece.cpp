@@ -243,6 +243,10 @@ bool Piece::hasSameColor(const Piece& other) const {
     return _color == other._color;
 };
 
+bool Piece::hasSameType(const Piece& other) const {
+    return _type == other._type;
+};
+
 bool Piece::isKing() const {
     return _type == PieceType::KING;
 };

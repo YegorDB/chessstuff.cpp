@@ -26,6 +26,7 @@ public:
         QUEEN_SIDE_CASTLE = 4,
     };
 
+    HistoryMove();
     HistoryMove(
         PieceType pieceType,
         Point from,
@@ -46,6 +47,7 @@ public:
     PieceType promotionType;
     PointSet otherCandidates;
 
+    void operator=(const HistoryMove& other);
     const std::string toString() const;
 };
 
@@ -62,6 +64,8 @@ public:
         int counter;
         std::string stringValue;
     };
+
+    HistoryMoves();
 
     void addMainLineMove(HistoryMove&& historyMove);
     void addSideLineMove(HistoryMove&& historyMove, int prevItemIndex);

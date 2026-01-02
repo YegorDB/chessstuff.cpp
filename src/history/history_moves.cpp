@@ -1,5 +1,7 @@
 #include "history.h"
 
+HistoryMoves::HistoryMoves() {};
+
 void HistoryMoves::addMainLineMove(HistoryMove&& historyMove) {
     int currentIndex = _items.size();
     /**

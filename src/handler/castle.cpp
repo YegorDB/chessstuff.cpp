@@ -106,6 +106,7 @@ void Handler::_handleCastleAfterKingMoveAdditionals(const Point& from, const Poi
 
     if (from == kingInitialPoint && to == kingCastlePoint) {
         _castleRook(isKingSide);
+        _currentHistoryMove.type = isKingSide ? HistoryMove::Type::KING_SIDE_CASTLE : HistoryMove::Type::QUEEN_SIDE_CASTLE;
     }
 };
 

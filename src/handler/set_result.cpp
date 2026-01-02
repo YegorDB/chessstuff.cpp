@@ -5,6 +5,7 @@ void Handler::_setResult() {
     if (_checkIsCheckmate()) {
         result.type = State::Result::Type::CHECKMATE;
         result.winnerColor = _state.activeColor == PieceColor::WHITE ? PieceColor::BLACK : PieceColor::WHITE;
+        _currentHistoryMove.isCheckMate = true;
     } else if (_checkIsStalemate()) {
         result.type = State::Result::Type::DRAW;
         result.drawType = State::Result::DrawType::STALEMATE;

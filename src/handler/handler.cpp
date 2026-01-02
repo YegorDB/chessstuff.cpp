@@ -22,6 +22,10 @@ const State& Handler::getState() {
     return _state;
 };
 
+const HistoryMoves& Handler::getHistoryMoves() {
+    return _historyMoves;
+};
+
 Handler::Response Handler::move(const Point& from, const Point& to) {
     if (_state.result.type != State::Result::Type::UNSET) {
         return Response{Response::Status::RESULT_REACHED};
@@ -55,6 +59,7 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
 
     _state.piecePlaces.move(from, to);
     _removeEnPassantPieceIfNeeded(from, to);
+    _setCurrentHistoryMove(piece, from, to);
     _actionsPlaces.clearActions();
     _refreshEnPassantPoint(from, to);
     _handleCastleAfterMove(from, to);
@@ -79,6 +84,7 @@ void Handler::_endMove(bool resetHalfMoveClock) {
     }
     _setActions();
     _setResult();
+    _historyMoves.addMainLineMove(std::move(_currentHistoryMove));
 };
 
 void Handler::_setActions() {
