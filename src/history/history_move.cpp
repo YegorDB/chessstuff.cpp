@@ -20,9 +20,7 @@ HistoryMove::HistoryMove(
     bool isCheckMate,
     PieceType promotionType,
     PointSet otherCandidates
-) : pieceType(pieceType), from(from), to(to), type(type), checkersCount(checkersCount), isCheckMate(isCheckMate), promotionType(promotionType), otherCandidates(otherCandidates) {
-    _buidStringValue();
-};
+) : pieceType(pieceType), from(from), to(to), type(type), checkersCount(checkersCount), isCheckMate(isCheckMate), promotionType(promotionType), otherCandidates(otherCandidates) {};
 
 void HistoryMove::operator=(const HistoryMove& other) {
     pieceType = other.pieceType;
@@ -35,13 +33,15 @@ void HistoryMove::operator=(const HistoryMove& other) {
     otherCandidates = other.otherCandidates;
 };
 
-void HistoryMove::_buidStringValue() {
+std::string HistoryMove::toString() const {
+    std::string stringValue;
+
     if (type == Type::KING_SIDE_CASTLE) {
-        _stringValue = "0-0";
+        stringValue = "0-0";
     } else if (type == Type::QUEEN_SIDE_CASTLE) {
-        _stringValue = "0-0-0";
+        stringValue = "0-0-0";
     } else {
-        _stringValue = PIECE_TYPES_TO_SYMBOLS.at(pieceType);
+        stringValue = PIECE_TYPES_TO_SYMBOLS.at(pieceType);
 
         if (!otherCandidates.empty() && pieceType != PieceType::PAWN) {
             bool hasSameFile = false;
@@ -57,40 +57,38 @@ void HistoryMove::_buidStringValue() {
 
             Square s{from};
             if (!hasSameFile && !hasSameRank) {
-                _stringValue += s.getName();
+                stringValue += s.getName();
             }
             if (hasSameRank) {
-                _stringValue.push_back(s.getFile());
+                stringValue.push_back(s.getFile());
             }
             if (hasSameFile) {
-                _stringValue.push_back(s.getRank());
+                stringValue.push_back(s.getRank());
             }
         }
 
         if (type == Type::TAKE) {
             if (pieceType == PieceType::PAWN) {
-                _stringValue.push_back(Square{from}.getFile());
+                stringValue.push_back(Square{from}.getFile());
             }
-            _stringValue.push_back('x');
+            stringValue.push_back('x');
         }
 
-        _stringValue += Square{to}.getName();
+        stringValue += Square{to}.getName();
 
         if (type == Type::PAWN_PROMOTION) {
-            _stringValue.push_back('=');
-            _stringValue += PIECE_TYPES_TO_SYMBOLS.at(promotionType);
+            stringValue.push_back('=');
+            stringValue += PIECE_TYPES_TO_SYMBOLS.at(promotionType);
         }
     }
 
     if (isCheckMate) {
-        _stringValue.push_back('#');
+        stringValue.push_back('#');
     } else if (checkersCount > 0) {
         for (int i = 0; i < checkersCount; i++) {
-            _stringValue.push_back('+');
+            stringValue.push_back('+');
         }
     }
-}
 
-const std::string HistoryMove::toString() const {
-    return _stringValue;
+    return stringValue;
 };

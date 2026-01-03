@@ -12,6 +12,7 @@ void testHandler() {
     testCastle();
     testValidatePosition();
     testSetResult();
+    testHandlerHistoryMoves();
 
     std::cout << "testHandler OK" << std::endl;
 };

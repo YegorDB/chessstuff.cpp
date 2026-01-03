@@ -1,7 +1,7 @@
 #include "handler.h"
 
 void Handler::_setCastleActions() {
-    if (!_state.castles[_state.activeColor].kingSide || !_state.castles[_state.activeColor].queenSide) {
+    if (!_state.castles[_state.activeColor].kingSide && !_state.castles[_state.activeColor].queenSide) {
         return;
     }
 

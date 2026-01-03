@@ -57,9 +57,9 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
 
     bool resetHalfMoveClock = piece.isPawn() || _state.piecePlaces.contains(to);
 
+    _setCurrentHistoryMove(piece, from, to);
     _state.piecePlaces.move(from, to);
     _removeEnPassantPieceIfNeeded(from, to);
-    _setCurrentHistoryMove(piece, from, to);
     _actionsPlaces.clearActions();
     _refreshEnPassantPoint(from, to);
     _handleCastleAfterMove(from, to);

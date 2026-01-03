@@ -10,11 +10,6 @@
 #include "../piece/piece.h"
 
 class HistoryMove {
-private:
-    std::string _stringValue;
-
-    void _buidStringValue();
-
 public:
     static const std::unordered_map<PieceType, std::string> PIECE_TYPES_TO_SYMBOLS;
 
@@ -48,7 +43,7 @@ public:
     PointSet otherCandidates;
 
     void operator=(const HistoryMove& other);
-    const std::string toString() const;
+    std::string toString() const;
 };
 
 class HistoryMoves {

@@ -106,8 +106,21 @@ void testCastleDrop() {
     assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "2r1kr2/8/8/8/8/8/8/1R2K1R1 w - - 4 3");
 }
 
+void testCastleOneSide() {
+    Handler handler1{FEN{"4k2r/8/8/8/8/8/8/R3K3 w Qk - 0 1"}};
+
+    Handler::Response response1 = handler1.move(sp("e1"), sp("c1"));
+    assert(response1.isOk());
+    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "4k2r/8/8/8/8/8/8/2KR4 b k - 1 1");
+
+    Handler::Response response2 = handler1.move(sp("e8"), sp("g8"));
+    assert(response2.isOk());
+    assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "5rk1/8/8/8/8/8/8/2KR4 w - - 2 2");
+}
+
 void testCastle() {
     testCastleMove();
     testRestrictCastleMove();
     testCastleDrop();
+    testCastleOneSide();
 }
