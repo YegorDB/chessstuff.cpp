@@ -38,5 +38,6 @@ public:
     FEN(const State& state);
 
     const std::string& getRawString() const;
+    const std::vector<std::string>& getRawStringParts() const;
     const State& getState() const;
 };

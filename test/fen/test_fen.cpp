@@ -3,6 +3,8 @@
 void testFenStringToState() {
     FEN fen{"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 10 15"};
 
+    assert(fen.getRawStringParts() == (std::vector<std::string>{"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "w", "KQkq", "e3", "10", "15"}));
+
     State s = fen.getState();
 
     for (bool isWhiteColor : {true, false}) {
@@ -47,6 +49,8 @@ void testFenStringToState() {
 
 void testFenStringToStateTwoKings() {
     FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0 0"};
+
+    assert(fen.getRawStringParts() == (std::vector<std::string>{"4k3/8/8/8/8/8/8/4K3", "b", "-", "-", "0", "0"}));
 
     State s = fen.getState();
 
@@ -130,6 +134,7 @@ void testStateToFenString() {
     FEN fen{s};
 
     assert(fen.getRawString() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 10 15");
+    assert(fen.getRawStringParts() == (std::vector<std::string>{"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "w", "KQkq", "e3", "10", "15"}));
 }
 
 void testStateToFenStringTwoKings() {
@@ -153,6 +158,7 @@ void testStateToFenStringTwoKings() {
     FEN fen{s};
 
     assert(fen.getRawString() == "4k3/8/8/8/8/8/8/4K3 b - - 0 0");
+    assert(fen.getRawStringParts() == (std::vector<std::string>{"4k3/8/8/8/8/8/8/4K3", "b", "-", "-", "0", "0"}));
 }
 
 void testFen() {

@@ -209,6 +209,10 @@ const std::string& FEN::getRawString() const {
     return _rawString;
 };
 
+const std::vector<std::string>& FEN::getRawStringParts() const {
+    return _rawStringParts;
+};
+
 const State& FEN::getState() const {
     return _state;
 };

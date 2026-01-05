@@ -15,6 +15,9 @@ void Handler::_setResult() {
     } else if (_checkIsFiftyMoveRule()) {
         result.type = State::Result::Type::DRAW;
         result.drawType = State::Result::DrawType::FIFTY_MOVE_RULE;
+    } else if (_checkIsThreefoldRepetition()) {
+        result.type = State::Result::Type::DRAW;
+        result.drawType = State::Result::DrawType::THREEFOLD_REPETITION;
     }
 
     if (result.type != State::Result::Type::UNSET) {
@@ -108,4 +111,8 @@ bool Handler::_checkIsInsufficientMaterial() const {
 
 bool Handler::_checkIsFiftyMoveRule() const {
     return _state.halfmoveClock >= 100;
+};
+
+bool Handler::_checkIsThreefoldRepetition() const {
+    return _maxPositionCount > 2;
 };

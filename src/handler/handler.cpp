@@ -5,6 +5,7 @@ Handler::Handler(const FEN& fen) {
     _actionsPlaces.clearActions();
     _setActions();
     _validatePosition();
+    _countPosition();
     _setResult();
 };
 
@@ -14,16 +15,20 @@ void Handler::_initState(const FEN& fen) {
     _state = fen.getState();
 };
 
-const ActionsPlaces& Handler::getActionsPlaces() {
+const ActionsPlaces& Handler::getActionsPlaces() const {
     return _actionsPlaces;
 };
 
-const State& Handler::getState() {
+const State& Handler::getState() const {
     return _state;
 };
 
-const HistoryMoves& Handler::getHistoryMoves() {
+const HistoryMoves& Handler::getHistoryMoves() const {
     return _historyMoves;
+};
+
+const Handler::PositionCounts& Handler::getPositionCounts() const {
+    return _positionCounts;
 };
 
 Handler::Response Handler::move(const Point& from, const Point& to) {
@@ -83,6 +88,7 @@ void Handler::_endMove(bool resetHalfMoveClock) {
         ++_state.halfmoveClock;
     }
     _setActions();
+    _countPosition();
     _setResult();
     _historyMoves.addMainLineMove(std::move(_currentHistoryMove));
 };

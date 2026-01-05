@@ -8,6 +8,8 @@
 
 class Handler {
 public:
+    using PositionCounts = std::unordered_map<std::string, int>;
+
     class Response {
     public:
         enum class Status {
@@ -31,9 +33,10 @@ public:
     Handler(const FEN& fen);
     Handler();
 
-    const ActionsPlaces& getActionsPlaces();
-    const State& getState();
-    const HistoryMoves& getHistoryMoves();
+    const ActionsPlaces& getActionsPlaces() const;
+    const State& getState() const;
+    const HistoryMoves& getHistoryMoves() const;
+    const PositionCounts& getPositionCounts() const;
     Response move(const Point& from, const Point& to);
     Response promotePawn(PieceType pieceType);
 
@@ -42,6 +45,8 @@ private:
     State _state;
     HistoryMoves _historyMoves;
     HistoryMove _currentHistoryMove;
+    PositionCounts _positionCounts;
+    int _maxPositionCount = 0;
 
     void _initState(const FEN& fen);
     void _endMove(bool resetHalfMoveClock);
@@ -102,6 +107,9 @@ private:
     bool _checkIsStalemate() const;
     bool _checkIsFiftyMoveRule() const;
     bool _checkIsInsufficientMaterial() const;
+    bool _checkIsThreefoldRepetition() const;
 
     void _setCurrentHistoryMove(const Piece& piece, const Point& from, const Point& to);
+
+    void _countPosition();
 };
