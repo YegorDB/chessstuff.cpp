@@ -140,9 +140,55 @@ void testCheckIsFiftyMoveRule() {
     assert(response2.status == Handler::Response::Status::RESULT_REACHED);
 }
 
+void testCheckIsThreefoldRepetition() {
+    Handler handler{FEN{"3qk3/8/8/8/8/8/8/3QK3 w - - 0 1"}};
+
+    Handler::Response response1 = handler.move(sp("e1"), sp("e2"));
+    assert(response1.isOk());
+    assert(handler.getMaxPositionCount() == 1);
+    assert(handler.getState().result.type == State::Result::Type::UNSET);
+
+    Handler::Response response2 = handler.move(sp("e8"), sp("e7"));
+    assert(response2.isOk());
+    assert(handler.getMaxPositionCount() == 1);
+    assert(handler.getState().result.type == State::Result::Type::UNSET);
+
+    Handler::Response response3 = handler.move(sp("e2"), sp("e1"));
+    assert(response3.isOk());
+    assert(handler.getMaxPositionCount() == 1);
+    assert(handler.getState().result.type == State::Result::Type::UNSET);
+
+    Handler::Response response4 = handler.move(sp("e7"), sp("e8"));
+    assert(response4.isOk());
+    assert(handler.getMaxPositionCount() == 2);
+    assert(handler.getState().result.type == State::Result::Type::UNSET);
+
+    Handler::Response response5 = handler.move(sp("e1"), sp("e2"));
+    assert(response5.isOk());
+    assert(handler.getMaxPositionCount() == 2);
+    assert(handler.getState().result.type == State::Result::Type::UNSET);
+
+    Handler::Response response6 = handler.move(sp("e8"), sp("e7"));
+    assert(response6.isOk());
+    assert(handler.getMaxPositionCount() == 2);
+    assert(handler.getState().result.type == State::Result::Type::UNSET);
+
+    Handler::Response response7 = handler.move(sp("e2"), sp("e1"));
+    assert(response7.isOk());
+    assert(handler.getMaxPositionCount() == 2);
+    assert(handler.getState().result.type == State::Result::Type::UNSET);
+
+    Handler::Response response8 = handler.move(sp("e7"), sp("e8"));
+    assert(response8.isOk());
+    assert(handler.getMaxPositionCount() == 3);
+    assert(handler.getState().result.type == State::Result::Type::DRAW);
+    assert(handler.getState().result.drawType == State::Result::DrawType::THREEFOLD_REPETITION);
+}
+
 void testSetResult() {
     testCheckIsCheckmate();
     testCheckIsStalemate();
     testCheckIsInsufficientMaterial();
     testCheckIsFiftyMoveRule();
+    testCheckIsThreefoldRepetition();
 }

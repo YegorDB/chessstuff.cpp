@@ -13,6 +13,7 @@ void testHandler() {
     testValidatePosition();
     testSetResult();
     testHandlerHistoryMoves();
+    testCountPosition();
 
     std::cout << "testHandler OK" << std::endl;
 };

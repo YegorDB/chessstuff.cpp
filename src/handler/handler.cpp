@@ -31,6 +31,10 @@ const Handler::PositionCounts& Handler::getPositionCounts() const {
     return _positionCounts;
 };
 
+int Handler::getMaxPositionCount() const {
+    return _maxPositionCount;
+};
+
 Handler::Response Handler::move(const Point& from, const Point& to) {
     if (_state.result.type != State::Result::Type::UNSET) {
         return Response{Response::Status::RESULT_REACHED};

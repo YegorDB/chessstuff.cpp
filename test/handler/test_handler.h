@@ -17,3 +17,4 @@ void testCastle();
 void testValidatePosition();
 void testSetResult();
 void testHandlerHistoryMoves();
+void testCountPosition();

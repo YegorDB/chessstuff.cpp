@@ -37,6 +37,7 @@ public:
     const State& getState() const;
     const HistoryMoves& getHistoryMoves() const;
     const PositionCounts& getPositionCounts() const;
+    int getMaxPositionCount() const;
     Response move(const Point& from, const Point& to);
     Response promotePawn(PieceType pieceType);
 
