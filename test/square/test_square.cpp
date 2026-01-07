@@ -28,5 +28,40 @@ void testSquare() {
     assert(s3.getColorName() == "light");
     assert(s3.toString() == "d1 (3, 7) light");
 
+    assert_error_was_thrown(
+        [](){
+            (Square{"e44"});
+        },
+        "Wrong square name."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            (Square{"E4"});
+        },
+        "Wrong square name."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            (Square{"i4"});
+        },
+        "Wrong square name."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            (Square{"e0"});
+        },
+        "Wrong square name."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            (Square{"e9"});
+        },
+        "Wrong square name."
+    );
+
     std::cout << "testSquare OK" << std::endl;
 };

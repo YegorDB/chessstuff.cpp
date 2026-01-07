@@ -63,6 +63,7 @@ void testActions() {
 void testAction() {
     testSingleAction();
     testActions();
+    testActionPlaces();
 
     std::cout << "testAction OK" << std::endl;
 };

@@ -167,6 +167,22 @@ void testPawn() {
     assert(!pawn1.hasSameColor(pawn2));
 };
 
+void testPieceThrowErrors() {
+    assert_error_was_thrown(
+        [](){
+            (Piece{PieceType::UNSET, true}).getVisibleSymbol();
+        },
+        "There is no visible symbol to unset piece."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            (Piece{}).getVisibleSymbol();
+        },
+        "There is no visible symbol to unset piece."
+    );
+};
+
 void testPiece() {
     testKing();
     testQueen();
@@ -174,6 +190,7 @@ void testPiece() {
     testBishop();
     testKnight();
     testPawn();
+    testPieceThrowErrors();
 
     std::cout << "testPiece OK" << std::endl;
 };

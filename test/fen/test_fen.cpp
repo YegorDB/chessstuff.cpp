@@ -161,11 +161,105 @@ void testStateToFenStringTwoKings() {
     assert(fen.getRawStringParts() == (std::vector<std::string>{"4k3/8/8/8/8/8/8/4K3", "b", "-", "-", "0", "0"}));
 }
 
+void testFenThrowErrors() {
+    assert_error_was_thrown(
+        [](){
+            FEN fen{""};
+        },
+        "Can't split empty string."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0"};
+        },
+        "Wrong raw string parts count."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0 0 0"};
+        },
+        "Wrong raw string parts count."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4g3/8/8/8/8/8/8/4K3 b - - 0 0"};
+        },
+        "Wrong piece type symbol."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 bb - - 0 0"};
+        },
+        "Wrong active color part."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 k - - 0 0"};
+        },
+        "Wrong active color part."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 b w - 0 0"};
+        },
+        "Wrong castle part symbol (w)."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - w 0"};
+        },
+        "Invalid number argument."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0 2147483648"};
+        },
+        "Number argument out of range."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/7/8/8/4K3 b - - 0 0"};
+        },
+        "Wrong squares count (7) in line 5."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/9/8/8/8/4K3 b - - 0 0"};
+        },
+        "Wrong squares count (9) in line 4."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/4K3 b - - 0 0"};
+        },
+        "Wrong rows count (7)."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            FEN fen{"4k3/8/8/8/8/8/8/8/4K3 b - - 0 0"};
+        },
+        "Wrong rows count (9)."
+    );
+}
+
 void testFen() {
     testFenStringToState();
     testFenStringToStateTwoKings();
     testStateToFenString();
     testStateToFenStringTwoKings();
+    testFenThrowErrors();
 
     std::cout << "testFen OK" << std::endl;
 }

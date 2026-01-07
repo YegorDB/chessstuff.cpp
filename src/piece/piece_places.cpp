@@ -29,7 +29,7 @@ void PiecePlaces::place(const Point& point, const Piece& piece) {
 void PiecePlaces::move(const Point& from, const Point& to) {
     if (!_items.contains(from)) {
         throw std::runtime_error{
-            std::format("There is no piece to move from {}.", Square{from}.toString())
+            std::format("There is no piece to move from {}.", Square{from}.getName())
         };
     }
     _items[to] = _items.at(from);

@@ -85,5 +85,12 @@ void testBoard() {
     }
     assert(i == 0);
 
+    assert_error_was_thrown(
+        [](){
+            Board::pointsByTwoPoints(Point{1, 1}, Point{2, 4}, true, true);
+        },
+        "Points are not on the same line."
+    );
+
     std::cout << "testBoard OK" << std::endl;
 };

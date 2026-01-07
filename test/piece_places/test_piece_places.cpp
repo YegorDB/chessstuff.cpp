@@ -34,6 +34,13 @@ void testPiecePlacesPlaceMoveRemove() {
 
     pp.remove(sp("d8"));
     assert(!pp.contains(sp("d8")));
+
+    assert_error_was_thrown(
+        [&](){
+            pp.move(sp("d8"), sp("d1"));
+        },
+        "There is no piece to move from d8."
+    );
 }
 
 void testPiecePlacesGetKingPoint() {

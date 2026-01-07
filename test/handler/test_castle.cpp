@@ -118,9 +118,61 @@ void testCastleOneSide() {
     assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "5rk1/8/8/8/8/8/8/2KR4 w - - 2 2");
 }
 
+void testCastleThrowErrors() {
+    assert_error_was_thrown(
+        [](){
+            Handler{FEN{"4k3/8/8/8/8/8/8/R2KN2R w KQ - 0 1"}};
+        },
+        "Wrong king piece to castle."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            Handler{FEN{"4K3/8/8/8/8/8/8/R2NkN1R w KQ - 0 1"}};
+        },
+        "Wrong king piece to castle."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            Handler{FEN{"4k3/8/8/8/8/8/8/N3K2R w KQ - 0 1"}};
+        },
+        "Wrong rook piece to castle."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            Handler{FEN{"4k3/8/8/8/8/8/8/R3K2N w KQ - 0 1"}};
+        },
+        "Wrong rook piece to castle."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            Handler{FEN{"4k3/8/8/8/8/8/8/N3K2R w KQ - 0 1"}};
+        },
+        "Wrong rook piece to castle."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            Handler{FEN{"4k3/8/8/8/8/8/8/r2NK2R w KQ - 0 1"}};
+        },
+        "Wrong rook piece to castle."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            Handler{FEN{"4k3/8/8/8/8/8/8/R3KN1r w KQ - 0 1"}};
+        },
+        "Wrong rook piece to castle."
+    );
+}
+
 void testCastle() {
     testCastleMove();
     testRestrictCastleMove();
     testCastleDrop();
     testCastleOneSide();
+    testCastleThrowErrors();
 }
