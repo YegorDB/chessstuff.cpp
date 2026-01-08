@@ -1,7 +1,7 @@
 #include "test_handler.h"
 
 void testRestrictActionsOnKingCheck() {
-    Handler handler1{FEN{"8/8/3nk3/8/B3K3/2Q1N3/3R3P/8 w - - 0 0"}};
+    Handler handler1{FEN{"8/8/3nk3/8/B3K3/2Q1N3/3R3P/8 w - - 0 1"}};
 
     Actions bishopActions1 = handler1.getActionsPlaces().getActions(sp("a4"));
     assert(bishopActions1.get(ActionType::PLACE).get(ActionRelation::TO).empty());
@@ -23,7 +23,7 @@ void testRestrictActionsOnKingCheck() {
     assert(pawnActions1.get(ActionType::PLACE).get(ActionRelation::TO).empty());
     assert(pawnActions1.get(ActionType::THREAT).get(ActionRelation::TO).empty());
 
-    Handler handler2{FEN{"8/8/4k3/3p4/B3K3/2Q1N3/3R3P/8 w - - 0 0"}};
+    Handler handler2{FEN{"8/8/4k3/3p4/B3K3/2Q1N3/3R3P/8 w - - 0 1"}};
 
     Actions bishopActions2 = handler2.getActionsPlaces().getActions(sp("a4"));
     assert(bishopActions2.get(ActionType::PLACE).get(ActionRelation::TO).empty());
@@ -45,7 +45,7 @@ void testRestrictActionsOnKingCheck() {
     assert(pawnActions2.get(ActionType::PLACE).get(ActionRelation::TO).empty());
     assert(pawnActions2.get(ActionType::THREAT).get(ActionRelation::TO).empty());
 
-    Handler handler3{FEN{"8/8/2b1k3/8/B3K3/2Q1N3/3R3P/8 w - - 0 0"}};
+    Handler handler3{FEN{"8/8/2b1k3/8/B3K3/2Q1N3/3R3P/8 w - - 0 1"}};
 
     Actions bishopActions3 = handler3.getActionsPlaces().getActions(sp("a4"));
     assert(bishopActions3.get(ActionType::PLACE).get(ActionRelation::TO).empty());
@@ -67,7 +67,7 @@ void testRestrictActionsOnKingCheck() {
     assert(pawnActions3.get(ActionType::PLACE).get(ActionRelation::TO).empty());
     assert(pawnActions3.get(ActionType::THREAT).get(ActionRelation::TO).empty());
 
-    Handler handler4{FEN{"8/8/4k3/8/Br2K3/2Q1N3/3R3P/8 w - - 0 0"}};
+    Handler handler4{FEN{"8/8/4k3/8/Br2K3/2Q1N3/3R3P/8 w - - 0 1"}};
 
     Actions bishopActions4 = handler4.getActionsPlaces().getActions(sp("a4"));
     assert(bishopActions4.get(ActionType::PLACE).get(ActionRelation::TO).empty());
@@ -89,7 +89,7 @@ void testRestrictActionsOnKingCheck() {
     assert(pawnActions4.get(ActionType::PLACE).get(ActionRelation::TO).empty());
     assert(pawnActions4.get(ActionType::THREAT).get(ActionRelation::TO).empty());
 
-    Handler handler5{FEN{"8/8/4k3/8/B3K3/2Q1N3/2qR3P/8 w - - 0 0"}};
+    Handler handler5{FEN{"8/8/4k3/8/B3K3/2Q1N3/2qR3P/8 w - - 0 1"}};
 
     Actions bishopActions5 = handler5.getActionsPlaces().getActions(sp("a4"));
     assert(bishopActions5.get(ActionType::PLACE).get(ActionRelation::TO).empty());
@@ -111,7 +111,7 @@ void testRestrictActionsOnKingCheck() {
     assert(pawnActions5.get(ActionType::PLACE).get(ActionRelation::TO).empty());
     assert(pawnActions5.get(ActionType::THREAT).get(ActionRelation::TO).empty());
 
-    Handler handler6{FEN{"8/7b/4k3/8/B3K1r1/2Q1N3/3R3P/8 w - - 0 0"}};
+    Handler handler6{FEN{"8/7b/4k3/8/B3K1r1/2Q1N3/3R3P/8 w - - 0 1"}};
 
     Actions bishopActions6 = handler6.getActionsPlaces().getActions(sp("a4"));
     assert(bishopActions6.get(ActionType::PLACE).get(ActionRelation::TO).empty());

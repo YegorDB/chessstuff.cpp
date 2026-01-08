@@ -36,7 +36,7 @@ struct State {
     };
     Point enPassant = Point{};
     int halfmoveClock = 0;
-    int movesCount = 0;
+    int movesCount = 1;
     Point pawnPromotion = Point{};
     Result result = Result{};
 };

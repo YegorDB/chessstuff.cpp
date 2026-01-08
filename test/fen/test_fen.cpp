@@ -48,9 +48,9 @@ void testFenStringToState() {
 };
 
 void testFenStringToStateTwoKings() {
-    FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0 0"};
+    FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0 1"};
 
-    assert(fen.getRawStringParts() == (std::vector<std::string>{"4k3/8/8/8/8/8/8/4K3", "b", "-", "-", "0", "0"}));
+    assert(fen.getRawStringParts() == (std::vector<std::string>{"4k3/8/8/8/8/8/8/4K3", "b", "-", "-", "0", "1"}));
 
     State s = fen.getState();
 
@@ -80,7 +80,7 @@ void testFenStringToStateTwoKings() {
 
     assert(s.halfmoveClock == 0);
 
-    assert(s.movesCount == 0);
+    assert(s.movesCount == 1);
 };
 
 void testStateToFenString() {
@@ -152,13 +152,13 @@ void testStateToFenStringTwoKings() {
         },
         Point{},
         0,
-        0
+        1
     };
 
     FEN fen{s};
 
-    assert(fen.getRawString() == "4k3/8/8/8/8/8/8/4K3 b - - 0 0");
-    assert(fen.getRawStringParts() == (std::vector<std::string>{"4k3/8/8/8/8/8/8/4K3", "b", "-", "-", "0", "0"}));
+    assert(fen.getRawString() == "4k3/8/8/8/8/8/8/4K3 b - - 0 1");
+    assert(fen.getRawStringParts() == (std::vector<std::string>{"4k3/8/8/8/8/8/8/4K3", "b", "-", "-", "0", "1"}));
 }
 
 void testFenThrowErrors() {
@@ -178,35 +178,35 @@ void testFenThrowErrors() {
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0 0 0"};
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 b - - 0 1 0"};
         },
         "Wrong raw string parts count."
     );
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4g3/8/8/8/8/8/8/4K3 b - - 0 0"};
+            FEN fen{"4g3/8/8/8/8/8/8/4K3 b - - 0 1"};
         },
         "Wrong piece type symbol."
     );
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/8/8/8/8/4K3 bb - - 0 0"};
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 bb - - 0 1"};
         },
         "Wrong active color part."
     );
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/8/8/8/8/4K3 k - - 0 0"};
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 k - - 0 1"};
         },
         "Wrong active color part."
     );
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/8/8/8/8/4K3 b w - 0 0"};
+            FEN fen{"4k3/8/8/8/8/8/8/4K3 b w - 0 1"};
         },
         "Wrong castle part symbol (w)."
     );
@@ -227,28 +227,28 @@ void testFenThrowErrors() {
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/8/7/8/8/4K3 b - - 0 0"};
+            FEN fen{"4k3/8/8/8/7/8/8/4K3 b - - 0 1"};
         },
         "Wrong squares count (7) in line 5."
     );
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/9/8/8/8/4K3 b - - 0 0"};
+            FEN fen{"4k3/8/8/9/8/8/8/4K3 b - - 0 1"};
         },
         "Wrong squares count (9) in line 4."
     );
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/8/8/8/4K3 b - - 0 0"};
+            FEN fen{"4k3/8/8/8/8/8/4K3 b - - 0 1"};
         },
         "Wrong rows count (7)."
     );
 
     assert_error_was_thrown(
         [](){
-            FEN fen{"4k3/8/8/8/8/8/8/8/4K3 b - - 0 0"};
+            FEN fen{"4k3/8/8/8/8/8/8/8/4K3 b - - 0 1"};
         },
         "Wrong rows count (9)."
     );

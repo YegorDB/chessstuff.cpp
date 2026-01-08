@@ -1,7 +1,7 @@
 #include "test_handler.h"
 
 void testBindedWithKingPiecesRestrictions() {
-    Handler handler{FEN{"8/8/3k4/2r5/1B1q1n2/1K6/3R3Q/8 b - - 0 0"}};
+    Handler handler{FEN{"8/8/3k4/2r5/1B1q1n2/1K6/3R3Q/8 b - - 0 1"}};
 
     Actions blackRookActions = handler.getActionsPlaces().getActions(Point{2, 3});
     PointSet expectedBlackRookPlaceTo;

@@ -1,6 +1,6 @@
 #include "fen.h"
 
-const std::string FEN::INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0";
+const std::string FEN::INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 FEN::FEN(const std::string& rawString) : _rawString(rawString) {
     _splitRawString();

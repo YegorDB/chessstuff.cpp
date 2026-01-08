@@ -1,7 +1,7 @@
 #include "test_handler.h"
 
 void testCheckIsCheckmate() {
-    Handler handler1{FEN{"3k2R1/8/3K4/8/8/8/8/8 b - - 0 0"}};
+    Handler handler1{FEN{"3k2R1/8/3K4/8/8/8/8/8 b - - 0 1"}};
     assert(handler1.getState().result.type == State::Result::Type::CHECKMATE);
     assert(handler1.getState().result.winnerColor == PieceColor::WHITE);
     assert(handler1.getState().result.drawType == State::Result::DrawType::UNSET);
@@ -10,32 +10,32 @@ void testCheckIsCheckmate() {
     assert(!response1.isOk());
     assert(response1.status == Handler::Response::Status::RESULT_REACHED);
 
-    Handler handler2{FEN{"3kR3/8/3K4/8/8/8/8/8 b - - 0 0"}};
+    Handler handler2{FEN{"3kR3/8/3K4/8/8/8/8/8 b - - 0 1"}};
     assert(handler2.getState().result.type == State::Result::Type::UNSET);
     assert(handler2.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler2.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler3{FEN{"3k2R1/8/3K4/8/8/4r3/8/8 b - - 0 0"}};
+    Handler handler3{FEN{"3k2R1/8/3K4/8/8/4r3/8/8 b - - 0 1"}};
     assert(handler3.getState().result.type == State::Result::Type::UNSET);
     assert(handler3.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler3.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler4{FEN{"3k2R1/8/3K4/8/8/1b6/8/8 b - - 0 0"}};
+    Handler handler4{FEN{"3k2R1/8/3K4/8/8/1b6/8/8 b - - 0 1"}};
     assert(handler4.getState().result.type == State::Result::Type::UNSET);
     assert(handler4.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler4.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler5{FEN{"2k2R2/8/3K4/8/8/8/8/8 b - - 0 0"}};
+    Handler handler5{FEN{"2k2R2/8/3K4/8/8/8/8/8 b - - 0 1"}};
     assert(handler5.getState().result.type == State::Result::Type::UNSET);
     assert(handler5.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler5.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler6{FEN{"2k2R2/1R6/3K4/8/8/8/8/8 b - - 0 0"}};
+    Handler handler6{FEN{"2k2R2/1R6/3K4/8/8/8/8/8 b - - 0 1"}};
     assert(handler6.getState().result.type == State::Result::Type::UNSET);
     assert(handler6.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler6.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler7{FEN{"8/8/8/1b6/4r3/2k5/3b1N2/3QK3 w - - 0 0"}};
+    Handler handler7{FEN{"8/8/8/1b6/4r3/2k5/3b1N2/3QK3 w - - 0 1"}};
     assert(handler7.getState().result.type == State::Result::Type::CHECKMATE);
     assert(handler7.getState().result.winnerColor == PieceColor::BLACK);
     assert(handler7.getState().result.drawType == State::Result::DrawType::UNSET);
@@ -44,24 +44,24 @@ void testCheckIsCheckmate() {
     assert(!response2.isOk());
     assert(response2.status == Handler::Response::Status::RESULT_REACHED);
 
-    Handler handler8{FEN{"8/8/8/8/4r3/2k5/3b1N2/3QK3 w - - 0 0"}};
+    Handler handler8{FEN{"8/8/8/8/4r3/2k5/3b1N2/3QK3 w - - 0 1"}};
     assert(handler8.getState().result.type == State::Result::Type::UNSET);
     assert(handler8.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler8.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler9{FEN{"8/8/8/8/4r3/2k5/3b1N2/3QKn2 w - - 0 0"}};
+    Handler handler9{FEN{"8/8/8/8/4r3/2k5/3b1N2/3QKn2 w - - 0 1"}};
     assert(handler9.getState().result.type == State::Result::Type::UNSET);
     assert(handler9.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler9.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler10{FEN{"3k4/8/3K2R1/8/8/8/8/8 w - - 0 0"}};
+    Handler handler10{FEN{"3k4/8/3K2R1/8/8/8/8/8 w - - 0 1"}};
     Handler::Response response3 = handler10.move(sp("g6"), sp("g8"));
     assert(response3.isOk());
     assert(handler10.getState().result.type == State::Result::Type::CHECKMATE);
     assert(handler10.getState().result.winnerColor == PieceColor::WHITE);
     assert(handler10.getState().result.drawType == State::Result::DrawType::UNSET);
 
-    Handler handler11{FEN{"8/8/8/1b6/4r3/2k1b3/5N2/3QK3 b - - 0 0"}};
+    Handler handler11{FEN{"8/8/8/1b6/4r3/2k1b3/5N2/3QK3 b - - 0 1"}};
     Handler::Response response4 = handler11.move(sp("e3"), sp("d2"));
     assert(response4.isOk());
     assert(handler11.getState().result.type == State::Result::Type::CHECKMATE);
@@ -70,7 +70,7 @@ void testCheckIsCheckmate() {
 }
 
 void testCheckIsStalemate() {
-    Handler handler{FEN{"8/8/8/8/p7/Pp6/1P6/K1k5 w - - 0 0"}};
+    Handler handler{FEN{"8/8/8/8/p7/Pp6/1P6/K1k5 w - - 0 1"}};
     assert(handler.getState().result.type == State::Result::Type::DRAW);
     assert(handler.getState().result.winnerColor == PieceColor::UNSET);
     assert(handler.getState().result.drawType == State::Result::DrawType::STALEMATE);
