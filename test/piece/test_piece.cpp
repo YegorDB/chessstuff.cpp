@@ -2,7 +2,9 @@
 
 void testKing() {
     Piece king{PieceType::KING, false};
-    assert(static_cast<int>(king.getType()) == 1);
+    assert(king.getType() == PieceType::KING);
+    assert(king.getColor() == PieceColor::BLACK);
+    assert(!king.isWhiteColor());
     assert(king.getColorName() == "black");
     assert(king.getPlaceDirections() == king.getThreatDirections());
     assert(king.getMovesCount() == 0);
@@ -31,7 +33,9 @@ void testKing() {
 
 void testQueen() {
     Piece queen{PieceType::QUEEN, true};
-    assert(static_cast<int>(queen.getType()) == 2);
+    assert(queen.getType() == PieceType::QUEEN);
+    assert(queen.getColor() == PieceColor::WHITE);
+    assert(queen.isWhiteColor());
     assert(queen.getColorName() == "white");
     assert(queen.getPlaceDirections() == queen.getThreatDirections());
     assert(queen.getMovesCount() == 0);
@@ -57,7 +61,9 @@ void testQueen() {
 
 void testRook() {
     Piece rook{PieceType::ROOK, false};
-    assert(static_cast<int>(rook.getType()) == 3);
+    assert(rook.getType() == PieceType::ROOK);
+    assert(rook.getColor() == PieceColor::BLACK);
+    assert(!rook.isWhiteColor());
     assert(rook.getColorName() == "black");
     assert(rook.getMovesCount() == 0);
     assert(rook.getVisibleSymbol() == "\u265C");
@@ -79,7 +85,9 @@ void testRook() {
 
 void testBishop() {
     Piece bishop{PieceType::BISHOP, true};
-    assert(static_cast<int>(bishop.getType()) == 4);
+    assert(bishop.getType() == PieceType::BISHOP);
+    assert(bishop.getColor() == PieceColor::WHITE);
+    assert(bishop.isWhiteColor());
     assert(bishop.getColorName() == "white");
     assert(bishop.getMovesCount() == 0);
     assert(bishop.getVisibleSymbol() == "\u2657");
@@ -101,7 +109,9 @@ void testBishop() {
 
 void testKnight() {
     Piece knight{PieceType::KNIGHT, false};
-    assert(static_cast<int>(knight.getType()) == 5);
+    assert(knight.getType() == PieceType::KNIGHT);
+    assert(knight.getColor() == PieceColor::BLACK);
+    assert(!knight.isWhiteColor());
     assert(knight.getColorName() == "black");
     assert(knight.getMovesCount() == 0);
     assert(knight.getVisibleSymbol() == "\u265E");
@@ -127,7 +137,9 @@ void testKnight() {
 
 void testPawn() {
     Piece pawn1{PieceType::PAWN, true};
-    assert(static_cast<int>(pawn1.getType()) == 6);
+    assert(pawn1.getType() == PieceType::PAWN);
+    assert(pawn1.getColor() == PieceColor::WHITE);
+    assert(pawn1.isWhiteColor());
     assert(pawn1.getColorName() == "white");
     assert(pawn1.getMovesCount() == 0);
     assert(pawn1.getVisibleSymbol() == "\u2659");
@@ -146,7 +158,9 @@ void testPawn() {
     assert((pawn1.getThreatDirections()[1] == Direction{1, -1}));
 
     Piece pawn2{PieceType::PAWN, false};
-    assert(static_cast<int>(pawn2.getType()) == 6);
+    assert(pawn2.getType() == PieceType::PAWN);
+    assert(pawn2.getColor() == PieceColor::BLACK);
+    assert(!pawn2.isWhiteColor());
     assert(pawn2.getColorName() == "black");
     assert(pawn2.getMovesCount() == 0);
     assert(pawn2.getVisibleSymbol() == "\u265F");
@@ -167,7 +181,44 @@ void testPawn() {
     assert(!pawn1.hasSameColor(pawn2));
 };
 
+void testUndefined() {
+    Piece piece;
+    assert(piece.getType() == PieceType::UNSET);
+    assert(piece.getColor() == PieceColor::UNSET);
+    assert(piece.getMovesCount() == 0);
+    assert(piece.hasColor(PieceColor::UNSET));
+    assert(!piece.isWhiteColor());
+    assert(!piece.isKing());
+    assert(!piece.isQueen());
+    assert(!piece.isRook());
+    assert(!piece.isBishop());
+    assert(!piece.isKnight());
+    assert(!piece.isPawn());
+    assert(piece.isUndefined());
+};
+
 void testPieceThrowErrors() {
+    assert_error_was_thrown(
+        [](){
+            (Piece{PieceType::UNSET, true}).getPlaceDirections();
+        },
+        "There is no place directions to unset piece."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            (Piece{PieceType::UNSET, true}).getThreatDirections();
+        },
+        "There is no threat directions to unset piece."
+    );
+
+    assert_error_was_thrown(
+        [](){
+            (Piece{PieceType::UNSET, true}).getColorName();
+        },
+        "There is no color name to unset piece."
+    );
+
     assert_error_was_thrown(
         [](){
             (Piece{PieceType::UNSET, true}).getVisibleSymbol();
@@ -190,6 +241,7 @@ void testPiece() {
     testBishop();
     testKnight();
     testPawn();
+    testUndefined();
     testPieceThrowErrors();
 
     std::cout << "testPiece OK" << std::endl;

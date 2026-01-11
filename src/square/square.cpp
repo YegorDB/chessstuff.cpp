@@ -42,5 +42,5 @@ const std::string Square::toString() const {
 };
 
 Point sp(const std::string& name) {
-    return Square{name}.point;
+    return Square::nameToPoint(name);
 };

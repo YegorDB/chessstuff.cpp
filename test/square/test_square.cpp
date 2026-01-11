@@ -28,6 +28,8 @@ void testSquare() {
     assert(s3.getColorName() == "light");
     assert(s3.toString() == "d1 (3, 7) light");
 
+    assert_points_are_equal(sp("e4"), (Point{4, 4}));
+
     assert_error_was_thrown(
         [](){
             (Square{"e44"});

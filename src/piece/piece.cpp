@@ -203,6 +203,9 @@ const PieceColor Piece::getColor() const {
 };
 
 const std::vector<Direction>& Piece::getPlaceDirections() const {
+    if (_color == PieceColor::UNSET || _type == PieceType::UNSET) {
+        throw std::runtime_error{"There is no place directions to unset piece."};
+    }
     if (_type == PieceType::PAWN) {
         return PAWN_PLACE_DIRECTIONS.at(_color);
     }
@@ -210,6 +213,9 @@ const std::vector<Direction>& Piece::getPlaceDirections() const {
 };
 
 const std::vector<Direction>& Piece::getThreatDirections() const {
+    if (_color == PieceColor::UNSET || _type == PieceType::UNSET) {
+        throw std::runtime_error{"There is no threat directions to unset piece."};
+    }
     if (_type == PieceType::PAWN) {
         return PAWN_THREAT_DIRECTIONS.at(_color);
     }
@@ -217,6 +223,9 @@ const std::vector<Direction>& Piece::getThreatDirections() const {
 };
 
 const std::string& Piece::getColorName() const {
+    if (_color == PieceColor::UNSET || _type == PieceType::UNSET) {
+        throw std::runtime_error{"There is no color name to unset piece."};
+    }
     return COLOR_NAMES[isWhiteColor() ? 0 : 1];
 };
 

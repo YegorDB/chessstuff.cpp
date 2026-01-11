@@ -1,6 +1,6 @@
 #include "test_board.h"
 
-void testBoard() {
+void testBordPoints() {
     int i = 0;
     for (Point* point : Board::points()) {
         Point expectedPoint{i % 8, i / 8};
@@ -8,8 +8,10 @@ void testBoard() {
         ++i;
     }
     assert(i == 64);
+};
 
-    i = 0;
+void testBordPointsByDirection() {
+    int i = 0;
     for (Point* point : Board::pointsByDirection(Point{1, 2}, Direction{1, 1, 7}, true)) {
         Point expectedPoint{1 + i, 2 + i};
         assert_points_are_equal(*point, expectedPoint);
@@ -24,8 +26,10 @@ void testBoard() {
         assert_points_are_equal(*point, expectedPoint);
     }
     assert(i == 5);
+};
 
-    i = 0;
+void testBoardPointsByTwoPoints() {
+    int i = 0;
     for (Point* point : Board::pointsByTwoPoints(Point{2, 3}, Point{6, 3})) {
         ++i;
         Point expectedPoint{2 + i, 3};
@@ -91,6 +95,12 @@ void testBoard() {
         },
         "Points are not on the same line."
     );
+};
+
+void testBoard() {
+    testBordPoints();
+    testBordPointsByDirection();
+    testBoardPointsByTwoPoints();
 
     std::cout << "testBoard OK" << std::endl;
 };
