@@ -88,7 +88,7 @@ void Handler::_threatSquareAfterKingIfNeeded(const Point& point, const Point& pr
     const Piece& prevPiece = _state.piecePlaces.getPiece(prevPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece)) {
-        _actionsPlaces.setAction(ActionType::THREAT, point, nextPoint);
+        _actionsPlaces.setAction(ActionType::AFTER_KING_RESTRICTION, point, nextPoint);
     }
 };
 
@@ -110,6 +110,6 @@ void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& pr
     const Piece& nextPiece = _state.piecePlaces.getPiece(nextPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece) && piece.hasSameColor(nextPiece)) {
-        _actionsPlaces.setAction(ActionType::SUPPORT, point, nextPoint);
+        _actionsPlaces.setAction(ActionType::AFTER_KING_RESTRICTION, point, nextPoint);
     }
 };

@@ -15,7 +15,8 @@ enum class ActionType {
     SUPPORT = 1,
     PLACE = 2,
     XRAY = 3,
-    BIND = 4
+    BIND = 4,
+    AFTER_KING_RESTRICTION = 5
 };
 
 class Action {
@@ -41,7 +42,8 @@ private:
         {ActionType::SUPPORT, Action{}},
         {ActionType::PLACE, Action{}},
         {ActionType::XRAY, Action{}},
-        {ActionType::BIND, Action{}}
+        {ActionType::BIND, Action{}},
+        {ActionType::AFTER_KING_RESTRICTION, Action{}}
     };
 
 public:

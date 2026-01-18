@@ -4,6 +4,8 @@ void Handler::_restrictKingActions() {
     const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
     _eraseKingActions(ActionType::PLACE, ActionType::THREAT, kingPoint);
     _eraseKingActions(ActionType::THREAT, ActionType::SUPPORT, kingPoint);
+    _eraseKingActions(ActionType::PLACE, ActionType::AFTER_KING_RESTRICTION, kingPoint);
+    _eraseKingActions(ActionType::THREAT, ActionType::AFTER_KING_RESTRICTION, kingPoint);
 };
 
 void Handler::_restrictBindedWithKingPiecesActions(const std::vector<Point>& bindedPoints) {
