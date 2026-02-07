@@ -9,7 +9,7 @@ void testPawnEnPassant() {
     assert_strings_are_equal(FEN{handler1.getState()}.getRawString(), "4k3/8/8/8/6pP/8/8/4K3 b - h3 0 1");
 
     const Actions& pawnGActions = handler1.getActionsPlaces().getActions(sp("g4"));
-    assert_point_sets_are_equal(pawnGActions.get(ActionType::THREAT).get(ActionRelation::TO), PointSet{sp("h3")});
+    assert_point_sets_are_equal(pawnGActions.get(Action::Type::THREAT).get(Action::Relation::TO), PointSet{sp("h3")});
 
     Handler::Response response2 = handler1.move(sp("g4"), sp("h3"));
     assert(response2.isOk());
@@ -24,7 +24,7 @@ void testPawnEnPassant() {
     assert_strings_are_equal(FEN{handler2.getState()}.getRawString(), "4k3/8/8/pP6/8/8/8/4K3 w - a6 0 2");
 
     const Actions& pawnBActions = handler2.getActionsPlaces().getActions(sp("b5"));
-    assert_point_sets_are_equal(pawnBActions.get(ActionType::THREAT).get(ActionRelation::TO), PointSet{sp("a6")});
+    assert_point_sets_are_equal(pawnBActions.get(Action::Type::THREAT).get(Action::Relation::TO), PointSet{sp("a6")});
 
     Handler::Response response4 = handler2.move(sp("b5"), sp("a6"));
     assert(response4.isOk());

@@ -10,27 +10,27 @@ void testActionPlaces() {
     Point toPoint2{3, 3};
     Point toPoint3{4, 4};
     Point wrongPoint;
-    ActionType actionType = ActionType::PLACE;
+    Action::Type actionType = Action::Type::PLACE;
 
     actionsPlaces.setAction(actionType, byPoint, toPoint1);
     actionsPlaces.setAction(actionType, byPoint, toPoint2);
     actionsPlaces.setAction(actionType, byPoint, toPoint3);
-    assert_point_sets_are_equal(actionsPlaces.getActions(byPoint).get(actionType).get(ActionRelation::TO), (PointSet{toPoint1, toPoint2, toPoint3}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint1).get(actionType).get(ActionRelation::BY), (PointSet{byPoint}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint2).get(actionType).get(ActionRelation::BY), (PointSet{byPoint}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint3).get(actionType).get(ActionRelation::BY), (PointSet{byPoint}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(byPoint).get(actionType).get(Action::Relation::TO), (PointSet{toPoint1, toPoint2, toPoint3}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint1).get(actionType).get(Action::Relation::BY), (PointSet{byPoint}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint2).get(actionType).get(Action::Relation::BY), (PointSet{byPoint}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint3).get(actionType).get(Action::Relation::BY), (PointSet{byPoint}));
 
     actionsPlaces.erasePoints(byPoint, actionType, PointSet{toPoint1, toPoint2});
-    assert_point_sets_are_equal(actionsPlaces.getActions(byPoint).get(actionType).get(ActionRelation::TO), (PointSet{toPoint3}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint1).get(actionType).get(ActionRelation::BY), (PointSet{}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint2).get(actionType).get(ActionRelation::BY), (PointSet{}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint3).get(actionType).get(ActionRelation::BY), (PointSet{byPoint}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(byPoint).get(actionType).get(Action::Relation::TO), (PointSet{toPoint3}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint1).get(actionType).get(Action::Relation::BY), (PointSet{}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint2).get(actionType).get(Action::Relation::BY), (PointSet{}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint3).get(actionType).get(Action::Relation::BY), (PointSet{byPoint}));
 
     actionsPlaces.clearActions();
-    assert_point_sets_are_equal(actionsPlaces.getActions(byPoint).get(actionType).get(ActionRelation::TO), (PointSet{}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint1).get(actionType).get(ActionRelation::BY), (PointSet{}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint2).get(actionType).get(ActionRelation::BY), (PointSet{}));
-    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint3).get(actionType).get(ActionRelation::BY), (PointSet{}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(byPoint).get(actionType).get(Action::Relation::TO), (PointSet{}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint1).get(actionType).get(Action::Relation::BY), (PointSet{}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint2).get(actionType).get(Action::Relation::BY), (PointSet{}));
+    assert_point_sets_are_equal(actionsPlaces.getActions(toPoint3).get(actionType).get(Action::Relation::BY), (PointSet{}));
 
     assert_error_was_thrown(
         [&](){

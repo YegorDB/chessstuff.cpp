@@ -16,12 +16,12 @@ const Actions& ActionsPlaces::getActions(const Point& point) const {
     return _items.at(point);
 };
 
-void ActionsPlaces::setAction(ActionType type, const Point& byPoint, const Point& toPoint) {
+void ActionsPlaces::setAction(Action::Type type, const Point& byPoint, const Point& toPoint) {
     if (!byPoint.isValid() || !toPoint.isValid()) {
         throw std::runtime_error{"Wrong point."};
     }
-    _items[byPoint].insert(type, ActionRelation::TO, toPoint);
-    _items[toPoint].insert(type, ActionRelation::BY, byPoint);
+    _items[byPoint].insert(type, Action::Relation::TO, toPoint);
+    _items[toPoint].insert(type, Action::Relation::BY, byPoint);
 };
 
 void ActionsPlaces::clearActions() {
@@ -30,9 +30,9 @@ void ActionsPlaces::clearActions() {
     }
 };
 
-void ActionsPlaces::erasePoints(const Point& byPoint, ActionType type, const PointSet& toPoints) {
+void ActionsPlaces::erasePoints(const Point& byPoint, Action::Type type, const PointSet& toPoints) {
     for (const Point& toPoint : toPoints) {
-        _items[byPoint].erase(type, ActionRelation::TO, toPoint);
-        _items[toPoint].erase(type, ActionRelation::BY, byPoint);
+        _items[byPoint].erase(type, Action::Relation::TO, toPoint);
+        _items[toPoint].erase(type, Action::Relation::BY, byPoint);
     }
 };

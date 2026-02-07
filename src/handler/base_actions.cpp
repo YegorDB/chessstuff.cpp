@@ -8,7 +8,7 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
                     if (_state.piecePlaces.contains(*nextPoint)) {
                         break;
                     }
-                    _actionsPlaces.setAction(ActionType::PLACE, point, *nextPoint);
+                    _actionsPlaces.setAction(Action::Type::PLACE, point, *nextPoint);
                 }
             }
         }
@@ -19,26 +19,26 @@ void Handler::_setBaseActions(std::vector<Point>& bindedPoints) {
             for (Point* nextPoint : Board::pointsByDirection(point, direction)) {
                 if (!_state.piecePlaces.contains(*nextPoint)) {
                     if (!piece.hasColor(_state.activeColor) && prevPointWithPiece.isUndefined()) {
-                        _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
+                        _actionsPlaces.setAction(Action::Type::THREAT, point, *nextPoint);
                     } else if (!prevPoint.isUndefined()) {
                         _threatSquareAfterKingIfNeeded(point, prevPoint, *nextPoint);
                     }
                     if (piece.isPawn() && piece.hasColor(_state.activeColor) && *nextPoint == _state.enPassant) {
-                        _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
+                        _actionsPlaces.setAction(Action::Type::THREAT, point, *nextPoint);
                     }
                     prevPoint = *nextPoint;
                 } else {
                     if (!prevPointWithPiece.isUndefined()) {
-                        _actionsPlaces.setAction(ActionType::XRAY, point, *nextPoint);
+                        _actionsPlaces.setAction(Action::Type::XRAY, point, *nextPoint);
                         _bindPieceIfNeeded(point, prevPointWithPiece, *nextPoint, bindedPoints);
                         _supportPieceAfterKingIfNeeded(point, prevPointWithPiece, *nextPoint);
                         break;
                     }
                     const Piece& nextPiece = _state.piecePlaces.getPiece(*nextPoint);
                     if (piece.hasSameColor(nextPiece)) {
-                        _actionsPlaces.setAction(ActionType::SUPPORT, point, *nextPoint);
+                        _actionsPlaces.setAction(Action::Type::SUPPORT, point, *nextPoint);
                     } else {
-                        _actionsPlaces.setAction(ActionType::THREAT, point, *nextPoint);
+                        _actionsPlaces.setAction(Action::Type::THREAT, point, *nextPoint);
                     }
                     prevPoint = *nextPoint;
                     prevPointWithPiece = *nextPoint;
@@ -67,7 +67,7 @@ void Handler::_bindPieceIfNeeded(const Point& point, const Point& prevPointWithP
 
     if (nextPiece.isKing() && nextPiece.hasSameColor(prevPiece) && prevPiece.hasColor(_state.activeColor) && !nextPiece.hasSameColor(piece)) {
         bindedPoints.push_back(prevPointWithPiece);
-        _actionsPlaces.setAction(ActionType::BIND, point, prevPointWithPiece);
+        _actionsPlaces.setAction(Action::Type::BIND, point, prevPointWithPiece);
     }
 };
 
@@ -88,7 +88,7 @@ void Handler::_threatSquareAfterKingIfNeeded(const Point& point, const Point& pr
     const Piece& prevPiece = _state.piecePlaces.getPiece(prevPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece)) {
-        _actionsPlaces.setAction(ActionType::AFTER_KING_RESTRICTION, point, nextPoint);
+        _actionsPlaces.setAction(Action::Type::AFTER_KING_RESTRICTION, point, nextPoint);
     }
 };
 
@@ -110,6 +110,6 @@ void Handler::_supportPieceAfterKingIfNeeded(const Point& point, const Point& pr
     const Piece& nextPiece = _state.piecePlaces.getPiece(nextPoint);
 
     if (!piece.hasColor(_state.activeColor) && prevPiece.isKing() && !piece.hasSameColor(prevPiece) && piece.hasSameColor(nextPiece)) {
-        _actionsPlaces.setAction(ActionType::AFTER_KING_RESTRICTION, point, nextPoint);
+        _actionsPlaces.setAction(Action::Type::AFTER_KING_RESTRICTION, point, nextPoint);
     }
 };

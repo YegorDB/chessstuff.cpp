@@ -2,19 +2,19 @@
 
 Action::Action() {};
 
-void Action::insert(ActionRelation relation, const Point& point) {
+void Action::insert(Action::Relation relation, const Point& point) {
     _relations[relation].insert(point);
 };
 
-void Action::erase(ActionRelation relation, const Point& point) {
+void Action::erase(Action::Relation relation, const Point& point) {
     _relations[relation].erase(point);
 };
 
 void Action::clear() {
-    _relations[ActionRelation::TO].clear();
-    _relations[ActionRelation::BY].clear();
+    _relations[Action::Relation::TO].clear();
+    _relations[Action::Relation::BY].clear();
 };
 
-const PointSet& Action::get(ActionRelation relation) const {
+const PointSet& Action::get(Action::Relation relation) const {
     return _relations.at(relation);
 };

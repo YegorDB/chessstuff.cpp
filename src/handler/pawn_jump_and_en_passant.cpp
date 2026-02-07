@@ -25,7 +25,7 @@ void Handler::_setPawnJumpMoves() {
             if (_state.piecePlaces.contains(stepPoint) || _state.piecePlaces.contains(jumpPoint)) {
                 continue;
             }
-            _actionsPlaces.setAction(ActionType::PLACE, point, jumpPoint);
+            _actionsPlaces.setAction(Action::Type::PLACE, point, jumpPoint);
         }
     }
 };

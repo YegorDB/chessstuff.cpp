@@ -6,22 +6,22 @@ void Actions::operator=(const Actions& other) {
     _inners = other._inners;
 };
 
-void Actions::insert(ActionType type, ActionRelation relation, const Point& point) {
+void Actions::insert(Action::Type type, Action::Relation relation, const Point& point) {
     _inners[type].insert(relation, point);
 };
 
-void Actions::erase(ActionType type, ActionRelation relation, const Point& point) {
+void Actions::erase(Action::Type type, Action::Relation relation, const Point& point) {
     _inners[type].erase(relation, point);
 };
 
 void Actions::clear() {
-    _inners[ActionType::THREAT].clear();
-    _inners[ActionType::SUPPORT].clear();
-    _inners[ActionType::PLACE].clear();
-    _inners[ActionType::XRAY].clear();
-    _inners[ActionType::BIND].clear();
+    _inners[Action::Type::THREAT].clear();
+    _inners[Action::Type::SUPPORT].clear();
+    _inners[Action::Type::PLACE].clear();
+    _inners[Action::Type::XRAY].clear();
+    _inners[Action::Type::BIND].clear();
 };
 
-const Action& Actions::get(ActionType type) const {
+const Action& Actions::get(Action::Type type) const {
     return _inners.at(type);
 };

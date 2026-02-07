@@ -52,15 +52,15 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
         return Response{Response::Status::WRONG_PIECE_COLOR};
     } else if (
         !_state.piecePlaces.contains(to) &&
-        !_actionsPlaces.getActions(from).get(ActionType::PLACE).get(ActionRelation::TO).contains(to) &&
+        !_actionsPlaces.getActions(from).get(Action::Type::PLACE).get(Action::Relation::TO).contains(to) &&
         !(
             piece.isPawn() &&
             to == _state.enPassant &&
-            _actionsPlaces.getActions(from).get(ActionType::THREAT).get(ActionRelation::TO).contains(to)
+            _actionsPlaces.getActions(from).get(Action::Type::THREAT).get(Action::Relation::TO).contains(to)
         )
     ) {
         return Response{Response::Status::WRONG_DESTINATION};
-    } else if (_state.piecePlaces.contains(to) && !_actionsPlaces.getActions(from).get(ActionType::THREAT).get(ActionRelation::TO).contains(to)) {
+    } else if (_state.piecePlaces.contains(to) && !_actionsPlaces.getActions(from).get(Action::Type::THREAT).get(Action::Relation::TO).contains(to)) {
         return Response{Response::Status::WRONG_DESTINATION};
     }
 

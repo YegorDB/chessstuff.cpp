@@ -6,23 +6,23 @@ void testSingleAction() {
     Square square2{"g7"};
     Square square3{"a5"};
 
-    action.insert(ActionRelation::TO, square1.point);
-    assert_point_sets_are_equal(action.get(ActionRelation::TO), PointSet{square1.point});
+    action.insert(Action::Relation::TO, square1.point);
+    assert_point_sets_are_equal(action.get(Action::Relation::TO), PointSet{square1.point});
 
-    action.insert(ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(action.get(ActionRelation::BY), PointSet{square2.point});
+    action.insert(Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(action.get(Action::Relation::BY), PointSet{square2.point});
 
-    action.insert(ActionRelation::BY, square3.point);
-    assert_point_sets_are_equal(action.get(ActionRelation::BY), (PointSet{square2.point, square3.point}));
+    action.insert(Action::Relation::BY, square3.point);
+    assert_point_sets_are_equal(action.get(Action::Relation::BY), (PointSet{square2.point, square3.point}));
 
-    action.erase(ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(action.get(ActionRelation::TO), PointSet{square1.point});
-    assert_point_sets_are_equal(action.get(ActionRelation::BY), PointSet{square3.point});
+    action.erase(Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(action.get(Action::Relation::TO), PointSet{square1.point});
+    assert_point_sets_are_equal(action.get(Action::Relation::BY), PointSet{square3.point});
 
     action.clear();
 
-    assert(action.get(ActionRelation::TO).empty());
-    assert(action.get(ActionRelation::BY).empty());
+    assert(action.get(Action::Relation::TO).empty());
+    assert(action.get(Action::Relation::BY).empty());
 };
 
 void testActions() {
@@ -30,47 +30,47 @@ void testActions() {
     Square square1{"b8"};
     Square square2{"h1"};
 
-    actions.insert(ActionType::THREAT, ActionRelation::TO, square1.point);
-    actions.insert(ActionType::THREAT, ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(actions.get(ActionType::THREAT).get(ActionRelation::TO), PointSet{square1.point});
-    assert_point_sets_are_equal(actions.get(ActionType::THREAT).get(ActionRelation::BY), PointSet{square2.point});
+    actions.insert(Action::Type::THREAT, Action::Relation::TO, square1.point);
+    actions.insert(Action::Type::THREAT, Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(actions.get(Action::Type::THREAT).get(Action::Relation::TO), PointSet{square1.point});
+    assert_point_sets_are_equal(actions.get(Action::Type::THREAT).get(Action::Relation::BY), PointSet{square2.point});
 
-    actions.insert(ActionType::SUPPORT, ActionRelation::TO, square1.point);
-    actions.insert(ActionType::SUPPORT, ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(actions.get(ActionType::SUPPORT).get(ActionRelation::TO), PointSet{square1.point});
-    assert_point_sets_are_equal(actions.get(ActionType::SUPPORT).get(ActionRelation::BY), PointSet{square2.point});
+    actions.insert(Action::Type::SUPPORT, Action::Relation::TO, square1.point);
+    actions.insert(Action::Type::SUPPORT, Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(actions.get(Action::Type::SUPPORT).get(Action::Relation::TO), PointSet{square1.point});
+    assert_point_sets_are_equal(actions.get(Action::Type::SUPPORT).get(Action::Relation::BY), PointSet{square2.point});
 
-    actions.insert(ActionType::PLACE, ActionRelation::TO, square1.point);
-    actions.insert(ActionType::PLACE, ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(actions.get(ActionType::PLACE).get(ActionRelation::TO), PointSet{square1.point});
-    assert_point_sets_are_equal(actions.get(ActionType::PLACE).get(ActionRelation::BY), PointSet{square2.point});
+    actions.insert(Action::Type::PLACE, Action::Relation::TO, square1.point);
+    actions.insert(Action::Type::PLACE, Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(actions.get(Action::Type::PLACE).get(Action::Relation::TO), PointSet{square1.point});
+    assert_point_sets_are_equal(actions.get(Action::Type::PLACE).get(Action::Relation::BY), PointSet{square2.point});
 
-    actions.insert(ActionType::XRAY, ActionRelation::TO, square1.point);
-    actions.insert(ActionType::XRAY, ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(actions.get(ActionType::XRAY).get(ActionRelation::TO), PointSet{square1.point});
-    assert_point_sets_are_equal(actions.get(ActionType::XRAY).get(ActionRelation::BY), PointSet{square2.point});
+    actions.insert(Action::Type::XRAY, Action::Relation::TO, square1.point);
+    actions.insert(Action::Type::XRAY, Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(actions.get(Action::Type::XRAY).get(Action::Relation::TO), PointSet{square1.point});
+    assert_point_sets_are_equal(actions.get(Action::Type::XRAY).get(Action::Relation::BY), PointSet{square2.point});
 
-    actions.insert(ActionType::BIND, ActionRelation::TO, square1.point);
-    actions.insert(ActionType::BIND, ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(actions.get(ActionType::BIND).get(ActionRelation::TO), PointSet{square1.point});
-    assert_point_sets_are_equal(actions.get(ActionType::BIND).get(ActionRelation::BY), PointSet{square2.point});
+    actions.insert(Action::Type::BIND, Action::Relation::TO, square1.point);
+    actions.insert(Action::Type::BIND, Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(actions.get(Action::Type::BIND).get(Action::Relation::TO), PointSet{square1.point});
+    assert_point_sets_are_equal(actions.get(Action::Type::BIND).get(Action::Relation::BY), PointSet{square2.point});
 
-    actions.erase(ActionType::PLACE, ActionRelation::BY, square2.point);
-    assert_point_sets_are_equal(actions.get(ActionType::PLACE).get(ActionRelation::TO), PointSet{square1.point});
-    assert(actions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
+    actions.erase(Action::Type::PLACE, Action::Relation::BY, square2.point);
+    assert_point_sets_are_equal(actions.get(Action::Type::PLACE).get(Action::Relation::TO), PointSet{square1.point});
+    assert(actions.get(Action::Type::PLACE).get(Action::Relation::BY).empty());
 
     actions.clear();
 
-    assert(actions.get(ActionType::THREAT).get(ActionRelation::TO).empty());
-    assert(actions.get(ActionType::THREAT).get(ActionRelation::BY).empty());
-    assert(actions.get(ActionType::SUPPORT).get(ActionRelation::TO).empty());
-    assert(actions.get(ActionType::SUPPORT).get(ActionRelation::BY).empty());
-    assert(actions.get(ActionType::PLACE).get(ActionRelation::TO).empty());
-    assert(actions.get(ActionType::PLACE).get(ActionRelation::BY).empty());
-    assert(actions.get(ActionType::XRAY).get(ActionRelation::TO).empty());
-    assert(actions.get(ActionType::XRAY).get(ActionRelation::BY).empty());
-    assert(actions.get(ActionType::BIND).get(ActionRelation::TO).empty());
-    assert(actions.get(ActionType::BIND).get(ActionRelation::BY).empty());
+    assert(actions.get(Action::Type::THREAT).get(Action::Relation::TO).empty());
+    assert(actions.get(Action::Type::THREAT).get(Action::Relation::BY).empty());
+    assert(actions.get(Action::Type::SUPPORT).get(Action::Relation::TO).empty());
+    assert(actions.get(Action::Type::SUPPORT).get(Action::Relation::BY).empty());
+    assert(actions.get(Action::Type::PLACE).get(Action::Relation::TO).empty());
+    assert(actions.get(Action::Type::PLACE).get(Action::Relation::BY).empty());
+    assert(actions.get(Action::Type::XRAY).get(Action::Relation::TO).empty());
+    assert(actions.get(Action::Type::XRAY).get(Action::Relation::BY).empty());
+    assert(actions.get(Action::Type::BIND).get(Action::Relation::TO).empty());
+    assert(actions.get(Action::Type::BIND).get(Action::Relation::BY).empty());
 };
 
 void testAction() {

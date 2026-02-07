@@ -61,12 +61,12 @@ void Handler::_validateKingsThreats() const {
     const Point& inactiveColorKingPoint = _state.piecePlaces.getKingPoint(inactiveColor);
 
     const Point& activeColorKingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
-    const PointSet activeColorKingThreaters = _actionsPlaces.getActions(activeColorKingPoint).get(ActionType::THREAT).get(ActionRelation::BY);
+    const PointSet activeColorKingThreaters = _actionsPlaces.getActions(activeColorKingPoint).get(Action::Type::THREAT).get(Action::Relation::BY);
     if (activeColorKingThreaters.contains(inactiveColorKingPoint)) {
         throw std::runtime_error{"Kingns threat each other."};
     }
 
-    const PointSet inactiveColorKingThreaters = _actionsPlaces.getActions(inactiveColorKingPoint).get(ActionType::THREAT).get(ActionRelation::BY);
+    const PointSet inactiveColorKingThreaters = _actionsPlaces.getActions(inactiveColorKingPoint).get(Action::Type::THREAT).get(Action::Relation::BY);
     if (!inactiveColorKingThreaters.empty()) {
         throw std::runtime_error{"Inactive king was threated."};
     }

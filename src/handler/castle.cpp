@@ -13,7 +13,7 @@ void Handler::_setCastleActions() {
         throw std::runtime_error{"Wrong king piece to castle."};
     }
 
-    if (!_actionsPlaces.getActions(kingInitialPoint).get(ActionType::THREAT).get(ActionRelation::BY).empty()) {
+    if (!_actionsPlaces.getActions(kingInitialPoint).get(Action::Type::THREAT).get(Action::Relation::BY).empty()) {
         return;
     }
 
@@ -51,7 +51,7 @@ void Handler::_setCastleAction(bool isKingSide) {
         }
 
         Actions actions = _actionsPlaces.getActions(*point);
-        if (!actions.get(ActionType::THREAT).get(ActionRelation::BY).empty()) {
+        if (!actions.get(Action::Type::THREAT).get(Action::Relation::BY).empty()) {
             isFreeWay = false;
             break;
         }
@@ -61,7 +61,7 @@ void Handler::_setCastleAction(bool isKingSide) {
         int kingCastleDx = isKingSide ? 2 : -2;
         int kingCasleX = kingInitialPoint.x() + kingCastleDx;
         Point kingCaslePoint{kingCasleX, firstRankY};
-        _actionsPlaces.setAction(ActionType::PLACE, kingInitialPoint, kingCaslePoint);
+        _actionsPlaces.setAction(Action::Type::PLACE, kingInitialPoint, kingCaslePoint);
     }
 };
 

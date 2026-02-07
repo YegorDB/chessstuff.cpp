@@ -5,45 +5,45 @@
 #include "../board/board.h"
 #include "../point/point.h"
 
-enum class ActionRelation {
-    BY = 0,
-    TO = 1
-};
-
-enum class ActionType {
-    THREAT = 0,
-    SUPPORT = 1,
-    PLACE = 2,
-    XRAY = 3,
-    BIND = 4,
-    AFTER_KING_RESTRICTION = 5
-};
-
 class Action {
-private:
-    std::unordered_map<ActionRelation, PointSet> _relations {
-        {ActionRelation::BY, PointSet{}},
-        {ActionRelation::TO, PointSet{}}
+public:
+    enum class Relation {
+        BY = 0,
+        TO = 1
     };
 
-public:
+    enum class Type {
+        THREAT = 0,
+        SUPPORT = 1,
+        PLACE = 2,
+        XRAY = 3,
+        BIND = 4,
+        AFTER_KING_RESTRICTION = 5
+    };
+
     Action();
 
-    void insert(ActionRelation relation, const Point& point);
-    void erase(ActionRelation relation, const Point& point);
+    void insert(Relation relation, const Point& point);
+    void erase(Relation relation, const Point& point);
     void clear();
-    const PointSet& get(ActionRelation relation) const;
+    const PointSet& get(Relation relation) const;
+
+private:
+    std::unordered_map<Relation, PointSet> _relations {
+        {Relation::BY, PointSet{}},
+        {Relation::TO, PointSet{}}
+    };
 };
 
 class Actions {
 private:
-    std::unordered_map<ActionType, Action> _inners{
-        {ActionType::THREAT, Action{}},
-        {ActionType::SUPPORT, Action{}},
-        {ActionType::PLACE, Action{}},
-        {ActionType::XRAY, Action{}},
-        {ActionType::BIND, Action{}},
-        {ActionType::AFTER_KING_RESTRICTION, Action{}}
+    std::unordered_map<Action::Type, Action> _inners{
+        {Action::Type::THREAT, Action{}},
+        {Action::Type::SUPPORT, Action{}},
+        {Action::Type::PLACE, Action{}},
+        {Action::Type::XRAY, Action{}},
+        {Action::Type::BIND, Action{}},
+        {Action::Type::AFTER_KING_RESTRICTION, Action{}}
     };
 
 public:
@@ -51,10 +51,10 @@ public:
 
     void operator=(const Actions& other);
 
-    void insert(ActionType type, ActionRelation relation, const Point& point);
-    void erase(ActionType type, ActionRelation relation, const Point& point);
+    void insert(Action::Type type, Action::Relation relation, const Point& point);
+    void erase(Action::Type type, Action::Relation relation, const Point& point);
     void clear();
-    const Action& get(ActionType type) const;
+    const Action& get(Action::Type type) const;
 };
 
 class ActionsPlaces {
@@ -65,9 +65,9 @@ public:
 
     const Items& getItems() const;
     const Actions& getActions(const Point& point) const;
-    void setAction(ActionType type, const Point& byPoint, const Point& toPoint);
+    void setAction(Action::Type type, const Point& byPoint, const Point& toPoint);
     void clearActions();
-    void erasePoints(const Point& byPoint, ActionType type, const PointSet& toPoints);
+    void erasePoints(const Point& byPoint, Action::Type type, const PointSet& toPoints);
 private:
     Items _items;
 };

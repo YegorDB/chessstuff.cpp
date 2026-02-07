@@ -74,8 +74,8 @@ private:
     void _restrictKingActions();
     void _restrictBindedWithKingPiecesActions(const std::vector<Point>& bindedPoints);
     void _restrictActionsOnKingCheck();
-    void _eraseKingActions(ActionType actionType, ActionType restrictActionType, const Point& kingPoint);
-    void _erasePieceActions(ActionType actionType, const Point& piecePoint, const PointSet& awaliablePoints);
+    void _eraseKingActions(Action::Type actionType, Action::Type restrictActionType, const Point& kingPoint);
+    void _erasePieceActions(Action::Type actionType, const Point& piecePoint, const PointSet& awaliablePoints);
 
     bool _setPromotionPawnIfNeeded(const Point& to);
     bool _isPawnOnPromotionRow(const Point& point, bool isWhiteColor) const;

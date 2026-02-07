@@ -27,20 +27,20 @@ void Handler::_setResult() {
 
 bool Handler::_checkIsCheckmate() const {
     const Point& kingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);
-    const PointSet kingThreaters = _actionsPlaces.getActions(kingPoint).get(ActionType::THREAT).get(ActionRelation::BY);
+    const PointSet kingThreaters = _actionsPlaces.getActions(kingPoint).get(Action::Type::THREAT).get(Action::Relation::BY);
 
     if (!kingThreaters.empty()) {
-        const PointSet kingThreatTo = _actionsPlaces.getActions(kingPoint).get(ActionType::THREAT).get(ActionRelation::TO);
-        const PointSet kingPlaceTo = _actionsPlaces.getActions(kingPoint).get(ActionType::PLACE).get(ActionRelation::TO);
+        const PointSet kingThreatTo = _actionsPlaces.getActions(kingPoint).get(Action::Type::THREAT).get(Action::Relation::TO);
+        const PointSet kingPlaceTo = _actionsPlaces.getActions(kingPoint).get(Action::Type::PLACE).get(Action::Relation::TO);
         if (kingThreatTo.empty() && kingPlaceTo.empty()) {
             if (kingThreaters.size() > 1) {
                 return true;
             }
             const Point& threaterPoint = *(kingThreaters.begin());
             const Actions& threaterActions = _actionsPlaces.getActions(threaterPoint);
-            if (threaterActions.get(ActionType::THREAT).get(ActionRelation::BY).empty()) {
+            if (threaterActions.get(Action::Type::THREAT).get(Action::Relation::BY).empty()) {
                 for (Point* p : Board::pointsByTwoPoints(kingPoint, threaterPoint, false, false)) {
-                    if (!_actionsPlaces.getActions(*p).get(ActionType::PLACE).get(ActionRelation::BY).empty()) {
+                    if (!_actionsPlaces.getActions(*p).get(Action::Type::PLACE).get(Action::Relation::BY).empty()) {
                         return false;
                     }
                 }
@@ -59,8 +59,8 @@ bool Handler::_checkIsStalemate() const {
         }
 
         const Actions& actions = _actionsPlaces.getActions(point);
-        bool hasThreatToAction = !actions.get(ActionType::THREAT).get(ActionRelation::TO).empty();
-        bool hasPlaceToAction = !actions.get(ActionType::PLACE).get(ActionRelation::TO).empty();
+        bool hasThreatToAction = !actions.get(Action::Type::THREAT).get(Action::Relation::TO).empty();
+        bool hasPlaceToAction = !actions.get(Action::Type::PLACE).get(Action::Relation::TO).empty();
         if (hasThreatToAction || hasPlaceToAction) {
             return false;
         }

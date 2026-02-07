@@ -5,19 +5,19 @@ void testBindedWithKingPiecesRestrictions() {
 
     Actions blackRookActions = handler.getActionsPlaces().getActions(Point{2, 3});
     PointSet expectedBlackRookPlaceTo;
-    assert_point_sets_are_equal(blackRookActions.get(ActionType::PLACE).get(ActionRelation::TO), expectedBlackRookPlaceTo);
+    assert_point_sets_are_equal(blackRookActions.get(Action::Type::PLACE).get(Action::Relation::TO), expectedBlackRookPlaceTo);
     PointSet expectedBlackRookThreatTo;
-    assert_point_sets_are_equal(blackRookActions.get(ActionType::THREAT).get(ActionRelation::TO), expectedBlackRookThreatTo);
+    assert_point_sets_are_equal(blackRookActions.get(Action::Type::THREAT).get(Action::Relation::TO), expectedBlackRookThreatTo);
 
     Actions blackQueenActions = handler.getActionsPlaces().getActions(Point{3, 4});
     PointSet expectedBlackQueenPlaceTo{Point{3, 3}, Point{3, 5}};
-    assert_point_sets_are_equal(blackQueenActions.get(ActionType::PLACE).get(ActionRelation::TO), expectedBlackQueenPlaceTo);
+    assert_point_sets_are_equal(blackQueenActions.get(Action::Type::PLACE).get(Action::Relation::TO), expectedBlackQueenPlaceTo);
     PointSet expectedBlackQueenThreatTo{Point{3, 6}};
-    assert_point_sets_are_equal(blackQueenActions.get(ActionType::THREAT).get(ActionRelation::TO), expectedBlackQueenThreatTo);
+    assert_point_sets_are_equal(blackQueenActions.get(Action::Type::THREAT).get(Action::Relation::TO), expectedBlackQueenThreatTo);
 
     Actions blackKnightActions = handler.getActionsPlaces().getActions(Point{5, 4});
     PointSet expectedBlackKnightPlaceTo;
-    assert_point_sets_are_equal(blackKnightActions.get(ActionType::PLACE).get(ActionRelation::TO), expectedBlackKnightPlaceTo);
+    assert_point_sets_are_equal(blackKnightActions.get(Action::Type::PLACE).get(Action::Relation::TO), expectedBlackKnightPlaceTo);
     PointSet expectedBlackKnightThreatTo;
-    assert_point_sets_are_equal(blackKnightActions.get(ActionType::THREAT).get(ActionRelation::TO), expectedBlackKnightThreatTo);
+    assert_point_sets_are_equal(blackKnightActions.get(Action::Type::THREAT).get(Action::Relation::TO), expectedBlackKnightThreatTo);
 }
