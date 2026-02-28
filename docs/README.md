@@ -44,6 +44,7 @@ Square
 
 - [Action](action)
 - [Board](board)
+- [Direction](direction)
 - [FEN](fen)
 - [Handler](handler)
 - [State](state)
