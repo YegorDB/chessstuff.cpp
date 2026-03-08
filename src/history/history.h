@@ -54,12 +54,6 @@ public:
         std::vector<int> nextIndexes;
     };
 
-    struct StringBuilderItem {
-        int currentIndex;
-        int counter;
-        std::string stringValue;
-    };
-
     HistoryMoves();
 
     void addMainLineMove(HistoryMove&& historyMove);
@@ -68,6 +62,12 @@ public:
     const std::vector<Item>& getItems() const;
 
 private:
+    struct StringBuilderItem {
+        int currentIndex;
+        int counter;
+        std::string stringValue;
+    };
+
     std::vector<Item> _items;
     int _latestMainLineIndex = -1;
 };

@@ -7,7 +7,7 @@ Handler
 | <- Action
 | <- Board
 | <- FEN
-| <- HistoryMove
+| <- History
 | <- State
 
 Action
@@ -21,7 +21,7 @@ FEN
 | <- Square
 | <- State
 
-HistoryMove
+History
 | <- Point
 
 State
@@ -47,4 +47,5 @@ Square
 - [Direction](direction)
 - [FEN](fen)
 - [Handler](handler)
+- [History](history)
 - [State](state)
