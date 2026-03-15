@@ -36,7 +36,7 @@ HistoryMoves::Item
 
 > Single chess move information
 
-### PropertiesHistoryMove::
+### Properties
 
 #### static const std::string PIECE_TYPES_TO_SYMBOLS
 

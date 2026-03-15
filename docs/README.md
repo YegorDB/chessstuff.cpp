@@ -48,4 +48,5 @@ Square
 - [FEN](fen)
 - [Handler](handler)
 - [History](history)
+- [Square](square)
 - [State](state)
