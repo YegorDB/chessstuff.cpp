@@ -4,7 +4,7 @@ void Handler::_setResult() {
     State::Result result;
     if (_checkIsCheckmate()) {
         result.type = State::Result::Type::CHECKMATE;
-        result.winnerColor = _state.activeColor == PieceColor::WHITE ? PieceColor::BLACK : PieceColor::WHITE;
+        result.winnerColor = _state.activeColor == Piece::Color::WHITE ? Piece::Color::BLACK : Piece::Color::WHITE;
         _currentHistoryMove.isCheckMate = true;
     } else if (_checkIsStalemate()) {
         result.type = State::Result::Type::DRAW;
@@ -76,15 +76,15 @@ bool Handler::_checkIsStalemate() const {
  * - king and bishop vs king and bishop (and same color bishops)
  */
 bool Handler::_checkIsInsufficientMaterial() const {
-    std::unordered_map<PieceColor, std::unordered_map<PieceType, int>> counter;
-    std::unordered_map<PieceColor, int> aggregatedCounter;
-    std::unordered_map<PieceColor, bool> bishopOnLightSquareMap;
+    std::unordered_map<Piece::Color, std::unordered_map<Piece::Type, int>> counter;
+    std::unordered_map<Piece::Color, int> aggregatedCounter;
+    std::unordered_map<Piece::Color, bool> bishopOnLightSquareMap;
 
     for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
         if (
-            piece.getType() == PieceType::QUEEN
-            || piece.getType() == PieceType::ROOK
-            || piece.getType() == PieceType::PAWN
+            piece.getType() == Piece::Type::QUEEN
+            || piece.getType() == Piece::Type::ROOK
+            || piece.getType() == Piece::Type::PAWN
         ) {
             return false;
         }
@@ -97,14 +97,14 @@ bool Handler::_checkIsInsufficientMaterial() const {
         }
     }
 
-    if (aggregatedCounter[PieceColor::WHITE] > 2 || aggregatedCounter[PieceColor::BLACK] > 2) {
+    if (aggregatedCounter[Piece::Color::WHITE] > 2 || aggregatedCounter[Piece::Color::BLACK] > 2) {
         return false;
     }
-    if (aggregatedCounter[PieceColor::WHITE] == 2 && aggregatedCounter[PieceColor::BLACK] == 2) {
-        if (counter[PieceColor::WHITE][PieceType::BISHOP] == 0 || counter[PieceColor::BLACK][PieceType::BISHOP] == 0) {
+    if (aggregatedCounter[Piece::Color::WHITE] == 2 && aggregatedCounter[Piece::Color::BLACK] == 2) {
+        if (counter[Piece::Color::WHITE][Piece::Type::BISHOP] == 0 || counter[Piece::Color::BLACK][Piece::Type::BISHOP] == 0) {
             return false;
         }
-        return bishopOnLightSquareMap[PieceColor::WHITE] == bishopOnLightSquareMap[PieceColor::BLACK];
+        return bishopOnLightSquareMap[Piece::Color::WHITE] == bishopOnLightSquareMap[Piece::Color::BLACK];
     }
     return true;
 };

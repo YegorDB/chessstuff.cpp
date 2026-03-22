@@ -16,20 +16,20 @@ void testInitialPieces() {
             const Piece& piece = handler.getState().piecePlaces.getPiece(point);
             assert(piece.isWhiteColor() == (point.y() == 7));
             if (point.x() == 0 || point.x() == 7) {
-                assert(piece.getType() == PieceType::ROOK);
+                assert(piece.getType() == Piece::Type::ROOK);
             } else if (point.x() == 1 || point.x() == 6) {
-                assert(piece.getType() == PieceType::KNIGHT);
+                assert(piece.getType() == Piece::Type::KNIGHT);
             } else if (point.x() == 2 || point.x() == 5) {
-                assert(piece.getType() == PieceType::BISHOP);
+                assert(piece.getType() == Piece::Type::BISHOP);
             } else if (point.x() == 3) {
-                assert(piece.getType() == PieceType::QUEEN);
+                assert(piece.getType() == Piece::Type::QUEEN);
             } else {
-                assert(piece.getType() == PieceType::KING);
+                assert(piece.getType() == Piece::Type::KING);
             }
         } else if (point.y() == 1 || point.y() == 6) {
             const Piece& piece = handler.getState().piecePlaces.getPiece(point);
             assert(piece.isWhiteColor() == (point.y() == 6));
-            assert(piece.getType() == PieceType::PAWN);
+            assert(piece.getType() == Piece::Type::PAWN);
         }
         ++i;
     }

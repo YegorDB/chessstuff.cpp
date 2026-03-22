@@ -6,13 +6,13 @@
 ```
 HistoryMove
     HistoryMove <- ()
-    HistoryMove <- PieceType
+    HistoryMove <- Piece::Type
                 <- Point
                 <- Point
                 <- HistoryMove::Type
                 <- int
                 <- bool
-                <- PieceType
+                <- Piece::Type
                 <- PointSet
     PIECE_TYPES_TO_SYMBOLS -> std::string
     toString -> std::string
@@ -42,7 +42,7 @@ HistoryMoves::Item
 
 > Piece types to symbols mapping
 
-#### PieceType pieceType
+#### Piece::Type pieceType
 
 > Moved piece type
 
@@ -66,7 +66,7 @@ HistoryMoves::Item
 
 > True if there is check mate after move
 
-#### PieceType promotionType
+#### Piece::Type promotionType
 
 > Pawn promotion piece type
 
@@ -86,7 +86,7 @@ HistoryMoves::Item
 
 > Creates empty move
 
-#### HistoryMove::HistoryMove(PieceType pieceType, Point from, Point to, Type type, int checkersCount, bool isCheckMate, PieceType promotionType, PointSet otherCandidates)
+#### HistoryMove::HistoryMove(Piece::Type pieceType, Point from, Point to, Type type, int checkersCount, bool isCheckMate, Piece::Type promotionType, PointSet otherCandidates)
 
 > Creates move
 

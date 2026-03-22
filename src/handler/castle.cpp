@@ -89,7 +89,7 @@ void Handler::_handleCastleAfterKingMove(const Point& from, const Point& to) {
 };
 
 void Handler::_handleCastleAfterRookMove(const Point& from, const Point& to) {
-    bool isWhiteColor = _state.activeColor == PieceColor::WHITE;
+    bool isWhiteColor = _state.activeColor == Piece::Color::WHITE;
     if (_isRookOnKingSideCastleSquare(from, isWhiteColor) && _state.castles[_state.activeColor].kingSide) {
         _state.castles[_state.activeColor].kingSide = false;
     }
@@ -126,7 +126,7 @@ void Handler::_castleRook(bool isKingSide) {
 };
 
 int Handler::_getFirstRankY() const {
-    return _state.activeColor == PieceColor::WHITE ? 7 : 0;
+    return _state.activeColor == Piece::Color::WHITE ? 7 : 0;
 };
 
 bool Handler::_isRookOnKingSideCastleSquare(const Point& point, bool isWhiteColor) const {

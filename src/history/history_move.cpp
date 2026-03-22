@@ -1,24 +1,24 @@
 #include "history.h"
 
-const std::unordered_map<PieceType, std::string> HistoryMove::PIECE_TYPES_TO_SYMBOLS = {
-    {PieceType::KING, "K"},
-    {PieceType::QUEEN, "Q"},
-    {PieceType::ROOK, "R"},
-    {PieceType::BISHOP, "B"},
-    {PieceType::KNIGHT, "N"},
-    {PieceType::PAWN, ""},
+const std::unordered_map<Piece::Type, std::string> HistoryMove::PIECE_TYPES_TO_SYMBOLS = {
+    {Piece::Type::KING, "K"},
+    {Piece::Type::QUEEN, "Q"},
+    {Piece::Type::ROOK, "R"},
+    {Piece::Type::BISHOP, "B"},
+    {Piece::Type::KNIGHT, "N"},
+    {Piece::Type::PAWN, ""},
 };
 
 HistoryMove::HistoryMove() {};
 
 HistoryMove::HistoryMove(
-    PieceType pieceType,
+    Piece::Type pieceType,
     Point from,
     Point to,
     Type type,
     int checkersCount,
     bool isCheckMate,
-    PieceType promotionType,
+    Piece::Type promotionType,
     PointSet otherCandidates
 ) : pieceType(pieceType), from(from), to(to), type(type), checkersCount(checkersCount), isCheckMate(isCheckMate), promotionType(promotionType), otherCandidates(otherCandidates) {};
 
@@ -43,7 +43,7 @@ std::string HistoryMove::toString() const {
     } else {
         stringValue = PIECE_TYPES_TO_SYMBOLS.at(pieceType);
 
-        if (!otherCandidates.empty() && pieceType != PieceType::PAWN) {
+        if (!otherCandidates.empty() && pieceType != Piece::Type::PAWN) {
             bool hasSameFile = false;
             bool hasSameRank = false;
             for (Point p : otherCandidates) {
@@ -68,7 +68,7 @@ std::string HistoryMove::toString() const {
         }
 
         if (type == Type::TAKE) {
-            if (pieceType == PieceType::PAWN) {
+            if (pieceType == Piece::Type::PAWN) {
                 stringValue.push_back(Square{from}.getFile());
             }
             stringValue.push_back('x');

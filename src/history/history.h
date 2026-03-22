@@ -11,7 +11,7 @@
 
 class HistoryMove {
 public:
-    static const std::unordered_map<PieceType, std::string> PIECE_TYPES_TO_SYMBOLS;
+    static const std::unordered_map<Piece::Type, std::string> PIECE_TYPES_TO_SYMBOLS;
 
     enum class Type {
         PLACE = 0,
@@ -23,23 +23,23 @@ public:
 
     HistoryMove();
     HistoryMove(
-        PieceType pieceType,
+        Piece::Type pieceType,
         Point from,
         Point to,
         Type type,
         int checkersCount,
         bool isCheckMate,
-        PieceType promotionType,
+        Piece::Type promotionType,
         PointSet otherCandidates
     );
 
-    PieceType pieceType;
+    Piece::Type pieceType;
     Point from;
     Point to;
     Type type;
     int checkersCount;
     bool isCheckMate;
-    PieceType promotionType;
+    Piece::Type promotionType;
     PointSet otherCandidates;
 
     void operator=(const HistoryMove& other);

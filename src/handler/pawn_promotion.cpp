@@ -1,6 +1,6 @@
 #include "handler.h"
 
-Handler::Response Handler::promotePawn(PieceType pieceType) {
+Handler::Response Handler::promotePawn(Piece::Type pieceType) {
     if (_state.pawnPromotion.isUndefined()) {
         return Response{Response::Status::WRONG_PAWN_PROMOTION};
     } else if (!Piece::PAWN_PROMOTION_TYPES.contains(pieceType)) {
@@ -9,7 +9,7 @@ Handler::Response Handler::promotePawn(PieceType pieceType) {
 
     _currentHistoryMove.promotionType = pieceType;
 
-    bool isWhiteColor = _state.activeColor == PieceColor::WHITE;
+    bool isWhiteColor = _state.activeColor == Piece::Color::WHITE;
     Piece piece{pieceType, isWhiteColor};
     _state.piecePlaces.place(_state.pawnPromotion, piece);
 

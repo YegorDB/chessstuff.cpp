@@ -52,18 +52,18 @@ void testPawnPromotion() {
     assert_strings_are_equal(FEN{handler.getState()}.getRawString(), "7P/4k3/8/8/8/8/1p2K3/8 w - - 0 1");
     assert(!handler.getState().pawnPromotion.isUndefined());
 
-    Handler::Response response3 = handler.promotePawn(PieceType::KING);
+    Handler::Response response3 = handler.promotePawn(Piece::Type::KING);
     assert(!response3.isOk());
     assert(response3.status == Handler::Response::Status::WRONG_PAWN_PROMOTION_PIECE_TYPE);
     assert_strings_are_equal(FEN{handler.getState()}.getRawString(), "7P/4k3/8/8/8/8/1p2K3/8 w - - 0 1");
     assert(!handler.getState().pawnPromotion.isUndefined());
 
-    Handler::Response response4 = handler.promotePawn(PieceType::QUEEN);
+    Handler::Response response4 = handler.promotePawn(Piece::Type::QUEEN);
     assert(response4.isOk());
     assert_strings_are_equal(FEN{handler.getState()}.getRawString(), "7Q/4k3/8/8/8/8/1p2K3/8 b - - 0 1");
     assert(handler.getState().pawnPromotion.isUndefined());
 
-    Handler::Response response5 = handler.promotePawn(PieceType::BISHOP);
+    Handler::Response response5 = handler.promotePawn(Piece::Type::BISHOP);
     assert(!response5.isOk());
     assert(response5.status == Handler::Response::Status::WRONG_PAWN_PROMOTION);
     assert_strings_are_equal(FEN{handler.getState()}.getRawString(), "7Q/4k3/8/8/8/8/1p2K3/8 b - - 0 1");
@@ -74,7 +74,7 @@ void testPawnPromotion() {
     assert_strings_are_equal(FEN{handler.getState()}.getRawString(), "7Q/4k3/8/8/8/8/4K3/1p6 b - - 0 1");
     assert(!handler.getState().pawnPromotion.isUndefined());
 
-    Handler::Response response7 = handler.promotePawn(PieceType::QUEEN);
+    Handler::Response response7 = handler.promotePawn(Piece::Type::QUEEN);
     assert(response7.isOk());
     assert_strings_are_equal(FEN{handler.getState()}.getRawString(), "7Q/4k3/8/8/8/8/4K3/1q6 w - - 0 2");
     assert(handler.getState().pawnPromotion.isUndefined());

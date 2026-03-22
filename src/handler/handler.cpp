@@ -80,10 +80,10 @@ Handler::Response Handler::move(const Point& from, const Point& to) {
 };
 
 void Handler::_endMove(bool resetHalfMoveClock) {
-    if (_state.activeColor == PieceColor::WHITE) {
-        _state.activeColor = PieceColor::BLACK;
-    } else if (_state.activeColor == PieceColor::BLACK) {
-        _state.activeColor = PieceColor::WHITE;
+    if (_state.activeColor == Piece::Color::WHITE) {
+        _state.activeColor = Piece::Color::BLACK;
+    } else if (_state.activeColor == Piece::Color::BLACK) {
+        _state.activeColor = Piece::Color::WHITE;
         _state.movesCount++;
     }
     if (resetHalfMoveClock) {

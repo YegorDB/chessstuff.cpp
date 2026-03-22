@@ -6,8 +6,8 @@
 ```
 State
     piecePlaces <-> PiecePlaces
-    activeColor <-> PieceColor
-    castles <-> std::unordered_map<PieceColor, CastleSides>
+    activeColor <-> Piece::Color
+    castles <-> std::unordered_map<Piece::Color, CastleSides>
     enPassant <-> Point
     halfmoveClock <-> int
     movesCount <-> int
@@ -20,7 +20,7 @@ State::CastleSides
 
 State::Result
     type <-> State::Result::Type
-    winnerColor <-> PieceColor
+    winnerColor <-> Piece::Color
     drawType <-> State::Result::DrawType
 ```
 
@@ -35,7 +35,7 @@ State::Result
 
 > Piece places map
 
-#### PieceColor activeColor
+#### Piece::Color activeColor
 
 > Active color enum value
 
@@ -89,7 +89,7 @@ State::Result
 
 > Result type enum value
 
-#### PieceColor winnerColor
+#### Piece::Color winnerColor
 
 > Winner color enum value
 

@@ -7,8 +7,8 @@ void Handler::_validatePosition() const {
 };
 
 void Handler::_validatePiecesCount() const {
-    std::unordered_map<PieceColor, std::unordered_map<PieceType, int>> counter;
-    std::unordered_map<PieceColor, int> aggregatedCounter;
+    std::unordered_map<Piece::Color, std::unordered_map<Piece::Type, int>> counter;
+    std::unordered_map<Piece::Color, int> aggregatedCounter;
 
     for (const auto& [point, piece] : _state.piecePlaces.getItems()) {
         counter[piece.getColor()][piece.getType()]++;
@@ -19,30 +19,30 @@ void Handler::_validatePiecesCount() const {
         }
     }
 
-    for (PieceColor pieceColor : {PieceColor::WHITE, PieceColor::BLACK}) {
-        std::string colorName = Piece::COLOR_NAMES[pieceColor == PieceColor::WHITE ? 0 : 1];
+    for (Piece::Color pieceColor : {Piece::Color::WHITE, Piece::Color::BLACK}) {
+        std::string colorName = Piece::COLOR_NAMES[pieceColor == Piece::Color::WHITE ? 0 : 1];
 
-        if (!counter[pieceColor].contains(PieceType::KING) || counter[pieceColor][PieceType::KING] != 1) {
+        if (!counter[pieceColor].contains(Piece::Type::KING) || counter[pieceColor][Piece::Type::KING] != 1) {
             throw std::runtime_error{std::format("Incorrect {} kings number.", colorName)};
         }
 
-        if (counter[pieceColor].contains(PieceType::QUEEN) && counter[pieceColor][PieceType::QUEEN] > 9) {
+        if (counter[pieceColor].contains(Piece::Type::QUEEN) && counter[pieceColor][Piece::Type::QUEEN] > 9) {
             throw std::runtime_error{std::format("Incorrect {} queens number.", colorName)};
         }
 
-        if (counter[pieceColor].contains(PieceType::ROOK) && counter[pieceColor][PieceType::ROOK] > 10) {
+        if (counter[pieceColor].contains(Piece::Type::ROOK) && counter[pieceColor][Piece::Type::ROOK] > 10) {
             throw std::runtime_error{std::format("Incorrect {} rooks number.", colorName)};
         }
 
-        if (counter[pieceColor].contains(PieceType::BISHOP) && counter[pieceColor][PieceType::BISHOP] > 10) {
+        if (counter[pieceColor].contains(Piece::Type::BISHOP) && counter[pieceColor][Piece::Type::BISHOP] > 10) {
             throw std::runtime_error{std::format("Incorrect {} bishops number.", colorName)};
         }
 
-        if (counter[pieceColor].contains(PieceType::KNIGHT) && counter[pieceColor][PieceType::KNIGHT] > 10) {
+        if (counter[pieceColor].contains(Piece::Type::KNIGHT) && counter[pieceColor][Piece::Type::KNIGHT] > 10) {
             throw std::runtime_error{std::format("Incorrect {} knights number.", colorName)};
         }
 
-        if (counter[pieceColor].contains(PieceType::PAWN) && counter[pieceColor][PieceType::PAWN] > 8) {
+        if (counter[pieceColor].contains(Piece::Type::PAWN) && counter[pieceColor][Piece::Type::PAWN] > 8) {
             throw std::runtime_error{std::format("Incorrect {} pawns number.", colorName)};
         }
     }
@@ -57,7 +57,7 @@ void Handler::_validatePawnsPositions() const {
 };
 
 void Handler::_validateKingsThreats() const {
-    PieceColor inactiveColor = _state.activeColor == PieceColor::WHITE ? PieceColor::BLACK : PieceColor::WHITE;
+    Piece::Color inactiveColor = _state.activeColor == Piece::Color::WHITE ? Piece::Color::BLACK : Piece::Color::WHITE;
     const Point& inactiveColorKingPoint = _state.piecePlaces.getKingPoint(inactiveColor);
 
     const Point& activeColorKingPoint = _state.piecePlaces.getKingPoint(_state.activeColor);

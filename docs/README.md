@@ -28,13 +28,13 @@ State
 | <- Piece
 | <- Point
 
-Point
-| <- Direction
-
 Piece
 | <- Direction
 | <- Point
 | <- Square
+
+Point
+| <- Direction
 
 Square
 | <- Point
@@ -48,5 +48,6 @@ Square
 - [FEN](fen)
 - [Handler](handler)
 - [History](history)
+- [Piece](piece)
 - [Square](square)
 - [State](state)

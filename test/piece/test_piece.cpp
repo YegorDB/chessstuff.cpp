@@ -1,16 +1,16 @@
 #include "test_piece.h"
 
 void testKing() {
-    Piece king{PieceType::KING, false};
-    assert(king.getType() == PieceType::KING);
-    assert(king.getColor() == PieceColor::BLACK);
+    Piece king{Piece::Type::KING, false};
+    assert(king.getType() == Piece::Type::KING);
+    assert(king.getColor() == Piece::Color::BLACK);
     assert(!king.isWhiteColor());
     assert(king.getColorName() == "black");
     assert(king.getPlaceDirections() == king.getThreatDirections());
     assert(king.getMovesCount() == 0);
     assert(king.getVisibleSymbol() == "\u265A");
-    assert(king.hasColor(PieceColor::BLACK));
-    assert(king.hasSameColor(Piece{PieceType::PAWN, false}));
+    assert(king.hasColor(Piece::Color::BLACK));
+    assert(king.hasSameColor(Piece{Piece::Type::PAWN, false}));
     assert(king.isKing());
     assert(!king.isQueen());
     assert(!king.isRook());
@@ -32,16 +32,16 @@ void testKing() {
 };
 
 void testQueen() {
-    Piece queen{PieceType::QUEEN, true};
-    assert(queen.getType() == PieceType::QUEEN);
-    assert(queen.getColor() == PieceColor::WHITE);
+    Piece queen{Piece::Type::QUEEN, true};
+    assert(queen.getType() == Piece::Type::QUEEN);
+    assert(queen.getColor() == Piece::Color::WHITE);
     assert(queen.isWhiteColor());
     assert(queen.getColorName() == "white");
     assert(queen.getPlaceDirections() == queen.getThreatDirections());
     assert(queen.getMovesCount() == 0);
     assert(queen.getVisibleSymbol() == "\u2655");
-    assert(queen.hasColor(PieceColor::WHITE));
-    assert(queen.hasSameColor(Piece{PieceType::KING, true}));
+    assert(queen.hasColor(Piece::Color::WHITE));
+    assert(queen.hasSameColor(Piece{Piece::Type::KING, true}));
     assert(!queen.isKing());
     assert(queen.isQueen());
     assert(!queen.isRook());
@@ -60,15 +60,15 @@ void testQueen() {
 };
 
 void testRook() {
-    Piece rook{PieceType::ROOK, false};
-    assert(rook.getType() == PieceType::ROOK);
-    assert(rook.getColor() == PieceColor::BLACK);
+    Piece rook{Piece::Type::ROOK, false};
+    assert(rook.getType() == Piece::Type::ROOK);
+    assert(rook.getColor() == Piece::Color::BLACK);
     assert(!rook.isWhiteColor());
     assert(rook.getColorName() == "black");
     assert(rook.getMovesCount() == 0);
     assert(rook.getVisibleSymbol() == "\u265C");
-    assert(rook.hasColor(PieceColor::BLACK));
-    assert(rook.hasSameColor(Piece{PieceType::QUEEN, false}));
+    assert(rook.hasColor(Piece::Color::BLACK));
+    assert(rook.hasSameColor(Piece{Piece::Type::QUEEN, false}));
     assert(!rook.isKing());
     assert(!rook.isQueen());
     assert(rook.isRook());
@@ -84,15 +84,15 @@ void testRook() {
 };
 
 void testBishop() {
-    Piece bishop{PieceType::BISHOP, true};
-    assert(bishop.getType() == PieceType::BISHOP);
-    assert(bishop.getColor() == PieceColor::WHITE);
+    Piece bishop{Piece::Type::BISHOP, true};
+    assert(bishop.getType() == Piece::Type::BISHOP);
+    assert(bishop.getColor() == Piece::Color::WHITE);
     assert(bishop.isWhiteColor());
     assert(bishop.getColorName() == "white");
     assert(bishop.getMovesCount() == 0);
     assert(bishop.getVisibleSymbol() == "\u2657");
-    assert(bishop.hasColor(PieceColor::WHITE));
-    assert(bishop.hasSameColor(Piece{PieceType::ROOK, true}));
+    assert(bishop.hasColor(Piece::Color::WHITE));
+    assert(bishop.hasSameColor(Piece{Piece::Type::ROOK, true}));
     assert(!bishop.isKing());
     assert(!bishop.isQueen());
     assert(!bishop.isRook());
@@ -108,15 +108,15 @@ void testBishop() {
 };
 
 void testKnight() {
-    Piece knight{PieceType::KNIGHT, false};
-    assert(knight.getType() == PieceType::KNIGHT);
-    assert(knight.getColor() == PieceColor::BLACK);
+    Piece knight{Piece::Type::KNIGHT, false};
+    assert(knight.getType() == Piece::Type::KNIGHT);
+    assert(knight.getColor() == Piece::Color::BLACK);
     assert(!knight.isWhiteColor());
     assert(knight.getColorName() == "black");
     assert(knight.getMovesCount() == 0);
     assert(knight.getVisibleSymbol() == "\u265E");
-    assert(knight.hasColor(PieceColor::BLACK));
-    assert(knight.hasSameColor(Piece{PieceType::BISHOP, false}));
+    assert(knight.hasColor(Piece::Color::BLACK));
+    assert(knight.hasSameColor(Piece{Piece::Type::BISHOP, false}));
     assert(!knight.isKing());
     assert(!knight.isQueen());
     assert(!knight.isRook());
@@ -136,15 +136,15 @@ void testKnight() {
 };
 
 void testPawn() {
-    Piece pawn1{PieceType::PAWN, true};
-    assert(pawn1.getType() == PieceType::PAWN);
-    assert(pawn1.getColor() == PieceColor::WHITE);
+    Piece pawn1{Piece::Type::PAWN, true};
+    assert(pawn1.getType() == Piece::Type::PAWN);
+    assert(pawn1.getColor() == Piece::Color::WHITE);
     assert(pawn1.isWhiteColor());
     assert(pawn1.getColorName() == "white");
     assert(pawn1.getMovesCount() == 0);
     assert(pawn1.getVisibleSymbol() == "\u2659");
-    assert(pawn1.hasColor(PieceColor::WHITE));
-    assert(pawn1.hasSameColor(Piece{PieceType::KNIGHT, true}));
+    assert(pawn1.hasColor(Piece::Color::WHITE));
+    assert(pawn1.hasSameColor(Piece{Piece::Type::KNIGHT, true}));
     assert(!pawn1.isKing());
     assert(!pawn1.isQueen());
     assert(!pawn1.isRook());
@@ -157,15 +157,15 @@ void testPawn() {
     assert((pawn1.getThreatDirections()[0] == Direction{-1, -1}));
     assert((pawn1.getThreatDirections()[1] == Direction{1, -1}));
 
-    Piece pawn2{PieceType::PAWN, false};
-    assert(pawn2.getType() == PieceType::PAWN);
-    assert(pawn2.getColor() == PieceColor::BLACK);
+    Piece pawn2{Piece::Type::PAWN, false};
+    assert(pawn2.getType() == Piece::Type::PAWN);
+    assert(pawn2.getColor() == Piece::Color::BLACK);
     assert(!pawn2.isWhiteColor());
     assert(pawn2.getColorName() == "black");
     assert(pawn2.getMovesCount() == 0);
     assert(pawn2.getVisibleSymbol() == "\u265F");
-    assert(pawn2.hasColor(PieceColor::BLACK));
-    assert(pawn2.hasSameColor(Piece{PieceType::KNIGHT, false}));
+    assert(pawn2.hasColor(Piece::Color::BLACK));
+    assert(pawn2.hasSameColor(Piece{Piece::Type::KNIGHT, false}));
     assert(!pawn2.isKing());
     assert(!pawn2.isQueen());
     assert(!pawn2.isRook());
@@ -183,10 +183,10 @@ void testPawn() {
 
 void testUndefined() {
     Piece piece;
-    assert(piece.getType() == PieceType::UNSET);
-    assert(piece.getColor() == PieceColor::UNSET);
+    assert(piece.getType() == Piece::Type::UNSET);
+    assert(piece.getColor() == Piece::Color::UNSET);
     assert(piece.getMovesCount() == 0);
-    assert(piece.hasColor(PieceColor::UNSET));
+    assert(piece.hasColor(Piece::Color::UNSET));
     assert(!piece.isWhiteColor());
     assert(!piece.isKing());
     assert(!piece.isQueen());
@@ -200,28 +200,28 @@ void testUndefined() {
 void testPieceThrowErrors() {
     assert_error_was_thrown(
         [](){
-            (Piece{PieceType::UNSET, true}).getPlaceDirections();
+            (Piece{Piece::Type::UNSET, true}).getPlaceDirections();
         },
         "There is no place directions to unset piece."
     );
 
     assert_error_was_thrown(
         [](){
-            (Piece{PieceType::UNSET, true}).getThreatDirections();
+            (Piece{Piece::Type::UNSET, true}).getThreatDirections();
         },
         "There is no threat directions to unset piece."
     );
 
     assert_error_was_thrown(
         [](){
-            (Piece{PieceType::UNSET, true}).getColorName();
+            (Piece{Piece::Type::UNSET, true}).getColorName();
         },
         "There is no color name to unset piece."
     );
 
     assert_error_was_thrown(
         [](){
-            (Piece{PieceType::UNSET, true}).getVisibleSymbol();
+            (Piece{Piece::Type::UNSET, true}).getVisibleSymbol();
         },
         "There is no visible symbol to unset piece."
     );

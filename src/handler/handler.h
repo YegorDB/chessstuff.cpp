@@ -39,7 +39,7 @@ public:
     const PositionCounts& getPositionCounts() const;
     int getMaxPositionCount() const;
     Response move(const Point& from, const Point& to);
-    Response promotePawn(PieceType pieceType);
+    Response promotePawn(Piece::Type pieceType);
 
 private:
     ActionsPlaces _actionsPlaces;

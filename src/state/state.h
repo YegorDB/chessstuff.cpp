@@ -23,16 +23,16 @@ struct State {
             FIFTY_MOVE_RULE = 4
         };
         Type type = Type::UNSET;
-        PieceColor winnerColor = PieceColor::UNSET;
+        Piece::Color winnerColor = Piece::Color::UNSET;
         DrawType drawType = DrawType::UNSET;
     };
-    using Castles = std::unordered_map<PieceColor, CastleSides>;
+    using Castles = std::unordered_map<Piece::Color, CastleSides>;
 
     PiecePlaces piecePlaces;
-    PieceColor activeColor = PieceColor::WHITE;
+    Piece::Color activeColor = Piece::Color::WHITE;
     Castles castles = {
-        {PieceColor::WHITE, CastleSides{}},
-        {PieceColor::BLACK, CastleSides{}}
+        {Piece::Color::WHITE, CastleSides{}},
+        {Piece::Color::BLACK, CastleSides{}}
     };
     Point enPassant = Point{};
     int halfmoveClock = 0;

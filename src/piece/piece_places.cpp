@@ -53,7 +53,7 @@ void PiecePlaces::remove(const Point& point) {
     _items.erase(point);
 };
 
-const Point& PiecePlaces::getKingPoint(PieceColor color) const {
+const Point& PiecePlaces::getKingPoint(Piece::Color color) const {
     if (!_kingPoints.contains(color)) {
         return _undefinedPoint;
     }

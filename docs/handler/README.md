@@ -32,7 +32,7 @@ Handler::Response
 
 > Moves piece by two points
 
-#### Handler::promotePawn(PieceType pieceType) -> Handler::Response
+#### Handler::promotePawn(Piece::Type pieceType) -> Handler::Response
 
 > Select pawn promotion piece type
 

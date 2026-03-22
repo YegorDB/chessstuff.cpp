@@ -66,7 +66,7 @@ void FEN::_parseRawSringPiecesPlacesPart() {
                 throw std::runtime_error{"Wrong piece type symbol."};
             }
             auto [pieceType, pieceColor] = Piece::SYMBOLS_TO_INFO.at(c);
-            bool isWhiteColor = pieceColor == PieceColor::WHITE;
+            bool isWhiteColor = pieceColor == Piece::Color::WHITE;
             _state.piecePlaces.place(Point(x, y), Piece{pieceType, isWhiteColor});
             x++;
         }
@@ -88,13 +88,13 @@ void FEN::_parseRawSringCastlesPart() {
 
     for (char c : _rawStringParts[2]) {
         if (c == 'K') {
-            _state.castles[PieceColor::WHITE].kingSide = true;
+            _state.castles[Piece::Color::WHITE].kingSide = true;
         } else if (c == 'Q') {
-            _state.castles[PieceColor::WHITE].queenSide = true;
+            _state.castles[Piece::Color::WHITE].queenSide = true;
         } else if (c == 'k') {
-            _state.castles[PieceColor::BLACK].kingSide = true;
+            _state.castles[Piece::Color::BLACK].kingSide = true;
         } else if (c == 'q') {
-            _state.castles[PieceColor::BLACK].queenSide = true;
+            _state.castles[Piece::Color::BLACK].queenSide = true;
         } else {
             throw std::runtime_error{std::format("Wrong castle part symbol ({}).", c)};
         }
@@ -177,16 +177,16 @@ void FEN::_stringifyAcivePieceColor() {
 void FEN::_stringifyCastles() {
     _rawStringParts[2] = "";
 
-    if (_state.castles[PieceColor::WHITE].kingSide) {
+    if (_state.castles[Piece::Color::WHITE].kingSide) {
         _rawStringParts[2].push_back('K');
     }
-    if (_state.castles[PieceColor::WHITE].queenSide) {
+    if (_state.castles[Piece::Color::WHITE].queenSide) {
         _rawStringParts[2].push_back('Q');
     }
-    if (_state.castles[PieceColor::BLACK].kingSide) {
+    if (_state.castles[Piece::Color::BLACK].kingSide) {
         _rawStringParts[2].push_back('k');
     }
-    if (_state.castles[PieceColor::BLACK].queenSide) {
+    if (_state.castles[Piece::Color::BLACK].queenSide) {
         _rawStringParts[2].push_back('q');
     }
     if (_rawStringParts[2].empty()) {

@@ -27,7 +27,7 @@ void testHandlerHistoryMoves() {
 
     Handler::Response response5 = handler.move(sp("g7"), sp("g8"));
     assert(response5.isOk());
-    Handler::Response response6 = handler.promotePawn(PieceType::QUEEN);
+    Handler::Response response6 = handler.promotePawn(Piece::Type::QUEEN);
     assert(response6.isOk());
     assert_strings_are_equal(handler.getHistoryMoves().toString(), "1.e4 Ne7 2.0-0 0-0-0 3.g8=Q");
     assert_strings_are_equal(FEN{handler.getState()}.getRawString(), "2kr2Q1/ppp1n3/8/5R2/4P3/7B/8/5RK1 b - - 0 3");
