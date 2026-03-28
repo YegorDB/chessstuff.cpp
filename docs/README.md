@@ -49,5 +49,6 @@ Square
 - [Handler](handler)
 - [History](history)
 - [Piece](piece)
+- [Point](point)
 - [Square](square)
 - [State](state)
