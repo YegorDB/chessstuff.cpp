@@ -2,5 +2,4 @@
 
 - [ ] CI
 - [ ] Architecture
-- [ ] Docs
 - [ ] Tutorial
